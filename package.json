@@ -8,7 +8,7 @@
     "start": "concurrently -k -n server,client -c magenta,cyan \"node server/index.js\" \"vite\"",
     "dev": "concurrently -k -n server,client -c magenta,cyan \"node --watch server/index.js\" \"vite\"",
     "build": "vite build",
-    "test": "node --test server/test/*.test.js"
+    "test": "node --test server/test/*.test.js src/state/*.test.js"
   },
   "dependencies": {
     "dotenv": "16.4.5",
