@@ -464,3 +464,8 @@ kbd {
 .t-night .card-deco {
   opacity: 0.22;
 }
+
+/* Safety net: nothing should ever push the page sideways on a phone. */
+.page {
+  overflow-x: clip;
+}
