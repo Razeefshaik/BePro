@@ -197,12 +197,12 @@ export function appReducer(state, action) {
           const copy = [...mods];
           const neighbour = copy[Math.max(0, action.index - 1)];
           copy.splice(action.index, 0, {
-            id: `u${Date.now().toString(36)}`,
+            id: action.id ?? `u${Date.now().toString(36)}`,
             title: action.title.slice(0, 90),
-            summary: "",
+            summary: action.summary ?? "",
             phase: neighbour?.phase === "basics" && action.index <= 1 ? "basics" : "deepdive",
             minutes: 6,
-            subtopics: [],
+            subtopics: (action.subtopics ?? []).map((s) => s.slice(0, 60)).slice(0, 5),
           });
           return copy;
         })

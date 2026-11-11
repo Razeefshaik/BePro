@@ -1,1 +1,326 @@
-/* results */
+/* Results: the same layout in both themes, only the tokens change. */
+
+.results {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 24px 24px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.results-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.results-head h1 {
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+}
+
+.results-grid {
+  display: grid;
+  grid-template-columns: 380px minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "score stops"
+    "score pile";
+  gap: 16px;
+}
+.score-card {
+  grid-area: score;
+}
+.stops-card {
+  grid-area: stops;
+}
+.pile-card {
+  grid-area: pile;
+}
+.results-grid .panel {
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  border-radius: 28px;
+}
+.score-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  font-size: 18px;
+  flex-wrap: wrap;
+}
+.verdict {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--muted);
+}
+.verdict-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--muted);
+}
+.verdict-good .verdict-dot {
+  background: var(--good-fill);
+}
+.verdict-focus .verdict-dot {
+  background: var(--focus);
+}
+.verdict-review .verdict-dot {
+  background: var(--review-fill);
+}
+
+.gauge {
+  position: relative;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+  aspect-ratio: 1;
+}
+.gauge svg {
+  width: 100%;
+  height: 100%;
+}
+.gauge-track,
+.gauge-value {
+  fill: none;
+  stroke-width: 16;
+  stroke-linecap: round;
+}
+.gauge-track {
+  stroke: var(--line);
+}
+.gauge-value {
+  transition: stroke-dasharray 0.8s ease;
+}
+.gauge-ticks {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 2;
+  stroke-dasharray: 2 9;
+}
+.gauge-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  font-size: 15px;
+}
+.gauge-number {
+  font-size: 92px;
+  font-weight: 200;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+.gauge-number small {
+  font-size: 28px;
+  color: var(--muted);
+}
+
+.score-split {
+  margin-top: auto;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.split {
+  border-radius: 18px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 13px;
+}
+.split span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.split strong {
+  font-size: 34px;
+  font-weight: 300;
+}
+.split-good {
+  background: var(--good-soft);
+  border: 1px solid var(--good-edge);
+}
+.split-good span {
+  color: var(--good);
+}
+.split-review {
+  background: var(--review-soft);
+  border: 1px solid var(--review-edge);
+}
+.split-review span {
+  color: var(--review);
+}
+
+/* Mini road with a score ring per stop. */
+.mini-road {
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(var(--stops), minmax(0, 1fr));
+  gap: 4px;
+  overflow-x: auto;
+}
+.mini-road::before {
+  content: "";
+  position: absolute;
+  top: 27px;
+  left: calc(50% / var(--stops));
+  right: calc(50% / var(--stops));
+  height: 3px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--good-fill), var(--focus), var(--accent));
+}
+.mini-stop {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+  min-width: 84px;
+}
+.ring {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 15px;
+  font-weight: 500;
+  background: var(--surface);
+  box-shadow: 0 0 0 3px var(--line);
+}
+.tone-good .ring {
+  box-shadow: 0 0 0 3px var(--good-fill);
+}
+.tone-focus .ring {
+  box-shadow: 0 0 0 3px var(--focus);
+}
+.tone-review .ring {
+  box-shadow: 0 0 0 3px var(--review-fill);
+}
+.mini-title {
+  font-size: 13px;
+  line-height: 1.3;
+  color: var(--muted);
+}
+.mini-flag {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--review);
+}
+
+.pile-note {
+  font-size: 13px;
+}
+.pile-empty {
+  font-size: 15px;
+}
+.pile {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  max-height: 300px;
+  overflow: auto;
+}
+.pile li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  font-size: 14px;
+  min-width: 0;
+}
+.pile-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+.tag {
+  flex: none;
+  height: 24px;
+  padding: 0 9px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 600;
+}
+.tag-question {
+  background: var(--review-soft);
+  color: var(--review);
+}
+.tag-card {
+  background: var(--focus-soft);
+  color: var(--focus-ink);
+}
+.pile-foot {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.btn-highlight:not(:disabled) {
+  box-shadow: 0 0 26px color-mix(in srgb, var(--focus) 35%, transparent);
+}
+
+@media (max-width: 960px) {
+  .results-grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "score"
+      "stops"
+      "pile";
+  }
+}
+
+@media (max-width: 760px) {
+  .results {
+    padding: 16px 16px 32px;
+  }
+  .results-head h1 {
+    font-size: 32px;
+  }
+  .pile {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .pile-foot .btn {
+    width: 100%;
+  }
+  .mini-road {
+    grid-template-columns: repeat(var(--stops), 92px);
+    padding-bottom: 6px;
+  }
+  .mini-road::before {
+    left: 46px;
+    right: auto;
+    width: calc((var(--stops) - 1) * 96px);
+  }
+}
