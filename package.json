@@ -1,0 +1,28 @@
+{
+  "name": "bepro",
+  "version": "1.0.0",
+  "private": true,
+  "description": "BePro: an AI study assistant that turns a topic or your notes into a flashcard-first road map.",
+  "type": "module",
+  "scripts": {
+    "start": "concurrently -k -n server,client -c magenta,cyan \"node server/index.js\" \"vite\"",
+    "dev": "concurrently -k -n server,client -c magenta,cyan \"node --watch server/index.js\" \"vite\"",
+    "build": "vite build",
+    "test": "node --test server/test/"
+  },
+  "dependencies": {
+    "dotenv": "16.4.5",
+    "express": "4.21.2",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "zod": "3.23.8"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "4.3.4",
+    "concurrently": "9.1.2",
+    "vite": "5.4.11"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
