@@ -1,0 +1,17 @@
+.env
+.env.*
+!.env.example
+__pycache__/
+*.pyc
+.venv/
+node_modules/
+.pytest_cache/
+.ruff_cache/
+build/
+dist/
+out/
+*.log
+npm-debug.log*
+.DS_Store
+.vite/
+coverage/
