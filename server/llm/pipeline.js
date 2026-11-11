@@ -49,7 +49,7 @@ export async function generate({ prompt, complete, check, signal }) {
   let lastFailure = null;
 
   for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
-    const text = await complete({ system: prompt.system, user, signal });
+    const text = await complete({ system: prompt.system, user, signal, task: prompt.task, meta: prompt.meta });
 
     const parsed = parseModelText(text);
     const result = parsed.ok ? check(parsed.value) : parsed;
