@@ -460,3 +460,7 @@ kbd {
     transition-duration: 0.01ms !important;
   }
 }
+
+.t-night .card-deco {
+  opacity: 0.22;
+}

@@ -68,6 +68,23 @@ function editPlan(session, change) {
   return { plan: { ...session.plan, data: { ...plan, modules: change(plan.modules) } } };
 }
 
+// Editing a stop makes its cached cards stale. Drop them, and the ratings and answers
+// for their ids (new content reuses the same ids).
+function dropModuleContent(session, moduleId) {
+  const modules = { ...session.modules };
+  delete modules[moduleId];
+  const keep = (map) => Object.fromEntries(Object.entries(map).filter(([id]) => !id.startsWith(`${moduleId}-`)));
+  return {
+    modules,
+    progress: { ...session.progress, ratings: keep(session.progress.ratings), answers: keep(session.progress.answers) },
+  };
+}
+
+// Applies a plan edit to one stop and drops that stop's stale content.
+function editStop(session, moduleId, change) {
+  return { ...editPlan(session, change), ...dropModuleContent(session, moduleId) };
+}
+
 // ---------- reducer ----------
 
 export function appReducer(state, action) {
@@ -147,16 +164,19 @@ export function appReducer(state, action) {
         });
       });
 
+    case "SLOT_RESET":
+      return updateSession(state, action.sessionId, (s) => setSlot(s, action.slot, action.key, emptySlot()));
+
     // ----- road map edits (no model call) -----
 
     case "PLAN_RENAME":
       return updateSession(state, action.sessionId, (s) =>
-        editPlan(s, (mods) => mods.map((m) => (m.id === action.id ? { ...m, title: action.title.slice(0, 90) } : m)))
+        editStop(s, action.id, (mods) => mods.map((m) => (m.id === action.id ? { ...m, title: action.title.slice(0, 90) } : m)))
       );
 
     case "PLAN_DELETE":
       return updateSession(state, action.sessionId, (s) =>
-        s.plan.data.modules.length <= 1 ? {} : editPlan(s, (mods) => mods.filter((m) => m.id !== action.id))
+        s.plan.data.modules.length <= 1 ? {} : editStop(s, action.id, (mods) => mods.filter((m) => m.id !== action.id))
       );
 
     case "PLAN_MOVE":
@@ -190,14 +210,14 @@ export function appReducer(state, action) {
 
     case "SUBTOPIC_ADD":
       return updateSession(state, action.sessionId, (s) =>
-        editPlan(s, (mods) =>
+        editStop(s, action.id, (mods) =>
           mods.map((m) => (m.id === action.id && m.subtopics.length < 8 ? { ...m, subtopics: [...m.subtopics, action.text.slice(0, 60)] } : m))
         )
       );
 
     case "SUBTOPIC_REMOVE":
       return updateSession(state, action.sessionId, (s) =>
-        editPlan(s, (mods) => mods.map((m) => (m.id === action.id ? { ...m, subtopics: m.subtopics.filter((_, i) => i !== action.index) } : m)))
+        editStop(s, action.id, (mods) => mods.map((m) => (m.id === action.id ? { ...m, subtopics: m.subtopics.filter((_, i) => i !== action.index) } : m)))
       );
 
     case "SKIPCHECK_DONE":
