@@ -1,0 +1,112 @@
+/* Theme tokens. The <html> element gets class t-meadow (default) or t-night.
+   Color roles are the same in both themes and always come with an icon or a word:
+   focus = where you are now, good = got it / correct, review = review this / wrong. */
+
+:root,
+.t-meadow {
+  color-scheme: light;
+  --bg: #f6f6fa;
+  --wash-1: rgba(196, 240, 175, 0.38);
+  --wash-2: rgba(185, 176, 246, 0.32);
+  --surface: #ffffff;
+  --surface-2: #f3f2f8;
+  --glass: rgba(255, 255, 255, 0.66);
+  --glass-edge: rgba(255, 255, 255, 0.92);
+  --line: #e7e5f0;
+  --text: #14151f;
+  --muted: #5a5e72;
+
+  --focus: #8b82e8;
+  --focus-ink: #4b40c4;
+  --focus-soft: #ecebfd;
+  --on-focus: #ffffff;
+
+  --good: #2c6e1b;
+  --good-fill: #a8e68a;
+  --good-soft: #e5f8dc;
+  --good-edge: #9ad97c;
+
+  --review: #a3224f;
+  --review-fill: #ffb8cb;
+  --review-soft: #fde6ec;
+  --review-edge: #f7a8be;
+
+  --warn: #7a5200;
+  --warn-soft: #fff3d6;
+
+  --action: #121320;
+  --on-action: #ffffff;
+  --accent: #a3e3e6;
+  --wordmark: #a29be6;
+
+  --shadow: 0 18px 44px rgba(76, 64, 170, 0.12);
+  --shadow-sm: 0 6px 18px rgba(76, 64, 170, 0.08);
+  --ring: 0 0 0 3px rgba(91, 80, 214, 0.55);
+  --intro-bg: url("/bg/intro-meadow.svg");
+
+  /* Flashcard tints, LangUp style pastels */
+  --tint-lavender-bg: #dcd8fb; --tint-lavender-deco: #b3abff; --tint-lavender-ink: #2a2470;
+  --tint-aqua-bg: #cdeef0;     --tint-aqua-deco: #8fd9dd;     --tint-aqua-ink: #10474b;
+  --tint-meadow-bg: #daf3cc;   --tint-meadow-deco: #a8e68a;   --tint-meadow-ink: #1d4a11;
+  --tint-butter-bg: #fff0bf;   --tint-butter-deco: #ffd966;   --tint-butter-ink: #573f00;
+  --tint-blush-bg: #ffdde6;    --tint-blush-deco: #ffb0c6;    --tint-blush-ink: #6a1636;
+  --tint-peach-bg: #ffe2cf;    --tint-peach-deco: #ffb98f;    --tint-peach-ink: #672d0b;
+  --card-panel: rgba(255, 255, 255, 0.72);
+}
+
+.t-night {
+  color-scheme: dark;
+  --bg: #111116;
+  --wash-1: rgba(46, 79, 184, 0.16);
+  --wash-2: rgba(217, 98, 43, 0.08);
+  --surface: #1a1a21;
+  --surface-2: #22222b;
+  --glass: rgba(255, 255, 255, 0.055);
+  --glass-edge: rgba(255, 255, 255, 0.12);
+  --line: rgba(255, 255, 255, 0.12);
+  --text: #f4f2ee;
+  --muted: #b9b6b0;
+
+  --focus: #e4ff5a;
+  --focus-ink: #e4ff5a;
+  --focus-soft: rgba(228, 255, 90, 0.12);
+  --on-focus: #17170f;
+
+  --good: #7ee8c4;
+  --good-fill: #7ee8c4;
+  --good-soft: rgba(126, 232, 196, 0.12);
+  --good-edge: rgba(126, 232, 196, 0.45);
+
+  --review: #ff9b6a;
+  --review-fill: #ff9b6a;
+  --review-soft: rgba(255, 155, 106, 0.12);
+  --review-edge: rgba(255, 155, 106, 0.45);
+
+  --warn: #ffd27a;
+  --warn-soft: rgba(255, 210, 122, 0.12);
+
+  --action: #f4f2ee;
+  --on-action: #101014;
+  --accent: #8fe3e8;
+  --wordmark: rgba(244, 242, 238, 0.07);
+
+  --shadow: 0 18px 44px rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 6px 18px rgba(0, 0, 0, 0.3);
+  --ring: 0 0 0 3px rgba(228, 255, 90, 0.6);
+  --intro-bg: url("/bg/intro-night.svg");
+
+  --tint-lavender-bg: #24213d; --tint-lavender-deco: #6e62d9; --tint-lavender-ink: #f4f2ee;
+  --tint-aqua-bg: #162e30;     --tint-aqua-deco: #2f9ea4;     --tint-aqua-ink: #f4f2ee;
+  --tint-meadow-bg: #1b2b18;   --tint-meadow-deco: #4f9a35;   --tint-meadow-ink: #f4f2ee;
+  --tint-butter-bg: #2d2816;   --tint-butter-deco: #b8932a;   --tint-butter-ink: #f4f2ee;
+  --tint-blush-bg: #321f28;    --tint-blush-deco: #c0567a;    --tint-blush-ink: #f4f2ee;
+  --tint-peach-bg: #31231a;    --tint-peach-deco: #c46a33;    --tint-peach-ink: #f4f2ee;
+  --card-panel: rgba(0, 0, 0, 0.25);
+}
+
+.tint-lavender { --card-bg: var(--tint-lavender-bg); --card-deco: var(--tint-lavender-deco); --card-ink: var(--tint-lavender-ink); }
+.tint-aqua     { --card-bg: var(--tint-aqua-bg);     --card-deco: var(--tint-aqua-deco);     --card-ink: var(--tint-aqua-ink); }
+.tint-meadow   { --card-bg: var(--tint-meadow-bg);   --card-deco: var(--tint-meadow-deco);   --card-ink: var(--tint-meadow-ink); }
+.tint-butter   { --card-bg: var(--tint-butter-bg);   --card-deco: var(--tint-butter-deco);   --card-ink: var(--tint-butter-ink); }
+.tint-blush    { --card-bg: var(--tint-blush-bg);    --card-deco: var(--tint-blush-deco);    --card-ink: var(--tint-blush-ink); }
+.tint-peach    { --card-bg: var(--tint-peach-bg);    --card-deco: var(--tint-peach-deco);    --card-ink: var(--tint-peach-ink); }

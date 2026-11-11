@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="base" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#E2F8D6"/>
+      <stop offset="0.45" stop-color="#F3F3FB"/>
+      <stop offset="1" stop-color="#D8D2FA"/>
+    </linearGradient>
+    <linearGradient id="plane" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.75"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="plane2" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="70"/></filter>
+    <filter id="edge" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="6"/></filter>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#base)"/>
+  <circle cx="160" cy="120" r="300" fill="#C6F1B0" opacity="0.8" filter="url(#soft)"/>
+  <circle cx="1450" cy="520" r="360" fill="#B9B0F6" opacity="0.75" filter="url(#soft)"/>
+  <circle cx="760" cy="1020" r="260" fill="#A9E7EA" opacity="0.55" filter="url(#soft)"/>
+  <path d="M-80 0 C 300 140, 360 520, 120 1000 L -80 1000 Z" fill="url(#plane)" filter="url(#edge)"/>
+  <path d="M1040 -40 L 1680 -40 L 1680 760 Z" fill="url(#plane2)" filter="url(#edge)"/>
+  <path d="M1180 1000 L 1600 560 L 1600 1000 Z" fill="#FFFFFF" opacity="0.28" filter="url(#edge)"/>
+</svg>
