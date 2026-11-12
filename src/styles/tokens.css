@@ -16,7 +16,7 @@
   --text: #14151f;
   --muted: #5a5e72;
 
-  --focus: #8b82e8;
+  --focus: #6f65e0; /* white text on it passes 4.5:1 */
   --focus-ink: #4b40c4;
   --focus-soft: #ecebfd;
   --on-focus: #ffffff;

@@ -324,3 +324,10 @@
     width: calc((var(--stops) - 1) * 96px);
   }
 }
+
+.mini-road {
+  padding-top: 4px;
+}
+.mini-road::before {
+  top: 31px;
+}

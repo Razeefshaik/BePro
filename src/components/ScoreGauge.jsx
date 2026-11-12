@@ -15,7 +15,7 @@ export default function ScoreGauge({ percent, label }) {
           </linearGradient>
         </defs>
         <circle cx="150" cy="150" r={radius} className="gauge-track" strokeDasharray={`${arc} ${circumference}`} transform="rotate(135 150 150)" />
-        <circle cx="150" cy="150" r={radius} className="gauge-value" stroke="url(#gauge-fill)" strokeDasharray={`${filled} ${circumference}`} transform="rotate(135 150 150)" />
+        {filled > 0 && <circle cx="150" cy="150" r={radius} className="gauge-value" stroke="url(#gauge-fill)" strokeDasharray={`${filled} ${circumference}`} transform="rotate(135 150 150)" />}
         <circle cx="150" cy="150" r="94" className="gauge-ticks" />
       </svg>
       <div className="gauge-center">
