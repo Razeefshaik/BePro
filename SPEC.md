@@ -288,13 +288,13 @@ Color meaning, same roles in both themes: **focus now = lavender (Meadow) / high
 * On a phone, the road scrolls horizontally.
 
 **Learning page.**
-* Top band: the stepper (Basics and prereqs, Topic deep dive, Test and quiz; skipped phases show "Skipped"), the Sources and Roadmap buttons, and a wide **notice board** with three pinned notes: the motivation note, a study tip from `src/data/tips.json` (replaced by an adaptive "Hint for you" after 2 "Review again" in a row), and live session stats with "Retest now".
+* Top band: the stepper (Basics and prereqs, Topic deep dive, Test and quiz; skipped phases show "Skipped"), the Sources and Roadmap buttons, and a **live board** styled like a station departures display: a LIVE light, the stop and a clock; a main line that rotates by itself every 7 seconds through motivation lines (`src/data/quotes.json`) and study tips (`src/data/tips.json`), replaced by an adaptive "Attention" hint after 2 "Review again" in a row; and a scrolling ticker with session stats and the next stop. The current stop's progress bar lives in the Index, not the top band.
 * Body: the Index (modules grouped by phase, current module expanded with its subtopics) and the content window.
 * Content window tabs: **Cards** (default) and **Quiz**.
   * Flashcard: front plus visual. Flip shows the answer. **Read further** expands the explanation inside the card (lazy loaded and cached). Rating buttons: "Review again" and "Got it".
   * Quiz: options, then feedback with the explanation, then Next. "Report a wrong question" removes the question and adds it to the warnings.
 * **Doubt bot**: a button in the bottom right of the content window opens a small panel. It answers about the current card or question only.
-* **Motivation note:** a random line from `src/data/quotes.json`. These are 30 original lines (motivation, light humor, learning tips) with **no attributions to real people**. A refresh button picks another.
+* **Motivation lines:** `src/data/quotes.json`, 30 original lines (motivation, light humor, learning tips) with **no attributions to real people**, shown on the live board.
 * **Sources:**
   * Notes mode: the quoted lines from the notes.
   * Topic mode: "Search Wikipedia for X" links that our code builds from module titles. The model never supplies URLs.

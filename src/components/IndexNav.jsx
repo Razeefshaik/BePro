@@ -9,7 +9,8 @@ const GROUPS = [
   { phase: "test", label: "Test and quiz" },
 ];
 
-export default function IndexNav({ session, onPick, open, onClose, retestCount }) {
+// currentProgress: the current stop's progress bar, shown under its entry.
+export default function IndexNav({ session, onPick, open, onClose, retestCount, currentProgress }) {
   const all = stops(session);
   const current = session.currentModuleId;
 
@@ -25,10 +26,13 @@ export default function IndexNav({ session, onPick, open, onClose, retestCount }
         </div>
 
         {current === "retest" && (
-          <div className="index-item is-current">
-            <span className="index-status status-current" />
-            <span className="index-title">Retest pile</span>
-            <span className="index-meta">{retestCount}</span>
+          <div className="index-entry is-current">
+            <div className="index-item">
+              <span className="index-status status-current" />
+              <span className="index-title">Retest pile</span>
+              <span className="index-meta">{retestCount}</span>
+            </div>
+            {currentProgress}
           </div>
         )}
 
@@ -72,6 +76,7 @@ export default function IndexNav({ session, onPick, open, onClose, retestCount }
                       <span className="index-title">{stop.title}</span>
                       <span className="index-meta">{meta}</span>
                     </button>
+                    {isCurrent && currentProgress}
                     {isCurrent && stop.subtopics.length > 0 && (
                       <ul className="index-subs">
                         {stop.subtopics.map((sub, i) => (

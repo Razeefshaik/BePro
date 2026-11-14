@@ -43,3 +43,11 @@ One row per design change, with its reason. Add a dated section per batch of wor
 | Smaller Build my road map button (42px) | razeef | Accept | Owner: it looked too big |
 | Road map: no native scrollbar; arrow buttons and soft faded edges appear only when the road overflows | razeef | Accept | Owner: the scrollbar looked ugly |
 | Road line segments and stop circle rings use each stop card's tint; circles are white inside | razeef | Accept | Owner: the step bar colors should match the cards |
+
+## 2026-11-14 Learning page band
+
+| Decision | By | Status | Reason |
+| --- | --- | --- | --- |
+| The current stop's progress bar moves from the top band into the Index entry | razeef | Accept | Owner: the Index already lists the stops, so progress belongs there |
+| Notice board replaced by a live board in the style of a railway or airport display (LED font VT323, auto-rotating line, ticker, clock), dark in both themes | razeef | Accept | Owner: should feel like a live announcement screen, not notes you refresh |
+| Top band shows the stop's one-line summary and time estimate under the title | razeef | Accept | Fills the space the progress bar left with useful context |

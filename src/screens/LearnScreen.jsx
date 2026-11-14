@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Icon from "../components/Icon.jsx";
 import AppBar from "../components/AppBar.jsx";
 import Stepper from "../components/Stepper.jsx";
-import NoticeBoard from "../components/NoticeBoard.jsx";
+import LiveBoard from "../components/LiveBoard.jsx";
 import IndexNav from "../components/IndexNav.jsx";
 import Flashcard from "../components/Flashcard.jsx";
 import QuizQuestion from "../components/QuizQuestion.jsx";
@@ -144,14 +144,33 @@ export default function LearnScreen({ session, actions, theme, toggleTheme }) {
               {stopLabel} · {phaseLabel}
             </span>
             <h1 className="track-title">{stop.title}</h1>
-            <ModuleProgress session={session} cards={cards} quiz={quiz} answers={answers} />
+            {(stop.summary || stop.minutes) && !isRetest && (
+              <p className="track-summary">
+                {stop.summary}
+                {stop.minutes ? <span className="track-time"> · about {stop.minutes} min</span> : null}
+              </p>
+            )}
           </div>
         </div>
-        <NoticeBoard stopNumber={stopIndex + 1} hint={Boolean(session.progress.readMoreHint[moduleId])} stats={stats} onRetest={!isRetest ? startRetest : null} />
+        <LiveBoard
+          stopLabel={stopLabel}
+          stopNumber={stopIndex + 1}
+          hint={Boolean(session.progress.readMoreHint[moduleId])}
+          stats={stats}
+          nextStop={nextId ? all.find((s) => s.id === nextId)?.title : null}
+          onRetest={!isRetest ? startRetest : null}
+        />
       </section>
 
       <div className="learn-body">
-        <IndexNav session={session} onPick={goTo} open={indexOpen} onClose={() => setIndexOpen(false)} retestCount={cards.length + quiz.length} />
+        <IndexNav
+          session={session}
+          onPick={goTo}
+          open={indexOpen}
+          onClose={() => setIndexOpen(false)}
+          retestCount={cards.length + quiz.length}
+          currentProgress={content ? <ModuleProgress session={session} cards={cards} quiz={quiz} answers={answers} /> : null}
+        />
 
         <main className="learn-main">
           <div className="learn-head">
@@ -324,11 +343,11 @@ function ModuleProgress({ session, cards, quiz, answers }) {
   const total = cards.length + quiz.length;
   const percent = total ? Math.round(((rated + answered) / total) * 100) : 0;
   return (
-    <div className="track-progress">
+    <div className="index-progress">
       <span className="bar" aria-hidden="true">
         <span style={{ width: `${percent}%` }} className={percent === 100 ? "bar-done" : ""} />
       </span>
-      <span className="muted">
+      <span className="muted index-progress-text">
         {cards.length > 0 && `${rated}/${cards.length} cards`}
         {cards.length > 0 && quiz.length > 0 && " · "}
         {quiz.length > 0 && `${answered}/${quiz.length} questions`}
