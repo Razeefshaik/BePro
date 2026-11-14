@@ -60,6 +60,7 @@ export default function LiveBoard({ stopLabel, stopNumber, hint, stats, nextStop
           <span className="live-dot" aria-hidden="true" /> LIVE
         </span>
         <span className="live-stop">{stopLabel}</span>
+        <span className={`live-label ${hint ? "is-hint" : ""}`}>{message.label}</span>
         <span className="live-clock" aria-label={`Time ${clock}`}>
           {clock}
         </span>
@@ -68,7 +69,6 @@ export default function LiveBoard({ stopLabel, stopNumber, hint, stats, nextStop
       <div className="live-screen">
         {/* key changes with the message, which restarts the flip-in animation */}
         <div key={hint ? "hint" : index} className={`live-message ${hint ? "is-hint" : ""}`}>
-          <span className="live-label">{message.label}</span>
           <p className="live-text">{message.text}</p>
         </div>
       </div>

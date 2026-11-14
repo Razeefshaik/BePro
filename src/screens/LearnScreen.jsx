@@ -145,13 +145,17 @@ export default function LearnScreen({ session, actions, theme, toggleTheme }) {
           <div className="track-now">
             <span className="track-chip">{stopLabel}</span>
             <h1 className="track-title">{stop.title}</h1>
+            {stop.summary && !isRetest && (
+              <span className="track-summary" title={stop.summary}>
+                {stop.summary}
+              </span>
+            )}
             {stop.minutes && !isRetest ? (
               <span className="track-time">
                 <Icon name="clock" size={14} /> {stop.minutes} min
               </span>
             ) : null}
           </div>
-          {stop.summary && !isRetest && <p className="track-summary">{stop.summary}</p>}
         </div>
         <LiveBoard
           stopLabel={stopLabel}

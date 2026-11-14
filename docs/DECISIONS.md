@@ -63,4 +63,4 @@ One row per design change, with its reason. Add a dated section per batch of wor
 | Flashcards get a deck meter, peeking next cards, a big number, Q and A badges, a different back face, click to flip and one control bar | razeef | Accept | Owner: the cards looked boring |
 | Card background shapes vary per card from a set of eight instead of one star everywhere | razeef | Accept | Owner: the same star on every card was boring |
 | Caveat font removed | razeef | Accept | Only the old notice board used it |
-
+| Learning page band made compact (about 130px instead of 290px): slim phase tiles, title and summary on one line, live board with one text line and its label in the top bar | razeef | Accept | Owner: the band took too much space; the card and its buttons now fit on one screen |
