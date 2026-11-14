@@ -13,7 +13,7 @@
 /* Everything under the top bar sits on a cream "scratch pad" with a faint dot grid. */
 .learn-body {
   min-height: calc(100 * var(--vh) - var(--appbar-h));
-  background: radial-gradient(circle, var(--pad-dot) 1.2px, transparent 1.6px) 0 0 / 18px 18px, var(--pad);
+  background: radial-gradient(circle, var(--pad-dot) 0.9px, transparent 1.3px) 0 0 / 28px 28px, var(--pad);
   display: grid;
   grid-template-columns: clamp(232px, calc(17 * var(--vw)), 272px) minmax(0, 1fr);
   align-items: start;
