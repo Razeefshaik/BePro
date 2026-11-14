@@ -603,3 +603,19 @@
   background: var(--focus);
   color: var(--on-focus);
 }
+
+/* Subtopic chips grow with long text instead of breaking their pill shape. */
+.sub {
+  height: auto;
+  min-height: 28px;
+  max-width: 100%;
+  padding: 4px 4px 4px 10px;
+  border-radius: 14px;
+  line-height: 1.3;
+  align-items: center;
+  overflow-wrap: anywhere;
+}
+.sub button {
+  flex: none;
+  align-self: center;
+}
