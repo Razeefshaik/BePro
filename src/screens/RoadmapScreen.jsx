@@ -58,7 +58,7 @@ export default function RoadmapScreen({ session, actions, theme, toggleTheme }) 
       <AppBar session={session} actions={actions} theme={theme} toggleTheme={toggleTheme} />
 
       <main className="roadmap">
-        <div className="rm-head">
+        <div className="rm-head hero-surface">
           <button className="icon-btn icon-back" onClick={() => actions.dispatch({ type: "NEW_LEARNING" })} aria-label="Back to start">
             <Icon name="chevronLeft" />
           </button>

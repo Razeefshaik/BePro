@@ -59,7 +59,7 @@ export default function SessionCard({ session, onRetest }) {
   const length = 2 * Math.PI * radius;
 
   return (
-    <section className="session-hero" aria-label="This session">
+    <section className="session-hero hero-surface" aria-label="This session">
       <header className="hero-head">
         <span className="hero-avatar" aria-hidden="true">
           <Icon name="cap" size={20} />

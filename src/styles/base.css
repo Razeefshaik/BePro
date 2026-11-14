@@ -565,3 +565,47 @@ kbd {
   background: var(--card-bg);
 }
 
+/* ---------- hero surface ----------
+   One look for the headline card of each screen (session card, road map header, results score):
+   the theme's gradient, white text, a soft glow in the corner. */
+.hero-surface {
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  background: var(--hero);
+  border: 0;
+  border-radius: 28px;
+  box-shadow: var(--hero-shadow);
+}
+.hero-surface::before {
+  content: "";
+  position: absolute;
+  width: 280px;
+  height: 280px;
+  right: -90px;
+  top: -140px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3), transparent 65%);
+  pointer-events: none;
+}
+.hero-surface > * {
+  position: relative;
+}
+.hero-surface .muted {
+  color: rgba(255, 255, 255, 0.82);
+}
+/* Buttons on a hero surface: glass for secondary, white for the main action. */
+.hero-surface .btn-ghost,
+.hero-surface .icon-btn {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.35);
+  color: #fff;
+}
+.hero-surface .btn-ghost:hover,
+.hero-surface .icon-btn:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+.hero-surface .btn-primary {
+  background: #fff;
+  color: #1b1840;
+}

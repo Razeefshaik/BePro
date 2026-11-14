@@ -331,3 +331,33 @@
 .mini-road::before {
   top: 31px;
 }
+
+/* ---------- score card as a hero card ---------- */
+.results-grid .score-card.hero-surface {
+  border: 0;
+}
+.score-card.hero-surface .verdict {
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+}
+.score-card.hero-surface .gauge-track {
+  stroke: rgba(255, 255, 255, 0.22);
+}
+.score-card.hero-surface .gauge-ticks {
+  stroke: rgba(255, 255, 255, 0.3);
+}
+.score-card.hero-surface .gauge-value {
+  stroke: #fff;
+}
+.score-card.hero-surface .gauge-number small {
+  color: rgba(255, 255, 255, 0.8);
+}
+.score-card.hero-surface .split {
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+.score-card.hero-surface .split span {
+  color: rgba(255, 255, 255, 0.9);
+}

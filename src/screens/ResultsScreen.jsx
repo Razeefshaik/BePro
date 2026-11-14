@@ -85,7 +85,7 @@ export default function ResultsScreen({ session, actions, theme, toggleTheme }) 
         {saved === "fail" && <StatusBanner kind="error" title="Couldn't save">Your browser blocked storage (private window or full). The session still works until you close the tab.</StatusBanner>}
 
         <div className="results-grid">
-          <section className="panel score-card">
+          <section className="panel score-card hero-surface">
             <div className="score-top">
               <span>Overall score</span>
               <span className={`verdict verdict-${v.tone}`}>

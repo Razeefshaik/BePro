@@ -760,3 +760,20 @@
   padding-top: 4px;
   border-top: 1px solid var(--line);
 }
+
+/* ---------- road map header as a hero card ---------- */
+.rm-head.hero-surface {
+  padding: 18px 22px;
+}
+.rm-head.hero-surface .rm-title h1 em {
+  color: #d4ceff;
+}
+.t-night .rm-head.hero-surface .rm-title h1 em {
+  color: var(--focus);
+}
+@media (max-width: 760px) {
+  .rm-head.hero-surface {
+    padding: 14px 16px;
+    border-radius: 22px;
+  }
+}

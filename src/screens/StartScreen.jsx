@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Icon from "../components/Icon.jsx";
-import { Logo, ThemeToggle } from "../components/common.jsx";
+import { Logo, ThemeToggle, tintFor } from "../components/common.jsx";
 import { sessionProgress } from "../state/selectors.js";
 import { LEVEL_LABELS, GOAL_LABELS, GOAL } from "../../shared/profile.js";
 
@@ -172,22 +172,26 @@ function Sidebar({ state, actions, open, onClose, theme, toggleTheme }) {
             <p className="saved-empty muted">Nothing saved yet. Your road maps show up here, so you can pick up where you left off.</p>
           ) : (
             <ul className="saved-list">
-              {sessions.map((s) => {
+              {sessions.map((s, i) => {
                 const p = sessionProgress(s);
                 const title = s.plan.data?.title || s.input.topic || "Your notes";
                 return (
                   <li key={s.id} className="saved-item">
                     <button className="saved-open" onClick={() => actions.dispatch({ type: "SESSION_OPEN", id: s.id })}>
-                      <span className="saved-title">{title}</span>
-                      <span className="bar" aria-hidden="true">
-                        <span style={{ width: `${p.percent}%` }} className={p.percent === 100 ? "bar-done" : ""} />
+                      <span className={`saved-tile tint-${tintFor(i)} ${p.percent === 100 ? "is-done" : ""}`}>
+                        {p.percent === 100 ? <Icon name="check" size={16} stroke={3} /> : `${p.percent}%`}
                       </span>
-                      <span className="saved-next">
-                        <span>{p.next}</span>
-                        <span className="muted">{p.percent}%</span>
-                      </span>
-                      <span className="saved-meta">
-                        {LEVEL_LABELS[s.input.level]} · {GOAL_LABELS[s.input.goal]}
+                      <span className="saved-text">
+                        <span className="saved-title">{title}</span>
+                        <span className="bar" aria-hidden="true">
+                          <span style={{ width: `${p.percent}%` }} className={p.percent === 100 ? "bar-done" : ""} />
+                        </span>
+                        <span className="saved-next">
+                          <span>{p.next}</span>
+                        </span>
+                        <span className="saved-meta">
+                          {LEVEL_LABELS[s.input.level]} · {GOAL_LABELS[s.input.goal]}
+                        </span>
                       </span>
                     </button>
                     <button
