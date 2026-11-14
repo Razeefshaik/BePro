@@ -12,6 +12,23 @@ One row per design change, with its reason. Add a dated section per batch of wor
 | Schedule is 4 days to 2026-11-16, not 8 hours; build the full spec | razeef | Accept | Owner's call; the cut order is only a fallback |
 | `provider.js` has two modes via `LLM_PROVIDER`: `openai` (fetch) and `codex` (spawns `codex exec` with the prompt on stdin, `-s read-only --ephemeral --skip-git-repo-check`, run in an empty temp dir, answer read from `-o` file) | razeef | Accept | Free local development on the owner's Codex login; no new dependency (Node `child_process`); graders still use the openai path |
 | Provider timeout comes from `LLM_TIMEOUT_MS` (25s default; raise to about 90s for codex) and the client timeout follows it | razeef | Accept | A Codex call took 11 to 14s for a tiny plan, so module content can exceed 25s |
-| Draft theme "Meadow Glass" replaces SPEC 10's Ink/Paper tokens, pending owner sign-off: Meadow (light, from LangUp: mint to lavender ground, ink pill buttons, Outfit) and Night (dark, from Noryx: ember and cobalt glow, glass cards, thin numerals, highlighter lime for focus). Canvas: https://claude.ai/artifact/NPGo2q3f3m9YUsPAip1Mfi | razeef | Proposed | Owner asked for LangUp's look plus Noryx's glass and gradients |
-| Color roles stay the same, hues change: focus = lavender / lime, got it = green / mint, review = blush / ember, always with an icon or a word | razeef | Proposed | Keeps SPEC's meaning-first rule while fitting the new palettes |
+| Theme "Meadow Glass" replaces SPEC 10's Ink/Paper tokens (owner approved, with the changes in the 2026-11-12 Build section): Meadow (light, from LangUp: mint to lavender ground, ink pill buttons, Outfit) and Night (dark, from Noryx: ember and cobalt glow, glass cards, thin numerals, highlighter lime for focus). Canvas: https://claude.ai/artifact/NPGo2q3f3m9YUsPAip1Mfi | razeef | Accept | Owner asked for LangUp's look plus Noryx's glass and gradients |
+| Color roles stay the same, hues change: focus = lavender / lime, got it = green / mint, review = blush / ember, always with an icon or a word | razeef | Accept | Keeps SPEC's meaning-first rule while fitting the new palettes |
 | Codex model `gpt-6-luna` with `model_reasoning_effort="low"` | razeef | Accept | The config default `gpt-6.1-sol` is rejected for ChatGPT-account logins; luna was the fastest tested |
+
+## 2026-11-12 Build (C01 to C10)
+
+| Decision | By | Status | Reason |
+| --- | --- | --- | --- |
+| Gradient background and big wordmark only on the start screen; working screens use a calm flat background with faint corner washes | razeef | Accept | Owner: the gradient fit the intro but not the learning pages, in both themes |
+| Each flashcard, road map stop and true/false card gets its own pastel tint, cycling through the palette | razeef | Accept | Owner asked for differently colored cards, like the reference lesson cards |
+| Learning page top band = tracking panel plus a wide notice board (motivation, tip or adaptive hint, session stats) | razeef | Accept | Owner asked for a wider band that reads like a notice board |
+| Results use one layout for both themes | razeef | Accept | Owner liked the results design and wanted it the same in both |
+| Third provider mode `mock`, plus `LLM_CHAOS` (0 to 1) that breaks replies on purpose | razeef | Accept | Lets graders click through without a key and demo the failure handling on demand |
+| One generic `generate()` retry loop in `pipeline.js`, endpoint rules in `checks.js` | razeef | Accept | Keeps the retry logic in one place and each check easy to explain |
+| Ids for cards and questions are assigned by our code (`m1-c1`, `m1-q1`), never taken from the model | razeef | Accept | Stable keys for ratings, answers and the retest pile |
+| Editing a stop (rename, subtopics, delete) drops its cached cards and their progress | razeef | Accept | Old cards may no longer match the edited stop |
+| "New questions on weak spots" adds a new stop built from the lowest scoring stops and opens it | razeef | Accept | Reuses the module endpoint instead of a new one |
+| Unanswered quiz questions go to the doubt bot without the answer key | razeef | Accept | The bot must not spoil the question |
+| Vite proxy reads the API port from `PORT` (dotenv) | razeef | Accept | Server and proxy always agree on the port |
+| Reducer tests (`src/state/*.test.js`) run with `npm test` next to the pipeline tests | razeef | Accept | Proves the stale guard in code, not only in prose |

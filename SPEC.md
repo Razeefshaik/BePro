@@ -262,18 +262,17 @@ Rules:
 
 ---
 
-## 10. UI specification (match the canvas)
+## 10. UI specification
 
-**Theme tokens** (`src/styles/tokens.css`). The root element gets class `t-ink` (default) or `t-paper`. The toggle is saved in localStorage.
+**Theme: "Meadow Glass"** (replaced the original Ink/Paper tokens, see DECISIONS 2026-11-12). Design canvas: https://claude.ai/artifact/NPGo2q3f3m9YUsPAip1Mfi
+* Tokens live in `src/styles/tokens.css`. The root element gets class `t-meadow` (default, light) or `t-night` (dark). The toggle is saved in localStorage.
+* Only the start screen gets the full gradient background (`public/bg/intro-*.svg`) and the big wordmark. Working screens (road map, learn, results) use a calm, flat background with two faint corner washes, so content stays readable.
+* Flashcards, road map stops and true/false cards each get a pastel tint from the palette (lavender, aqua, meadow, butter, blush, peach), cycling per item.
+* Results use the same layout in both themes.
 
-```css
-.t-ink{--bg:#10162A;--panel:#18203A;--panel2:#212A47;--line:#2E3858;--text:#EEF1F8;--muted:#A6AFC6;--hl:#FFE45C;--on-hl:#17170F;--mint:#7EE8C4;--pink:#FF8FB1;--good:#7EE8C4;--bad:#FF9DBB;--mint-soft:rgba(126,232,196,0.14);--pink-soft:rgba(255,143,177,0.15);--hl-soft:rgba(255,228,92,0.12);--link:#A9BDFF;--rule:rgba(169,189,255,0.07);--shadow:0 18px 40px rgba(4,8,20,0.55)}
-.t-paper{--bg:#EEF0EA;--panel:#FFFFFF;--panel2:#F5F6F1;--line:#DCDFD5;--text:#1D2640;--muted:#545E77;--hl:#FFE45C;--on-hl:#1D2640;--mint:#9FF0D2;--pink:#FFC0D2;--good:#0F7A57;--bad:#B8285A;--mint-soft:#E2F8EF;--pink-soft:#FDE7EF;--hl-soft:#FFF7CC;--link:#2F4CC9;--rule:rgba(47,76,201,0.08);--shadow:0 18px 40px rgba(29,38,64,0.16)}
-```
+Fonts (Google Fonts): Outfit (everything), Caveat (motivation note only).
 
-Fonts (Google Fonts): Bricolage Grotesque (headings), Atkinson Hyperlegible (body), Caveat (motivation note only).
-
-Color meaning, used everywhere: **yellow = focus now, mint = got it, pink = review this.** Never rely on color alone; always pair it with text or an icon.
+Color meaning, same roles in both themes: **focus now = lavender (Meadow) / highlighter lime (Night), got it = green / mint, review this = blush pink / ember.** Never rely on color alone; always pair it with text or an icon.
 
 **Start screen.**
 * Left sidebar: saved learnings with a progress bar and a "what's next" line, plus a "New learning" button.
@@ -289,7 +288,7 @@ Color meaning, used everywhere: **yellow = focus now, mint = got it, pink = revi
 * On a phone, the road scrolls horizontally.
 
 **Learning page.**
-* Top band: the stepper (Basics and prereqs, Topic deep dive, Test and quiz; skipped phases show "Skipped"), the Sources and Roadmap buttons, and the motivation note.
+* Top band: the stepper (Basics and prereqs, Topic deep dive, Test and quiz; skipped phases show "Skipped"), the Sources and Roadmap buttons, and a wide **notice board** with three pinned notes: the motivation note, a study tip from `src/data/tips.json` (replaced by an adaptive "Hint for you" after 2 "Review again" in a row), and live session stats with "Retest now".
 * Body: the Index (modules grouped by phase, current module expanded with its subtopics) and the content window.
 * Content window tabs: **Cards** (default) and **Quiz**.
   * Flashcard: front plus visual. Flip shows the answer. **Read further** expands the explanation inside the card (lazy loaded and cached). Rating buttons: "Review again" and "Got it".
