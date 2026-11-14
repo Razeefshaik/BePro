@@ -30,11 +30,15 @@ function accuracyLevel(percent, answered) {
   return { word: "low", tone: "low" };
 }
 
-function Metric({ label, value, sub, ratio, tone = "none" }) {
+// `detail` is the part of the label that is hidden when the band is slim (see .hero-extra).
+function Metric({ label, detail, value, sub, ratio, tone = "none" }) {
   return (
     <div className={`hero-metric tone-${tone}`}>
       <strong>{value}</strong>
-      <span className="hero-metric-label">{label}</span>
+      <span className="hero-metric-label">
+        {label}
+        {detail && <span className="hero-extra"> · {detail}</span>}
+      </span>
       <span className="hero-bar" aria-hidden="true">
         <span style={{ width: `${Math.round(Math.min(1, ratio) * 100)}%` }} />
       </span>
@@ -87,7 +91,8 @@ export default function SessionCard({ session, onRetest }) {
           <div className="hero-big">
             <strong>{percent}%</strong>
             <span>
-              Road map done · {done} of {all.length} stops
+              <span className="hero-extra">Road map done · </span>
+              {done} of {all.length} stops
             </span>
           </div>
           <div className="hero-ring" aria-hidden="true">
@@ -103,7 +108,8 @@ export default function SessionCard({ session, onRetest }) {
 
         <div className="hero-metrics">
           <Metric
-            label={score.total ? `Accuracy · ${level.word}` : "Accuracy"}
+            label="Accuracy"
+            detail={score.total ? level.word : null}
             value={score.total ? `${score.percent}%` : "–"}
             sub={score.total ? `${score.correct} of ${score.total} right` : "No answers yet"}
             ratio={score.total ? score.correct / score.total : 0}
@@ -115,7 +121,7 @@ export default function SessionCard({ session, onRetest }) {
             sub={rated ? `${score.cardsReview} to review` : "No cards rated yet"}
             ratio={rated ? score.cardsGot / rated : 0}
           />
-          <Metric label={`Studying · goal ${GOAL_MINUTES}`} value={`${minutes < 1 ? "<1" : minutes} min`} sub="this visit" ratio={minutes / GOAL_MINUTES} />
+          <Metric label="Studying" detail={`goal ${GOAL_MINUTES}`} value={`${minutes < 1 ? "<1" : minutes} min`} sub="this visit" ratio={minutes / GOAL_MINUTES} />
         </div>
       </div>
     </section>

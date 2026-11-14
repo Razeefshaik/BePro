@@ -18,12 +18,12 @@
 .meter-segs {
   flex: 1;
   display: flex;
-  gap: 6px;
+  gap: 4px;
 }
 .meter-seg {
   position: relative;
   flex: 1;
-  height: 8px;
+  height: 4px;
   padding: 0;
   border: 0;
   border-radius: 999px;
@@ -36,7 +36,7 @@
   inset: -8px 0; /* bigger click area than the thin bar */
 }
 .meter-seg:hover {
-  transform: scaleY(1.4);
+  transform: scaleY(1.6);
 }
 .meter-seg.is-got {
   background: var(--good-fill);
@@ -46,10 +46,10 @@
 }
 .meter-seg.is-current {
   background: var(--focus);
-  box-shadow: 0 0 0 3px var(--focus-soft);
+  box-shadow: 0 0 0 2px var(--focus-soft);
 }
 .meter-count {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   color: var(--muted);
   font-variant-numeric: tabular-nums;
@@ -112,6 +112,12 @@
   box-shadow: var(--shadow);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+}
+/* Everything on a face except the shape and the big number. */
+.flash-body {
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 16px;

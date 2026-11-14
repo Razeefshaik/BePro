@@ -114,3 +114,7 @@
 **C19: smaller top band**
 - **Goal:** shrink the session card, doubt card and live board (padding, avatars, big number, ring, board text). The band is about 190px tall at 1440 wide, down from about 295px.
 - **Status:** done on `razeef/c01-build`
+
+**C20: one-screen learning page**
+- **Goal:** on desktop (901px wide and 600px tall or more) the band, stop title, meter, card and buttons fit in the window with no page scroll. The card is the main element: the band is slimmer (one-line session numbers, one-row doubt chips), the meter is thinner, the card grows into the space left, visuals on the question side shrink to fit, and long answers scroll inside the card (`.flash-body`) with a soft see-through scrollbar.
+- **Status:** done on `razeef/c01-build`

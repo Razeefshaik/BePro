@@ -88,49 +88,54 @@ export default function Flashcard({
               <span className="flash-num" aria-hidden="true">
                 {number}
               </span>
-              <CardTop label={label} index={index} total={total} card={card} rating={rating} />
-              <span className="flash-kind">
-                <span className="kind-badge">Q</span> Question
-              </span>
-              <h2 className="flash-question">{card.front}</h2>
-              {card.visual && (
-                <div className="flash-visual">
-                  <Visual visual={card.visual} />
+              {/* The body scrolls if the content is long; the face itself stays clipped. */}
+              <div className="flash-body">
+                <CardTop label={label} index={index} total={total} card={card} rating={rating} />
+                <span className="flash-kind">
+                  <span className="kind-badge">Q</span> Question
+                </span>
+                <h2 className="flash-question">{card.front}</h2>
+                {card.visual && (
+                  <div className="flash-visual">
+                    <Visual visual={card.visual} />
+                  </div>
+                )}
+                <div className="flash-hint">
+                  <Icon name="flip" size={15} /> Think of your answer, then tap the card to flip.
                 </div>
-              )}
-              <div className="flash-hint">
-                <Icon name="flip" size={15} /> Think of your answer, then tap the card to flip.
               </div>
             </section>
 
             {/* Back */}
             <section className="flash-face flash-back" aria-hidden={!flipped} inert={!flipped ? "" : undefined} onClick={onFaceClick}>
               <CardDeco variant={deco} />
-              <CardTop label={label} index={index} total={total} card={card} rating={rating} />
-              <span className="flash-kind">
-                <span className="kind-badge kind-answer">A</span> Answer
-              </span>
-              <p className="flash-echo">{card.front}</p>
-              <p className="flash-answer">{card.answer}</p>
-              {card.sourceQuote && !card.ungrounded && (
-                <blockquote className="flash-quote">
-                  <Icon name="book" size={14} /> “{card.sourceQuote}”
-                </blockquote>
-              )}
-              {card.visual && card.visual.kind !== "image" && (
-                <div className="flash-visual flash-visual-small">
-                  <Visual visual={card.visual} compact />
-                </div>
-              )}
+              <div className="flash-body">
+                <CardTop label={label} index={index} total={total} card={card} rating={rating} />
+                <span className="flash-kind">
+                  <span className="kind-badge kind-answer">A</span> Answer
+                </span>
+                <p className="flash-echo">{card.front}</p>
+                <p className="flash-answer">{card.answer}</p>
+                {card.sourceQuote && !card.ungrounded && (
+                  <blockquote className="flash-quote">
+                    <Icon name="book" size={14} /> “{card.sourceQuote}”
+                  </blockquote>
+                )}
+                {card.visual && card.visual.kind !== "image" && (
+                  <div className="flash-visual flash-visual-small">
+                    <Visual visual={card.visual} compact />
+                  </div>
+                )}
 
-              <div className="readmore">
-                <button className={`readmore-toggle ${suggestReadMore && !readMoreOpen ? "is-suggested" : ""}`} onClick={onReadMore} aria-expanded={readMoreOpen}>
-                  <Icon name="book" size={16} />
-                  {readMoreOpen ? "Hide explanation" : "Read further"}
-                  {suggestReadMore && !readMoreOpen && <span className="pill pill-white suggested">Suggested</span>}
-                  <Icon name={readMoreOpen ? "chevronUp" : "chevronDown"} size={16} />
-                </button>
-                {readMoreOpen && <ReadMoreBody slot={readMore} onRetry={onReadMore} />}
+                <div className="readmore">
+                  <button className={`readmore-toggle ${suggestReadMore && !readMoreOpen ? "is-suggested" : ""}`} onClick={onReadMore} aria-expanded={readMoreOpen}>
+                    <Icon name="book" size={16} />
+                    {readMoreOpen ? "Hide explanation" : "Read further"}
+                    {suggestReadMore && !readMoreOpen && <span className="pill pill-white suggested">Suggested</span>}
+                    <Icon name={readMoreOpen ? "chevronUp" : "chevronDown"} size={16} />
+                  </button>
+                  {readMoreOpen && <ReadMoreBody slot={readMore} onRetry={onReadMore} />}
+                </div>
               </div>
             </section>
           </div>
