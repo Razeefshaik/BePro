@@ -23,6 +23,12 @@
   --hero: linear-gradient(140deg, #7a6ef0 0%, #5a4fd6 52%, #4136b0 100%);
   --hero-shadow: 0 18px 40px rgba(76, 64, 190, 0.32);
   --on-focus: #ffffff;
+  /* Learning page: the band tray, the dotted "scratch pad" behind the card, the Index column. */
+  --band: linear-gradient(135deg, #e7e3ff 0%, #e2f1f5 100%);
+  --band-edge: rgba(111, 101, 224, 0.16);
+  --pad: #fbf7ee;
+  --pad-dot: rgba(120, 96, 50, 0.17);
+  --pad-side: #f4eee0;
 
   --good: #2c6e1b;
   --good-fill: #a8e68a;
@@ -77,6 +83,11 @@
   --hero: linear-gradient(140deg, #3d3399 0%, #2b2873 50%, #165059 100%);
   --hero-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
   --on-focus: #17170f;
+  --band: linear-gradient(135deg, #1f1d36 0%, #172a2f 100%);
+  --band-edge: rgba(255, 255, 255, 0.07);
+  --pad: #141318;
+  --pad-dot: rgba(255, 255, 255, 0.075);
+  --pad-side: #18171d;
 
   --good: #7ee8c4;
   --good-fill: #7ee8c4;

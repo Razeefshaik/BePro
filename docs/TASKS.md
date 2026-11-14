@@ -122,3 +122,7 @@
 **C21: compact card buttons**
 - **Goal:** on desktop the card buttons are a compact bar (up to 660px wide, 44px tall) centred under the wider card, so the card reads as the main element. Phones keep the full-width sticky bar.
 - **Status:** done on `razeef/c01-build`
+
+**C22: band tray and scratch-pad background**
+- **Goal:** the three band cards sit on one tray (`--band`, lavender to mint; deep indigo to teal in Night) so they read as one section. The rest of the learning page is a cream "scratch pad" with a faint dot grid (`--pad`, `--pad-dot`); the Index column is a slightly deeper cream (`--pad-side`).
+- **Status:** done on `razeef/c01-build`
