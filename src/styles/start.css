@@ -542,10 +542,13 @@
   /* Sizes and gaps grow with the window height (--vh), so a tall window is filled
      and a short one still fits. */
   /* The big wordmark is a soft backdrop and the headline sits on the bottom of its letters.
-     --wm is its size, from the window width beside the sidebar and the window height.
-     It may run slightly past the column's edges; .start-content clips that quietly. */
+     --wm is its size, the smaller of:
+       width:  about a third of the column beside the sidebar (it may bleed a little past the
+               edges; .start-content clips that quietly)
+       height: whatever the window has left after the rest of the screen (~535px), so the
+               wordmark fills short windows instead of leaving gaps. */
   .start-main {
-    --wm: clamp(90px, min(calc((100 * var(--vw) - 356px) * 0.36), calc(38 * var(--vh))), 380px);
+    --wm: clamp(90px, min(calc((100 * var(--vw) - 356px) * 0.345), calc((100 * var(--vh) - 535px) * 1.45)), 400px);
   }
   .start-content {
     overflow-x: hidden;
@@ -585,12 +588,6 @@
   }
   .examples {
     margin-top: clamp(10px, calc(3 * var(--vh)), 32px);
-  }
-}
-/* Short desktop windows: a smaller wordmark keeps everything on one screen. */
-@media (min-width: 901px) and (max-height: 740px) {
-  .start-main {
-    --wm: clamp(90px, min(calc((100 * var(--vw) - 380px) * 0.32), calc(26 * var(--vh))), 200px);
   }
 }
 
