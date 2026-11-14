@@ -118,7 +118,7 @@
 }
 .road {
   position: relative;
-  min-width: calc(var(--stops) * 232px);
+  min-width: calc(var(--stops) * 214px);
 }
 .road-brackets,
 .road-stops {
@@ -519,4 +519,87 @@
 .adjust-chips .chip {
   flex: none;
   white-space: nowrap;
+}
+
+/* ---------- road colors follow the stop cards ---------- */
+.dot.has-tint {
+  border: 3px solid var(--card-deco);
+  background: var(--card-bg);
+  color: var(--card-ink);
+}
+.dot.has-tint.dot-done {
+  background: var(--good-fill);
+  border-color: var(--good-fill);
+  color: #14151f;
+}
+.station.is-selected .dot.has-tint {
+  background: var(--focus);
+  border-color: var(--surface);
+  color: var(--on-focus);
+}
+.road-line {
+  box-shadow: 0 6px 18px rgba(20, 21, 31, 0.08);
+}
+
+/* ---------- road scrolling: no native scrollbar, arrows and soft edges instead ---------- */
+.road-wrap {
+  position: relative;
+}
+.road-scroll {
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+.road-scroll::-webkit-scrollbar {
+  display: none;
+}
+.road-scroll.fade-right {
+  mask-image: linear-gradient(90deg, #000 calc(100% - 56px), transparent);
+  -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 56px), transparent);
+}
+.road-scroll.fade-left {
+  mask-image: linear-gradient(90deg, transparent, #000 56px);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 56px);
+}
+.road-scroll.fade-left.fade-right {
+  mask-image: linear-gradient(90deg, transparent, #000 56px, #000 calc(100% - 56px), transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 56px, #000 calc(100% - 56px), transparent);
+}
+.road-arrow {
+  position: absolute;
+  top: 132px;
+  z-index: 8;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow);
+}
+.road-arrow:hover {
+  border-color: var(--focus);
+}
+.road-arrow-left {
+  left: -6px;
+}
+.road-arrow-right {
+  right: -6px;
+}
+@media (max-width: 760px) {
+  .road-arrow {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+/* Stop circles: white inside, colored ring from the card (owner's request). */
+.dot.has-tint:not(.dot-done) {
+  background: #ffffff;
+  color: #14151f;
+}
+.station.is-selected .dot.has-tint {
+  background: var(--focus);
+  color: var(--on-focus);
 }

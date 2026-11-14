@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Icon from "../components/Icon.jsx";
 import AppBar from "../components/AppBar.jsx";
 import SkipCheck from "../components/SkipCheck.jsx";
@@ -182,9 +182,40 @@ export default function RoadmapScreen({ session, actions, theme, toggleTheme }) 
   );
 }
 
+// Each stop's color: its card tint. The final test is always aqua.
+const stopTint = (stop, index) => (stop.id === FINAL_ID ? "aqua" : tintFor(index));
+
+// Tracks whether the road can scroll left or right, so arrow buttons show only when needed.
+function useScrollEdges(ref, deps) {
+  const [edges, setEdges] = useState({ left: false, right: false });
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return undefined;
+    const update = () =>
+      setEdges({ left: el.scrollLeft > 4, right: el.scrollLeft + el.clientWidth < el.scrollWidth - 4 });
+    update();
+    el.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    return () => {
+      el.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+    };
+  }, deps); // eslint-disable-line react-hooks/exhaustive-deps
+  return edges;
+}
+
 function Road({ session, all, selected, setSelected, actions, busy }) {
   const sessionId = session.id;
   const modules = session.plan.data.modules;
+  const scrollRef = useRef(null);
+  const edges = useScrollEdges(scrollRef, [all.length]);
+  const scroll = (direction) => scrollRef.current?.scrollBy({ left: direction * 320, behavior: "smooth" });
+
+  // The road line runs through every stop's color, so each segment matches the card under it.
+  const lineColors = all.map((stop, i) => {
+    const at = all.length > 1 ? (i / (all.length - 1)) * 100 : 0;
+    return `var(--tint-${stopTint(stop, i)}-deco) ${at.toFixed(1)}%`;
+  });
 
   // Consecutive stops with the same phase share one bracket above the road.
   const groups = [];
@@ -195,7 +226,18 @@ function Road({ session, all, selected, setSelected, actions, busy }) {
   });
 
   return (
-    <div className={`road-scroll ${busy ? "is-busy" : ""}`} aria-busy={busy}>
+    <div className="road-wrap">
+      {edges.left && (
+        <button className="road-arrow road-arrow-left" onClick={() => scroll(-1)} aria-label="Scroll the road left">
+          <Icon name="chevronLeft" />
+        </button>
+      )}
+      {edges.right && (
+        <button className="road-arrow road-arrow-right" onClick={() => scroll(1)} aria-label="Scroll the road right">
+          <Icon name="chevronRight" />
+        </button>
+      )}
+    <div ref={scrollRef} className={`road-scroll ${busy ? "is-busy" : ""} ${edges.left ? "fade-left" : ""} ${edges.right ? "fade-right" : ""}`} aria-busy={busy}>
       <div className="road" style={{ "--stops": all.length }}>
         <div className="road-brackets">
           {groups.map((g) => (
@@ -204,7 +246,7 @@ function Road({ session, all, selected, setSelected, actions, busy }) {
             </div>
           ))}
         </div>
-        <div className="road-line" aria-hidden="true" />
+        <div className="road-line" style={{ background: `linear-gradient(90deg, ${lineColors.join(", ")})` }} aria-hidden="true" />
         <ol className="road-stops">
           {all.map((stop, i) => (
             <Station
@@ -225,6 +267,7 @@ function Road({ session, all, selected, setSelected, actions, busy }) {
         </ol>
       </div>
     </div>
+    </div>
   );
 }
 
@@ -239,7 +282,7 @@ function Station({ stop, index, isFirst, isLastModule, session, selected, onSele
   const isFinal = stop.id === FINAL_ID;
   const done = isModuleDone(session, stop.id);
   const ready = session.modules[stop.id]?.status === "ready";
-  const tint = isFinal ? "aqua" : tintFor(index);
+  const tint = stopTint(stop, index);
   const dispatch = (action) => actions.dispatch({ sessionId, ...action });
 
   function saveRename() {
@@ -298,7 +341,7 @@ function Station({ stop, index, isFirst, isLastModule, session, selected, onSele
       )}
 
       <button
-        className={`dot dot-${stop.phase} ${done ? "dot-done" : ""}`}
+        className={`dot dot-${stop.phase} has-tint tint-${tint} ${done ? "dot-done" : ""}`}
         onClick={isFinal ? undefined : onSelect}
         aria-pressed={isFinal ? undefined : selected}
         aria-label={isFinal ? "Final test" : `Stop ${index + 1}: ${stop.title}. ${selected ? "Hide" : "Show"} edit tools`}

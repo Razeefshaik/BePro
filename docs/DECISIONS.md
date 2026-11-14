@@ -41,3 +41,5 @@ One row per design change, with its reason. Add a dated section per batch of wor
 | BEPRO wordmark gets its own row above the headline (gradient in Meadow) instead of sitting behind it | razeef | Accept | Owner: text over the wordmark looked congested and wasted it |
 | Level and goal are two joined stacked lists with a radio per row, not separate tiles | razeef | Accept | Owner: separated tiles looked confusing |
 | Smaller Build my road map button (42px) | razeef | Accept | Owner: it looked too big |
+| Road map: no native scrollbar; arrow buttons and soft faded edges appear only when the road overflows | razeef | Accept | Owner: the scrollbar looked ugly |
+| Road line segments and stop circle rings use each stop card's tint; circles are white inside | razeef | Accept | Owner: the step bar colors should match the cards |
