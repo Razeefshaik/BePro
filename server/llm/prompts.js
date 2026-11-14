@@ -23,7 +23,9 @@ const VISUAL_RULES = `Visuals: add a visual only where it genuinely helps unders
 
 function notesRules(notes) {
   if (!notes.trim()) return "";
-  return `\nNOTES MODE: use only facts from the user's notes below. Every card and question must include "sourceQuote": a short sentence copied word for word from the notes.\nNotes:\n${fence(notes)}\n`;
+  // The examples above have no "sourceQuote", so spell it out: a real model left it off quiz questions.
+  return `\nNOTES MODE: use only facts from the user's notes below.
+Add one more field, "sourceQuote", to EVERY card object and to EVERY quiz question object (mcq and truefalse alike): one short sentence copied word for word from the notes that supports it. Example: {"type":"truefalse", ..., "sourceQuote":"a sentence copied from the notes"}. An item without "sourceQuote" is shown to the learner as "Not found in your notes".\nNotes:\n${fence(notes)}\n`;
 }
 
 function depthRules(profile) {
