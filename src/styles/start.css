@@ -509,8 +509,42 @@
   .start-top {
     display: none;
   }
+  /* One screen on desktop: everything fits in the window, centred top to bottom.
+     The wordmark follows the window height, so short screens get a smaller one. */
   .start-content {
-    padding-top: 28px;
+    height: calc(100 * var(--vh));
+    overflow-y: auto;
+    padding: 20px 28px;
+  }
+  .start-main {
+    margin: auto;
+  }
+  .wordmark {
+    font-size: clamp(56px, min(calc(11 * var(--vw)), calc(13 * var(--vh))), 168px);
+    margin-top: 0;
+  }
+  .hero {
+    margin-top: 10px;
+    gap: 6px;
+  }
+  .start-form {
+    margin-top: 18px;
+  }
+  .prompt-input {
+    padding-bottom: 20px;
+  }
+  .choices {
+    gap: 14px;
+  }
+  .choice-group legend {
+    margin-bottom: 6px;
+  }
+  .stack-row {
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+  .examples {
+    margin-top: 12px;
   }
 }
 

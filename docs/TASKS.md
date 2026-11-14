@@ -134,3 +134,7 @@
 **C24: start box polish**
 - **Goal:** a roomier topic box with smaller buttons, and a soft light that runs around the box (a conic gradient spun with an `@property` angle: a thin line on the border plus a blurred copy behind it). It stops for reduced motion.
 - **Status:** done on `razeef/c01-build`
+
+**C25: start screen fits one screen**
+- **Goal:** on desktop the start screen fits the window, centred top to bottom: the wordmark follows the window height, and the gaps between sections and the choice rows are tighter. With notes open, the content column scrolls inside itself.
+- **Status:** done on `razeef/c01-build`
