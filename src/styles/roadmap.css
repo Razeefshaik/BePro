@@ -12,7 +12,8 @@
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 12px 24px;
+  /* side padding lines the bar up with the page content on wide screens */
+  padding: 12px max(var(--gutter), calc((100% - var(--page-max)) / 2 + var(--gutter)));
   background: color-mix(in srgb, var(--bg) 78%, transparent);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -44,9 +45,9 @@
 /* ---------- road map ---------- */
 .roadmap {
   width: 100%;
-  max-width: 1440px;
+  max-width: var(--page-max);
   margin: 0 auto;
-  padding: 24px 24px 28px;
+  padding: 24px var(--gutter) 28px;
   display: flex;
   flex-direction: column;
   gap: 16px;

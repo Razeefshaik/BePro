@@ -64,3 +64,13 @@ One row per design change, with its reason. Add a dated section per batch of wor
 | Card background shapes vary per card from a set of eight instead of one star everywhere | razeef | Accept | Owner: the same star on every card was boring |
 | Caveat font removed | razeef | Accept | Only the old notice board used it |
 | Learning page band made compact (about 130px instead of 290px): slim phase tiles, title and summary on one line, live board with one text line and its label in the top bar | razeef | Accept | Owner: the band took too much space; the card and its buttons now fit on one screen |
+
+## 2026-11-14 Screen sizes
+
+| Decision | By | Status | Reason |
+| --- | --- | --- | --- |
+| Big monitors (1800px and wider) scale the whole UI with CSS `zoom`; viewport units go through `--vh` / `--vw` to undo the zoom | razeef | Accept | Owner: the UI looked different on different screens; on big screens it was small and boxed in the middle |
+| One page width and gutter token for every screen, with the top bar aligned to it | razeef | Accept | Same proportions everywhere |
+| Learning page parts use container queries (deck controls, phase tiles, live board text) | razeef | Accept | They react to the space they get, so a narrow column looks like a small screen |
+| Index drawer from 900px down (was 760px); band stacks only below 860px; card control bar sticky at every size | razeef | Accept | Tablets and short laptops showed a cramped card with its buttons off screen |
+

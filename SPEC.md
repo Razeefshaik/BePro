@@ -318,3 +318,5 @@ Color meaning, same roles in both themes: **focus now = lavender (Meadow) / high
 **Keyboard:** Space flips a card. 1 and 2 rate a card. 1 to 4 answer a question. Enter goes next. Focus is always visible.
 
 **Mobile, below 760px:** the Index becomes a drawer, the top band compacts, and actions stick to the bottom.
+
+**Every screen size:** content shares one page width (`--page-max`) and side gutter, and the top bar lines up with it. Monitors from 1800px wide scale the whole interface up a step with CSS `zoom` (1.1, 1.3 at 2200px, 1.6 at 2800px); the CSS uses `--vh` / `--vw`, which undo the zoom, instead of raw `vh` / `vw`. On the learning page the deck, the phase band and the live board adapt to their own width (container queries). The Index becomes a drawer below 900px, the band stacks below 860px, the card's control bar always sticks to the bottom, and short screens (820px tall or less) get a smaller card and visuals.

@@ -179,7 +179,7 @@ export default function LearnScreen({ session, actions, theme, toggleTheme }) {
 
         <main className="learn-main">
           <div className="learn-head">
-            <button className="btn btn-ghost show-sm" onClick={() => setIndexOpen(true)}>
+            <button className="btn btn-ghost index-btn" onClick={() => setIndexOpen(true)}>
               <Icon name="menu" size={16} /> Index
             </button>
             {cards.length > 0 && quiz.length > 0 && (
