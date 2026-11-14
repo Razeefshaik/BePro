@@ -2,9 +2,9 @@
 //   - top bar: LIVE light, which stop you are on, a clock
 //   - main line: a motivation line or study tip that changes by itself every few seconds
 //     (an adaptive hint takes over after 2 "Review again" in a row)
-//   - ticker: session stats and the next stop, scrolling along the bottom
+//   - ticker: the next stops and the keyboard shortcuts, scrolling along the bottom
+//     (session numbers live in the session card next to it, not here)
 import { useEffect, useMemo, useState } from "react";
-import Icon from "./Icon.jsx";
 import quotes from "../data/quotes.json";
 import tips from "../data/tips.json";
 
@@ -33,7 +33,7 @@ function useClock() {
   return now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 }
 
-export default function LiveBoard({ stopLabel, stopNumber, hint, stats, nextStop, onRetest }) {
+export default function LiveBoard({ stopLabel, stopNumber, hint, nextStop, laterStop }) {
   const playlist = useMemo(() => buildPlaylist(stopNumber), [stopNumber]);
   const [index, setIndex] = useState(0);
   const clock = useClock();
@@ -46,11 +46,11 @@ export default function LiveBoard({ stopLabel, stopNumber, hint, stats, nextStop
   const message = hint ? { label: "Attention", text: HINT } : playlist[index];
 
   const tickerItems = [
-    `Cards rated ${stats.cardsRated}`,
-    `Correct ${stats.correct}/${stats.answered}`,
-    `Retest pile ${stats.pile}`,
-    nextStop ? `Next stop: ${nextStop}` : "Final stop ahead",
-    "Space flips · 1 and 2 rate · Enter goes next",
+    nextStop ? `Next stop: ${nextStop}` : "Last stop: finish strong",
+    ...(laterStop ? [`Then: ${laterStop}`] : []),
+    "Space flips the card",
+    "1 Review again · 2 Got it",
+    "Enter goes to the next question",
   ];
 
   return (
@@ -85,12 +85,7 @@ export default function LiveBoard({ stopLabel, stopNumber, hint, stats, nextStop
             ))}
           </div>
         </div>
-        <span className="sr-only">{tickerItems.slice(0, 4).join(". ")}</span>
-        {stats.pile > 0 && onRetest && (
-          <button className="live-btn" onClick={onRetest}>
-            <Icon name="redo" size={13} /> Retest {stats.pile}
-          </button>
-        )}
+        <span className="sr-only">{tickerItems.join(". ")}</span>
       </div>
     </section>
   );

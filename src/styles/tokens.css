@@ -19,6 +19,7 @@
   --focus: #6f65e0; /* white text on it passes 4.5:1 */
   --focus-ink: #4b40c4;
   --focus-soft: #ecebfd;
+  --focus-edge: rgba(111, 101, 224, 0.22); /* thin outline on "you are here" highlights */
   --on-focus: #ffffff;
 
   --good: #2c6e1b;
@@ -69,7 +70,8 @@
 
   --focus: #e4ff5a;
   --focus-ink: #e4ff5a;
-  --focus-soft: rgba(228, 255, 90, 0.12);
+  --focus-soft: rgba(255, 255, 255, 0.07); /* lime here looked olive */
+  --focus-edge: rgba(228, 255, 90, 0.38);
   --on-focus: #17170f;
 
   --good: #7ee8c4;
@@ -77,13 +79,13 @@
   --good-soft: rgba(126, 232, 196, 0.12);
   --good-edge: rgba(126, 232, 196, 0.45);
 
-  --review: #ff9b6a;
-  --review-fill: #ff9b6a;
-  --review-soft: rgba(255, 155, 106, 0.12);
-  --review-edge: rgba(255, 155, 106, 0.45);
+  --review: #ff8f86;
+  --review-fill: #ff8f86;
+  --review-soft: rgba(255, 128, 128, 0.12);
+  --review-edge: rgba(255, 143, 134, 0.45);
 
   --warn: #ffd27a;
-  --warn-soft: rgba(255, 210, 122, 0.12);
+  --warn-soft: rgba(255, 210, 122, 0.1);
 
   --action: #f4f2ee;
   --on-action: #101014;

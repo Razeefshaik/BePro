@@ -167,8 +167,11 @@
   margin-top: clamp(0px, calc(3 * var(--vh)), 32px);
 }
 .t-night .wordmark {
-  opacity: 1;
-  color: rgba(244, 242, 238, 0.1);
+  opacity: 0.3;
+  background: linear-gradient(100deg, #f4f2ee 0%, #8fe3e8 55%, #b3abff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .hero {

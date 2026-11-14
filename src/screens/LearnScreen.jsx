@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import Icon from "../components/Icon.jsx";
 import AppBar from "../components/AppBar.jsx";
-import Stepper from "../components/Stepper.jsx";
 import LiveBoard from "../components/LiveBoard.jsx";
+import SessionCard from "../components/SessionCard.jsx";
 import IndexNav from "../components/IndexNav.jsx";
 import Flashcard from "../components/Flashcard.jsx";
 import QuizQuestion from "../components/QuizQuestion.jsx";
@@ -10,7 +10,7 @@ import DoubtBot from "../components/DoubtBot.jsx";
 import SourcesPanel from "../components/SourcesPanel.jsx";
 import RoadPeek from "../components/RoadPeek.jsx";
 import { LoadingNotice, Skeleton, StatusBanner, tintFor, decoFor } from "../components/common.jsx";
-import { stops, phases, retestContent, retestPile, nextStopId, isModuleDone, FINAL_ID } from "../state/selectors.js";
+import { stops, retestContent, retestPile, nextStopId, isModuleDone, FINAL_ID } from "../state/selectors.js";
 
 export default function LearnScreen({ session, actions, theme, toggleTheme }) {
   const sessionId = session.id;
@@ -61,13 +61,6 @@ export default function LearnScreen({ session, actions, theme, toggleTheme }) {
   useEffect(() => setFlipped(false), [card?.id]);
 
   const pile = retestPile(session);
-  const allAnswers = Object.values(session.progress.answers);
-  const stats = {
-    cardsRated: Object.keys(session.progress.ratings).length,
-    answered: allAnswers.length,
-    correct: allAnswers.filter((a) => a.correct).length,
-    pile: pile.cards.length + pile.questions.length,
-  };
 
   function startRetest() {
     dispatch({ type: "START_RETEST", cardIds: pile.cards.map((c) => c.id), questionIds: pile.questions.map((q) => q.id) });
@@ -138,35 +131,7 @@ export default function LearnScreen({ session, actions, theme, toggleTheme }) {
         </button>
       </AppBar>
 
-      <section className="learn-top">
-        <div className="track panel">
-          <Stepper phases={phases(session)} />
-          {/* The current stop in one line: the Index and the card already show the rest. */}
-          <div className="track-now">
-            <span className="track-chip">{stopLabel}</span>
-            <h1 className="track-title">{stop.title}</h1>
-            {stop.summary && !isRetest && (
-              <span className="track-summary" title={stop.summary}>
-                {stop.summary}
-              </span>
-            )}
-            {stop.minutes && !isRetest ? (
-              <span className="track-time">
-                <Icon name="clock" size={14} /> {stop.minutes} min
-              </span>
-            ) : null}
-          </div>
-        </div>
-        <LiveBoard
-          stopLabel={stopLabel}
-          stopNumber={stopIndex + 1}
-          hint={Boolean(session.progress.readMoreHint[moduleId])}
-          stats={stats}
-          nextStop={nextId ? all.find((s) => s.id === nextId)?.title : null}
-          onRetest={!isRetest ? startRetest : null}
-        />
-      </section>
-
+      {/* Index on the left edge; the band (session, doubt bot, live board) and the card on the right. */}
       <div className="learn-body">
         <IndexNav
           session={session}
@@ -177,171 +142,188 @@ export default function LearnScreen({ session, actions, theme, toggleTheme }) {
           currentProgress={content ? <ModuleProgress session={session} cards={cards} quiz={quiz} answers={answers} /> : null}
         />
 
-        <main className="learn-main">
-          <div className="learn-head">
-            <button className="btn btn-ghost index-btn" onClick={() => setIndexOpen(true)}>
-              <Icon name="menu" size={16} /> Index
-            </button>
-            {cards.length > 0 && quiz.length > 0 && (
-              <div className="tabs" role="tablist" aria-label="Cards or quiz">
-                <button role="tab" aria-selected={view === "cards"} className={view === "cards" ? "is-on" : ""} onClick={() => dispatch({ type: "SET_VIEW", view: "cards" })}>
-                  Cards <span className="tab-count">{cards.length}</span>
+        <div className="learn-content">
+          <section className="learn-top">
+            <SessionCard session={session} onRetest={!isRetest ? startRetest : null} />
+            <DoubtBot context={doubtContext} contextKey={doubtKey} contextLabel={view === "cards" ? "this card" : "this question"} />
+            <LiveBoard
+              stopLabel={stopLabel}
+              stopNumber={stopIndex + 1}
+              hint={Boolean(session.progress.readMoreHint[moduleId])}
+              nextStop={nextId ? all.find((s) => s.id === nextId)?.title : null}
+              laterStop={nextId ? all.find((s) => s.id === nextStopId(session, nextId))?.title : null}
+            />
+          </section>
+
+          <main className="learn-main">
+            <div className="learn-head">
+              <button className="btn btn-ghost index-btn" onClick={() => setIndexOpen(true)}>
+                <Icon name="menu" size={16} /> Index
+              </button>
+              <h1 className="learn-stop">
+                <span className="learn-stop-chip">{stopLabel}</span>
+                <span className="learn-stop-title">{stop.title}</span>
+              </h1>
+              {cards.length > 0 && quiz.length > 0 && (
+                <div className="tabs" role="tablist" aria-label="Cards or quiz">
+                  <button role="tab" aria-selected={view === "cards"} className={view === "cards" ? "is-on" : ""} onClick={() => dispatch({ type: "SET_VIEW", view: "cards" })}>
+                    Cards <span className="tab-count">{cards.length}</span>
+                  </button>
+                  <button role="tab" aria-selected={view === "quiz"} className={view === "quiz" ? "is-on" : ""} onClick={() => dispatch({ type: "SET_VIEW", view: "quiz" })}>
+                    Quiz <span className="tab-count">{quiz.length}</span>
+                  </button>
+                </div>
+              )}
+              <div className="learn-head-actions show-sm">
+                <button className="icon-btn" onClick={() => setSourcesOpen(true)} aria-label="Sources">
+                  <Icon name="list" />
                 </button>
-                <button role="tab" aria-selected={view === "quiz"} className={view === "quiz" ? "is-on" : ""} onClick={() => dispatch({ type: "SET_VIEW", view: "quiz" })}>
-                  Quiz <span className="tab-count">{quiz.length}</span>
+                <button className="icon-btn" onClick={() => setRoadOpen(true)} aria-label="Road map">
+                  <Icon name="road" />
+                </button>
+              </div>
+            </div>
+
+            {/* ---------- states ---------- */}
+            {status === "loading" && !content && (
+              <>
+                <LoadingNotice label={`Building the cards for ${stop.title}...`} onRetry={() => actions.loadModule(sessionId, moduleId)} onCancel={() => actions.cancel(sessionId, "modules", moduleId)} />
+                <div className="card-skeleton panel">
+                  <Skeleton width="30%" height={26} radius={999} />
+                  <Skeleton width="80%" height={30} />
+                  <Skeleton height={180} radius={20} />
+                </div>
+              </>
+            )}
+
+            {status === "error" && (
+              <StatusBanner
+                kind="error"
+                title={`Couldn't build ${stop.title}`}
+                actions={[
+                  ...(slot.error?.retryable !== false ? [{ label: "Try again", onClick: () => actions.loadModule(sessionId, moduleId), primary: true }] : []),
+                  ...(nextId ? [{ label: "Skip", onClick: () => goTo(nextId) }] : [{ label: "Road map", onClick: () => actions.dispatch({ type: "GO", screen: "roadmap" }) }]),
+                ]}
+              >
+                {slot.error?.message}
+              </StatusBanner>
+            )}
+
+            {status === "idle" && !content && !isRetest && (
+              <StatusBanner kind="info" title="Getting ready" actions={[{ label: "Load cards", onClick: () => actions.loadModule(sessionId, moduleId), primary: true }]} />
+            )}
+
+            {content && cards.length === 0 && quiz.length === 0 && (
+              <div className="empty panel">
+                <h2>Nothing here yet</h2>
+                <p className="muted">{isRetest ? "Your retest pile is empty. Nice work." : "This stop has no cards or questions."}</p>
+                <button className="btn btn-primary" onClick={() => actions.dispatch({ type: "GO", screen: isRetest ? "results" : "roadmap" })}>
+                  {isRetest ? "See results" : "Back to road map"}
                 </button>
               </div>
             )}
-            <div className="learn-head-actions show-sm">
-              <button className="icon-btn" onClick={() => setSourcesOpen(true)} aria-label="Sources">
-                <Icon name="list" />
-              </button>
-              <button className="icon-btn" onClick={() => setRoadOpen(true)} aria-label="Road map">
-                <Icon name="road" />
-              </button>
-            </div>
-          </div>
 
-          {/* ---------- states ---------- */}
-          {status === "loading" && !content && (
-            <>
-              <LoadingNotice label={`Building the cards for ${stop.title}...`} onRetry={() => actions.loadModule(sessionId, moduleId)} onCancel={() => actions.cancel(sessionId, "modules", moduleId)} />
-              <div className="card-skeleton panel">
-                <Skeleton width="30%" height={26} radius={999} />
-                <Skeleton width="80%" height={30} />
-                <Skeleton height={180} radius={20} />
-              </div>
-            </>
-          )}
+            {/* ---------- cards ---------- */}
+            {content && view === "cards" && cards.length > 0 && (
+              <>
+                {(droppedCards > 0 || droppedVisuals > 0) && (
+                  <StatusBanner kind="partial" title="Some content didn't pass our checks">
+                    {[droppedCards ? `${droppedCards} card${droppedCards > 1 ? "s" : ""} left out` : "", droppedVisuals ? `${droppedVisuals} visual${droppedVisuals > 1 ? "s" : ""} replaced with text only` : ""].filter(Boolean).join(", ")}.
+                  </StatusBanner>
+                )}
 
-          {status === "error" && (
-            <StatusBanner
-              kind="error"
-              title={`Couldn't build ${stop.title}`}
-              actions={[
-                ...(slot.error?.retryable !== false ? [{ label: "Try again", onClick: () => actions.loadModule(sessionId, moduleId), primary: true }] : []),
-                ...(nextId ? [{ label: "Skip", onClick: () => goTo(nextId) }] : [{ label: "Road map", onClick: () => actions.dispatch({ type: "GO", screen: "roadmap" }) }]),
-              ]}
-            >
-              {slot.error?.message}
-            </StatusBanner>
-          )}
-
-          {status === "idle" && !content && !isRetest && (
-            <StatusBanner kind="info" title="Getting ready" actions={[{ label: "Load cards", onClick: () => actions.loadModule(sessionId, moduleId), primary: true }]} />
-          )}
-
-          {content && cards.length === 0 && quiz.length === 0 && (
-            <div className="empty panel">
-              <h2>Nothing here yet</h2>
-              <p className="muted">{isRetest ? "Your retest pile is empty. Nice work." : "This stop has no cards or questions."}</p>
-              <button className="btn btn-primary" onClick={() => actions.dispatch({ type: "GO", screen: isRetest ? "results" : "roadmap" })}>
-                {isRetest ? "See results" : "Back to road map"}
-              </button>
-            </div>
-          )}
-
-          {/* ---------- cards ---------- */}
-          {content && view === "cards" && cards.length > 0 && (
-            <>
-              {(droppedCards > 0 || droppedVisuals > 0) && (
-                <StatusBanner kind="partial" title="Some content didn't pass our checks">
-                  {[droppedCards ? `${droppedCards} card${droppedCards > 1 ? "s" : ""} left out` : "", droppedVisuals ? `${droppedVisuals} visual${droppedVisuals > 1 ? "s" : ""} replaced with text only` : ""].filter(Boolean).join(", ")}.
-                </StatusBanner>
-              )}
-
-              {card ? (
-                <Flashcard
-                  key={card.id}
-                  card={card}
-                  index={cardIndex}
-                  total={cards.length}
-                  tint={tintFor(cardIndex + Math.max(0, stopIndex))}
-                  deco={decoFor(cardIndex + Math.max(0, stopIndex))}
-                  upcoming={[1, 2].filter((k) => cardIndex + k < cards.length).map((k) => tintFor(cardIndex + k + Math.max(0, stopIndex)))}
-                  marks={cards.map((c) => session.progress.ratings[c.id])}
-                  onJump={(i) => dispatch({ type: "SET_CARD_INDEX", index: i })}
-                  label={isRetest ? "Retest" : stop.title}
-                  flipped={flipped}
-                  onFlip={() => setFlipped((f) => !f)}
-                  readMore={session.readMore[card.id]}
-                  readMoreOpen={Boolean(openReadMore[card.id])}
-                  onReadMore={() => (session.readMore[card.id]?.status === "error" && openReadMore[card.id] ? retryReadMore(card) : toggleReadMore(card))}
-                  suggestReadMore={session.profile.readMore === "suggested" || Boolean(session.progress.readMoreHint[moduleId])}
-                  rating={session.progress.ratings[card.id]}
-                  onRate={rate}
-                  onPrev={cardIndex > 0 ? () => dispatch({ type: "SET_CARD_INDEX", index: cardIndex - 1 }) : null}
-                  onNext={() => dispatch({ type: "SET_CARD_INDEX", index: cardIndex + 1 })}
-                />
-              ) : (
-                <DeckDone
-                  cards={cards}
-                  ratings={session.progress.ratings}
-                  hasQuiz={quiz.length > 0}
-                  onQuiz={() => dispatch({ type: "SET_VIEW", view: "quiz" })}
-                  onAgain={() => dispatch({ type: "SET_CARD_INDEX", index: 0 })}
-                />
-              )}
-            </>
-          )}
-
-          {/* ---------- quiz ---------- */}
-          {content && view === "quiz" && quiz.length > 0 && (
-            <>
-              {(partial || reported > 0) && (
-                <StatusBanner kind="partial" title={partial ? partial.message : "Question removed"}>
-                  {partial ? "The rest didn't pass our checks, so we left them out." : ""}
-                  {reported ? ` You reported ${reported} question${reported > 1 ? "s" : ""}.` : ""}
-                </StatusBanner>
-              )}
-              {question ? (
-                <div className="quiz panel">
-                  <div className="quiz-progress">
-                    <span className="muted">
-                      Question {questionIndex + 1} of {quiz.length}
-                    </span>
-                    <span className="bar" aria-hidden="true">
-                      <span style={{ width: `${(questionIndex / quiz.length) * 100}%` }} />
-                    </span>
-                  </div>
-                  <QuizQuestion
-                    key={`${question.id}:${isRetest}`}
-                    question={question}
-                    answer={answers[question.id]}
-                    tint={tintFor(questionIndex + 2)}
-                    deco={decoFor(questionIndex + 3)}
-                    onAnswer={(chosen, correct) => dispatch({ type: "ANSWER", questionId: question.id, chosen, correct })}
-                    onNext={() => dispatch({ type: "SET_QUESTION_INDEX", index: questionIndex + 1 })}
-                    nextLabel={questionIndex === quiz.length - 1 ? "Finish" : "Next"}
-                    onReport={
-                      isRetest
-                        ? null
-                        : () => {
-                            if (window.confirm("Remove this question as wrong? It won't count.")) dispatch({ type: "REPORT_QUESTION", moduleId, questionId: question.id });
-                          }
-                    }
+                {card ? (
+                  <Flashcard
+                    key={card.id}
+                    card={card}
+                    index={cardIndex}
+                    total={cards.length}
+                    tint={tintFor(cardIndex + Math.max(0, stopIndex))}
+                    deco={decoFor(cardIndex + Math.max(0, stopIndex))}
+                    upcoming={[1, 2].filter((k) => cardIndex + k < cards.length).map((k) => tintFor(cardIndex + k + Math.max(0, stopIndex)))}
+                    marks={cards.map((c) => session.progress.ratings[c.id])}
+                    onJump={(i) => dispatch({ type: "SET_CARD_INDEX", index: i })}
+                    label={isRetest ? "Retest" : stop.title}
+                    flipped={flipped}
+                    onFlip={() => setFlipped((f) => !f)}
+                    readMore={session.readMore[card.id]}
+                    readMoreOpen={Boolean(openReadMore[card.id])}
+                    onReadMore={() => (session.readMore[card.id]?.status === "error" && openReadMore[card.id] ? retryReadMore(card) : toggleReadMore(card))}
+                    suggestReadMore={session.profile.readMore === "suggested" || Boolean(session.progress.readMoreHint[moduleId])}
+                    rating={session.progress.ratings[card.id]}
+                    onRate={rate}
+                    onPrev={cardIndex > 0 ? () => dispatch({ type: "SET_CARD_INDEX", index: cardIndex - 1 }) : null}
+                    onNext={() => dispatch({ type: "SET_CARD_INDEX", index: cardIndex + 1 })}
                   />
-                </div>
-              ) : (
-                <StopDone
-                  session={session}
-                  quiz={quiz}
-                  answers={answers}
-                  isRetest={isRetest}
-                  isFinal={moduleId === FINAL_ID}
-                  next={nextId ? all.find((s) => s.id === nextId) : null}
-                  onNext={() => nextId && goTo(nextId)}
-                  onResults={() => actions.dispatch({ type: "GO", screen: "results" })}
-                  onRoadmap={() => actions.dispatch({ type: "GO", screen: "roadmap" })}
-                  onAgain={() => dispatch({ type: "SET_QUESTION_INDEX", index: 0 })}
-                />
-              )}
-            </>
-          )}
-        </main>
+                ) : (
+                  <DeckDone
+                    cards={cards}
+                    ratings={session.progress.ratings}
+                    hasQuiz={quiz.length > 0}
+                    onQuiz={() => dispatch({ type: "SET_VIEW", view: "quiz" })}
+                    onAgain={() => dispatch({ type: "SET_CARD_INDEX", index: 0 })}
+                  />
+                )}
+              </>
+            )}
+
+            {/* ---------- quiz ---------- */}
+            {content && view === "quiz" && quiz.length > 0 && (
+              <>
+                {(partial || reported > 0) && (
+                  <StatusBanner kind="partial" title={partial ? partial.message : "Question removed"}>
+                    {partial ? "The rest didn't pass our checks, so we left them out." : ""}
+                    {reported ? ` You reported ${reported} question${reported > 1 ? "s" : ""}.` : ""}
+                  </StatusBanner>
+                )}
+                {question ? (
+                  <div className="quiz panel">
+                    <div className="quiz-progress">
+                      <span className="muted">
+                        Question {questionIndex + 1} of {quiz.length}
+                      </span>
+                      <span className="bar" aria-hidden="true">
+                        <span style={{ width: `${(questionIndex / quiz.length) * 100}%` }} />
+                      </span>
+                    </div>
+                    <QuizQuestion
+                      key={`${question.id}:${isRetest}`}
+                      question={question}
+                      answer={answers[question.id]}
+                      tint={tintFor(questionIndex + 2)}
+                      deco={decoFor(questionIndex + 3)}
+                      onAnswer={(chosen, correct) => dispatch({ type: "ANSWER", questionId: question.id, chosen, correct })}
+                      onNext={() => dispatch({ type: "SET_QUESTION_INDEX", index: questionIndex + 1 })}
+                      nextLabel={questionIndex === quiz.length - 1 ? "Finish" : "Next"}
+                      onReport={
+                        isRetest
+                          ? null
+                          : () => {
+                              if (window.confirm("Remove this question as wrong? It won't count.")) dispatch({ type: "REPORT_QUESTION", moduleId, questionId: question.id });
+                            }
+                      }
+                    />
+                  </div>
+                ) : (
+                  <StopDone
+                    session={session}
+                    quiz={quiz}
+                    answers={answers}
+                    isRetest={isRetest}
+                    isFinal={moduleId === FINAL_ID}
+                    next={nextId ? all.find((s) => s.id === nextId) : null}
+                    onNext={() => nextId && goTo(nextId)}
+                    onResults={() => actions.dispatch({ type: "GO", screen: "results" })}
+                    onRoadmap={() => actions.dispatch({ type: "GO", screen: "roadmap" })}
+                    onAgain={() => dispatch({ type: "SET_QUESTION_INDEX", index: 0 })}
+                  />
+                )}
+              </>
+            )}
+          </main>
+        </div>
       </div>
 
-      {doubtContext && <DoubtBot context={doubtContext} contextKey={doubtKey} contextLabel={view === "cards" ? "this card" : "this question"} />}
       {sourcesOpen && <SourcesPanel session={session} onClose={() => setSourcesOpen(false)} />}
       {roadOpen && (
         <RoadPeek session={session} onPick={goTo} onOpenMap={() => actions.dispatch({ type: "GO", screen: "roadmap" })} onClose={() => setRoadOpen(false)} />

@@ -100,26 +100,6 @@ export function nextStopId(session, moduleId) {
   return index >= 0 && index < all.length - 1 ? all[index + 1].id : null;
 }
 
-// Stepper phases. A phase with no stops (basics for pros) shows as skipped.
-export function phases(session) {
-  const all = stops(session);
-  const current = all.find((s) => s.id === session.currentModuleId);
-  const defs = [
-    { key: "basics", label: "Basics and prereqs" },
-    { key: "deepdive", label: "Topic deep dive" },
-    { key: "test", label: "Test and quiz" },
-  ];
-  return defs.map((def) => {
-    const members = all.filter((s) => s.phase === def.key);
-    const marks = members.map((s) => (isModuleDone(session, s.id) ? "done" : s.id === current?.id ? "current" : "todo"));
-    const counts = { total: members.length, done: marks.filter((m) => m === "done").length, marks };
-    if (members.length === 0) return { ...def, ...counts, state: "skipped" };
-    if (counts.done === counts.total) return { ...def, ...counts, state: "done" };
-    if (current && current.phase === def.key) return { ...def, ...counts, state: "current" };
-    return { ...def, ...counts, state: "todo" };
-  });
-}
-
 // Lowest scoring stops, used for "New questions on weak spots".
 export function weakSpots(session) {
   return stops(session)

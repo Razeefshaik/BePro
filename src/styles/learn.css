@@ -1,216 +1,236 @@
-/* Learning page: tracking band + live board, index, flashcards, visuals, quiz, doubt bot. */
+/* Learning page: Index sidebar, top band (session card, doubt bot, live board), flashcards, visuals, quiz. */
 
 .show-sm {
   display: none !important;
 }
 
-/* ---------- top band ---------- */
-.learn-top {
-  width: 100%;
-  max-width: var(--page-max);
-  margin: 0 auto;
-  padding: 14px var(--gutter) 0;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 16px;
+/* ---------- layout ----------
+   Index on the left edge of the screen; next to it the content column: the band
+   (session card, doubt bot, live board) and the card or quiz. */
+.learn-page {
+  --appbar-h: 69px;
 }
-
-.track {
-  padding: 10px;
+.learn-body {
+  display: grid;
+  grid-template-columns: clamp(232px, calc(17 * var(--vw)), 272px) minmax(0, 1fr);
+  align-items: start;
+}
+.learn-content {
+  container: content / inline-size;
+  min-width: 0;
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 14px var(--gutter) 40px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 8px;
-}
-.track-now {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-width: 0;
-  padding: 0 6px;
-}
-.track-chip {
-  flex: none;
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: var(--focus-soft);
-  color: var(--focus-ink);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-.track-title {
-  flex: 0 1 auto;
-  min-width: 0;
-  font-size: 17px;
-  line-height: 1.2;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.track-time {
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--muted);
-}
-.track-summary {
-  flex: 1 1 0;
-  min-width: 0;
-  font-size: 13px;
-  color: var(--muted);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  gap: 14px;
 }
 
-/* Phase tiles: the phase you are in is the bright one. */
-.stepper {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+/* The Index: a sidebar attached to the left edge, full height under the top bar. */
+.index {
+  position: sticky;
+  top: var(--appbar-h);
+  height: calc(100 * var(--vh) - var(--appbar-h));
+  overflow: auto;
+  padding: 14px 10px 24px;
   display: flex;
-  align-items: stretch;
+  flex-direction: column;
   gap: 4px;
 }
-.step {
+.index.panel {
+  border-radius: 0;
+  border-width: 0 1px 0 0;
+  box-shadow: none;
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+}
+.index-group-count {
+  margin-left: 6px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 11px;
+}
+.index-group-count.is-done {
+  background: var(--good-soft);
+  color: var(--good);
+}
+
+/* ---------- top band ---------- */
+.learn-top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr) minmax(0, 1.15fr);
+  gap: 14px;
+  align-items: stretch;
+}
+.session {
+  grid-area: session;
+}
+.doubt-card {
+  grid-area: doubt;
+}
+.live {
+  grid-area: live;
+}
+/* Narrower content: session and board side by side, the doubt bot full width under them. */
+@container content (max-width: 980px) {
+  .learn-top {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas: "session live" "doubt doubt";
+  }
+}
+@container content (max-width: 620px) {
+  .learn-top {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "session" "live" "doubt";
+  }
+}
+@container content (min-width: 981px) {
+  .learn-top {
+    grid-template-areas: "session doubt live";
+  }
+}
+
+/* Session card: progress ring + four numbers. */
+.session {
+  container-type: inline-size;
+  min-width: 0;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.session-ring {
+  position: relative;
+  flex: none;
+  width: 88px;
+  height: 88px;
+}
+.session-ring svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+.ring-track,
+.ring-value {
+  fill: none;
+  stroke-width: 8;
+}
+.ring-track {
+  stroke: var(--line);
+}
+.ring-value {
+  stroke: var(--good-fill);
+  stroke-linecap: round;
+  transition: stroke-dasharray 0.5s ease;
+}
+.ring-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.15;
+}
+.ring-text strong {
+  font-size: 19px;
+  font-weight: 700;
+}
+.ring-text span {
+  font-size: 11px;
+  color: var(--muted);
+}
+.session-stats {
   flex: 1;
   min-width: 0;
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  align-items: center;
-  column-gap: 10px;
-  row-gap: 6px;
-  padding: 8px 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.stat {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 6px 10px;
   border-radius: 14px;
   background: var(--surface-2);
 }
-.step-arrow {
-  flex: none;
-  display: grid;
-  place-items: center;
+.stat-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  font-weight: 600;
   color: var(--muted);
-}
-.step-dot {
-  width: 26px;
-  height: 26px;
-  flex: none;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  font-size: 13px;
-  font-weight: 700;
-  border: 2px solid var(--line);
-  color: var(--muted);
-  background: var(--surface);
-}
-.step-text {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.25;
-  min-width: 0;
-}
-.step-label {
-  font-size: 13.5px;
-  font-weight: 700;
-  overflow: hidden;
-  text-overflow: ellipsis;
   white-space: nowrap;
 }
-.step-state {
+.stat strong {
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+.stat-sub {
   font-size: 11.5px;
   color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.step-pips {
-  grid-column: 2;
-  display: flex;
-  gap: 5px;
-}
-.pip {
-  flex: 1;
-  height: 5px;
-  border-radius: 999px;
-  background: var(--line);
-}
-.pip-done {
-  background: var(--good-fill);
-}
-.pip-current {
-  background: var(--focus);
-}
-.step-done {
+/* Accuracy: green when strong, amber in between, pink when low. Always with the number. */
+.stat-good {
   background: var(--good-soft);
 }
-.step-done .step-dot {
-  background: var(--good-fill);
-  border-color: var(--good-fill);
-  color: #14151f;
-}
-.step-done .step-state {
+.stat-good strong {
   color: var(--good);
 }
-.step-current {
-  background: linear-gradient(135deg, var(--focus), color-mix(in srgb, var(--focus) 55%, #6cc9cf));
-  color: var(--on-focus);
-  box-shadow: 0 12px 26px color-mix(in srgb, var(--focus) 30%, transparent);
+.stat-ok {
+  background: var(--warn-soft);
 }
-.step-current .step-dot {
-  background: var(--on-focus);
-  border-color: transparent;
+.stat-ok strong {
+  color: var(--warn);
+}
+.stat-low {
+  background: var(--review-soft);
+}
+.stat-low strong {
+  color: var(--review);
+}
+.stat-pile.has-pile {
+  background: var(--focus-soft);
+}
+.stat-action {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 12px;
+  font-weight: 700;
   color: var(--focus-ink);
 }
-.t-night .step-current .step-dot {
-  color: var(--focus);
+.stat-action:hover {
+  text-decoration: underline;
 }
-.step-current .step-state {
-  color: inherit;
-  opacity: 0.85;
-  font-weight: 600;
-}
-.step-current .pip {
-  background: color-mix(in srgb, var(--on-focus) 30%, transparent);
-}
-.step-current .pip-done {
-  background: var(--good-fill);
-}
-.step-current .pip-current {
-  background: var(--on-focus);
-}
-.step-skipped {
-  opacity: 0.55;
-}
-.step-skipped .step-dot {
-  border-style: dashed;
+@container (max-width: 360px) {
+  .session-ring {
+    width: 72px;
+    height: 72px;
+  }
+  .ring-text strong {
+    font-size: 16px;
+  }
+  .stat {
+    padding: 5px 8px;
+  }
+  .stat strong {
+    font-size: 15px;
+  }
 }
 
-/* ---------- body ---------- */
-.learn-body {
-  width: 100%;
-  max-width: var(--page-max);
-  margin: 0 auto;
-  padding: 16px var(--gutter) 40px;
-  display: grid;
-  grid-template-columns: clamp(230px, calc(19 * var(--vw)), 290px) minmax(0, 1fr);
-  gap: 16px;
-  align-items: start;
-}
-
-.index {
-  position: sticky;
-  top: 84px;
-  max-height: calc(100 * var(--vh) - 100px);
-  overflow: auto;
-  padding: 14px 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
 .index-head {
   display: flex;
   justify-content: space-between;
@@ -1207,51 +1227,25 @@
   font-weight: 600;
 }
 
-/* ---------- doubt bot ---------- */
-.doubt-fab {
-  position: fixed;
-  right: 24px;
-  bottom: 24px;
-  z-index: 30;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  border: 3px solid var(--surface);
-  display: grid;
-  place-items: center;
-  color: #fff;
-  background: linear-gradient(140deg, #8b82e8, #6cc9cf);
-  box-shadow: 0 14px 30px rgba(91, 80, 214, 0.35);
-}
-.t-night .doubt-fab {
-  color: var(--text);
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 0 0 10px rgba(255, 255, 255, 0.04), 0 0 0 11px rgba(255, 255, 255, 0.1);
-}
-.doubt {
-  position: fixed;
-  right: 24px;
-  bottom: 96px;
-  z-index: 30;
-  width: min(380px, calc(100 * var(--vw) - 32px));
-  height: min(520px, calc(100 * var(--vh) - 140px));
+/* ---------- doubt bot (a card in the band) ---------- */
+.doubt-card {
+  position: relative;
+  min-width: 0;
+  padding: 12px 14px;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-  box-shadow: var(--shadow);
+  justify-content: center;
+  gap: 8px;
 }
 .doubt-head {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 14px;
-  border-bottom: 1px solid var(--line);
 }
 .doubt-avatar {
-  width: 38px;
-  height: 38px;
+  flex: none;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   display: grid;
   place-items: center;
@@ -1260,24 +1254,107 @@
 }
 .doubt-titles {
   flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  font-size: 13px;
-  min-width: 0;
+  font-size: 12px;
+  line-height: 1.3;
 }
 .doubt-titles strong {
-  font-size: 15px;
+  font-size: 14.5px;
+}
+.doubt-toggle {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 600;
+}
+.doubt-form {
+  display: flex;
+  gap: 6px;
+}
+.doubt-form input {
+  flex: 1;
+  min-width: 0;
+  height: 40px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  color: var(--text);
+  padding: 0 14px;
+  font-size: 14px;
+}
+.doubt-form input:disabled {
+  opacity: 0.6;
+}
+.doubt-send {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--action);
+  color: var(--on-action);
+}
+.doubt-send:hover:not(:disabled) {
+  background: var(--action);
+}
+.doubt-suggest {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.doubt-suggest::-webkit-scrollbar {
+  display: none;
+}
+.doubt-suggest .chip {
+  flex: none;
+  height: 28px;
+  padding: 0 10px;
+  font-size: 12px;
+  color: var(--text);
+}
+/* Answers drop down under the card, over the page, like search results. */
+.doubt-pop {
+  position: absolute;
+  z-index: 25;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  padding: 12px;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  animation: pop-in 0.2s ease;
+}
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
 }
 .doubt-list {
-  flex: 1;
+  max-height: min(360px, calc(50 * var(--vh)));
   overflow: auto;
-  padding: 14px;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
-.doubt-empty {
-  font-size: 14px;
+.doubt-hide {
+  align-self: center;
 }
 .bubble {
   max-width: 86%;
@@ -1333,41 +1410,6 @@
     opacity: 1;
   }
 }
-.doubt-suggest {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  padding: 0 14px 10px;
-}
-.doubt-suggest .chip {
-  height: 32px;
-  font-size: 13px;
-}
-.doubt-form {
-  display: flex;
-  gap: 8px;
-  padding: 12px;
-  border-top: 1px solid var(--line);
-}
-.doubt-form input {
-  flex: 1;
-  min-width: 0;
-  height: 44px;
-  border-radius: 999px;
-  border: 1px solid var(--line);
-  background: var(--surface-2);
-  padding: 0 16px;
-}
-.doubt-send {
-  border-radius: 50%;
-  background: var(--action);
-  color: var(--on-action);
-  border: 0;
-}
-.doubt-send:hover:not(:disabled) {
-  background: var(--action);
-}
-
 /* ---------- sources ---------- */
 .sources-list {
   list-style: none;
@@ -1405,11 +1447,7 @@
 }
 
 /* ---------- tablets ---------- */
-@media (max-width: 860px) {
-  .learn-top {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
+
 
 /* ---------- phones: index becomes a drawer, the band compacts, actions stick to the bottom ---------- */
 @media (max-width: 760px) {
@@ -1419,22 +1457,11 @@
   .show-sm {
     display: inline-flex !important;
   }
-  .learn-top {
-    padding: 12px 16px 0;
-    gap: 12px;
-  }
-  .track {
-    padding: 10px;
-    gap: 10px;
-  }
-  .track-title {
-    font-size: 17px;
-  }
-  .track-summary {
-    display: none;
-  }
-  .learn-body {
+  .learn-content {
     padding: 12px 16px 120px;
+  }
+  .learn-stop {
+    font-size: 17px;
   }
   .flash-face {
     min-height: 360px;
@@ -1464,19 +1491,6 @@
   .tf-btn {
     flex: 1;
     min-width: 0;
-  }
-  .doubt-fab {
-    right: 16px;
-    bottom: 92px;
-    width: 52px;
-    height: 52px;
-  }
-  .doubt {
-    right: 16px;
-    left: 16px;
-    width: auto;
-    bottom: 152px;
-    height: min(460px, calc(100 * var(--vh) - 190px));
   }
 }
 
@@ -1513,7 +1527,7 @@
 }
 .index-progress .bar {
   height: 6px;
-  background: color-mix(in srgb, var(--focus) 18%, var(--surface));
+  background: color-mix(in srgb, var(--text) 12%, transparent);
 }
 .index-progress-text {
   font-size: 12px;
@@ -1717,7 +1731,6 @@
    Parts of this page adapt to the space they actually get (container queries),
    not only to the window width, so they look the same in a narrow column or a wide one. */
 .deck,
-.track,
 .live {
   container-type: inline-size;
 }
@@ -1761,21 +1774,6 @@
   }
 }
 
-/* Phase tiles: in a narrow band only the current phase keeps its words. */
-@container (max-width: 560px) {
-  .step:not(.step-current) {
-    flex: none;
-    padding: 8px;
-  }
-  .step:not(.step-current) .step-text,
-  .step:not(.step-current) .step-pips {
-    display: none;
-  }
-  .track-summary {
-    display: none;
-  }
-}
-
 /* Live board text follows the board's own width. */
 .live-text {
   font-size: clamp(21px, 4.2cqw, 30px);
@@ -1799,8 +1797,13 @@
     bottom: 0;
     z-index: 40;
     width: min(320px, calc(86 * var(--vw)));
+    height: auto;
     max-height: none;
+  }
+  .index.panel {
     border-radius: 0 24px 24px 0;
+    background: var(--surface);
+    box-shadow: var(--shadow);
     transform: translateX(-105%);
     transition: transform 0.25s ease;
   }
@@ -1845,13 +1848,54 @@
   margin: 0 auto;
 }
 
-/* Below 1200px the card reaches the right edge: lift the doubt bot above its control bar. */
-@media (min-width: 761px) and (max-width: 1200px) {
-  .doubt-fab {
-    bottom: 96px;
+/* The current stop's name, above the card. */
+.learn-stop {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.learn-stop-chip {
+  flex: none;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--focus-soft);
+  color: var(--focus-ink);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.learn-stop-title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Narrow content (phones): the doubt bot moves under the card, so the card comes first.
+   The band's cards become direct items of the content column, and order places them. */
+@container content (max-width: 620px) {
+  .learn-top {
+    display: contents;
   }
-  .doubt {
-    bottom: 168px;
-    height: min(520px, calc(100 * var(--vh) - 200px));
+  .learn-main {
+    order: 1;
+  }
+  .doubt-card {
+    order: 2;
+  }
+  .doubt-pop {
+    top: auto;
+    bottom: calc(100% + 8px);
+  }
+}
+@media (max-width: 760px) {
+  .learn-stop-chip {
+    display: none;
   }
 }

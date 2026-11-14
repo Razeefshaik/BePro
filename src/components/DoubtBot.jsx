@@ -1,5 +1,7 @@
-// The doubt bot: a small side panel that answers ONE thing, the card or question on screen.
-// It is a helper, not the core experience. Answers are rendered as plain text, never HTML.
+// The doubt bot, as a card in the top band of the learning page.
+// It answers ONE thing: the card or question on screen. You type in the card; the answers
+// drop down under it (like search results) and can be hidden again.
+// Answers are rendered as plain text, never HTML.
 import { useEffect, useRef, useState } from "react";
 import Icon from "./Icon.jsx";
 import { api } from "../api/client.js";
@@ -7,31 +9,34 @@ import { api } from "../api/client.js";
 const SUGGESTIONS = ["Explain it simpler", "Give me an example", "Why is that true?"];
 
 export default function DoubtBot({ context, contextKey, contextLabel }) {
-  const [open, setOpen] = useState(false);
   const [threads, setThreads] = useState({}); // contextKey -> [{ role, text, kind? }]
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showAnswers, setShowAnswers] = useState(false);
   const latest = useRef({ id: 0, controller: null }); // stale guard for the bot's own requests
   const listRef = useRef(null);
 
   const messages = threads[contextKey] ?? [];
+  const disabled = !context;
+  const answersOpen = showAnswers && (messages.length > 0 || loading);
 
   // A new card or question: stop any answer that is still coming for the old one.
   useEffect(() => {
     latest.current.controller?.abort();
     setLoading(false);
+    setShowAnswers(false);
   }, [contextKey]);
 
   useEffect(() => {
     listRef.current?.scrollTo({ top: listRef.current.scrollHeight });
-  }, [messages.length, loading, open]);
+  }, [messages.length, loading, answersOpen]);
 
   useEffect(() => {
-    if (!open) return undefined;
-    const onKey = (e) => e.key === "Escape" && setOpen(false);
+    if (!answersOpen) return undefined;
+    const onKey = (e) => e.key === "Escape" && setShowAnswers(false);
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [open]);
+  }, [answersOpen]);
 
   async function ask(text) {
     const question = text.trim();
@@ -40,6 +45,7 @@ export default function DoubtBot({ context, contextKey, contextLabel }) {
     const history = messages.filter((m) => m.kind !== "error").slice(-6).map(({ role, text: t }) => ({ role, text: t }));
     setThreads((all) => ({ ...all, [key]: [...(all[key] ?? []), { role: "user", text: question }] }));
     setInput("");
+    setShowAnswers(true);
 
     latest.current.controller?.abort();
     const controller = new AbortController();
@@ -58,28 +64,50 @@ export default function DoubtBot({ context, contextKey, contextLabel }) {
   }
 
   return (
-    <>
-      <button className={`doubt-fab ${open ? "is-open" : ""}`} onClick={() => setOpen((v) => !v)} aria-label={open ? "Close doubt bot" : "Ask a doubt about this card"} aria-expanded={open}>
-        <Icon name={open ? "close" : "chat"} size={22} />
-      </button>
+    <section className="doubt-card panel" aria-label="Doubt bot">
+      <header className="doubt-head">
+        <span className="doubt-avatar" aria-hidden="true">
+          <Icon name="chat" size={16} />
+        </span>
+        <div className="doubt-titles">
+          <strong>Ask a doubt</strong>
+          <span className="muted">{disabled ? "Open a card to ask about it" : `Only about ${contextLabel}`}</span>
+        </div>
+        {messages.length > 0 && (
+          <button className="doubt-toggle" onClick={() => setShowAnswers((v) => !v)} aria-expanded={answersOpen}>
+            {answersOpen ? "Hide" : `Answers ${Math.ceil(messages.length / 2)}`}
+            <Icon name={answersOpen ? "chevronUp" : "chevronDown"} size={14} />
+          </button>
+        )}
+      </header>
 
-      {open && (
-        <section className="doubt panel" role="dialog" aria-label="Doubt bot">
-          <header className="doubt-head">
-            <span className="doubt-avatar" aria-hidden="true">
-              <Icon name="chat" size={18} />
-            </span>
-            <div className="doubt-titles">
-              <strong>Doubt bot</strong>
-              <span className="muted">Only about: {contextLabel}</span>
-            </div>
-            <button className="icon-btn icon-btn-sm" onClick={() => setOpen(false)} aria-label="Close doubt bot">
-              <Icon name="close" size={14} />
-            </button>
-          </header>
+      <form
+        className="doubt-form"
+        onSubmit={(e) => {
+          e.preventDefault();
+          ask(input);
+        }}
+      >
+        <label htmlFor="doubt-input" className="sr-only">
+          Ask about {contextLabel}
+        </label>
+        <input id="doubt-input" value={input} maxLength={500} onChange={(e) => setInput(e.target.value)} placeholder="Stuck? Ask anything..." disabled={disabled} />
+        <button className="icon-btn doubt-send" aria-label="Send" disabled={disabled || input.trim().length < 2}>
+          <Icon name="send" size={15} />
+        </button>
+      </form>
 
+      <div className="doubt-suggest">
+        {SUGGESTIONS.map((s) => (
+          <button key={s} className="chip" onClick={() => ask(s)} disabled={disabled}>
+            {s}
+          </button>
+        ))}
+      </div>
+
+      {answersOpen && (
+        <div className="doubt-pop" role="region" aria-label="Doubt bot answers">
           <div className="doubt-list" ref={listRef} aria-live="polite">
-            {messages.length === 0 && <p className="doubt-empty muted">Stuck on this one? Ask anything about it.</p>}
             {messages.map((m, i) => (
               <div key={i} className={`bubble bubble-${m.role} ${m.kind === "error" ? "bubble-error" : ""}`}>
                 {m.text}
@@ -98,34 +126,11 @@ export default function DoubtBot({ context, contextKey, contextLabel }) {
               </div>
             )}
           </div>
-
-          {messages.length === 0 && (
-            <div className="doubt-suggest">
-              {SUGGESTIONS.map((s) => (
-                <button key={s} className="chip" onClick={() => ask(s)}>
-                  {s}
-                </button>
-              ))}
-            </div>
-          )}
-
-          <form
-            className="doubt-form"
-            onSubmit={(e) => {
-              e.preventDefault();
-              ask(input);
-            }}
-          >
-            <label htmlFor="doubt-input" className="sr-only">
-              Ask a follow up
-            </label>
-            <input id="doubt-input" value={input} maxLength={500} onChange={(e) => setInput(e.target.value)} placeholder="Ask a follow up..." autoFocus />
-            <button className="icon-btn doubt-send" aria-label="Send" disabled={input.trim().length < 2}>
-              <Icon name="send" size={16} />
-            </button>
-          </form>
-        </section>
+          <button className="btn btn-ghost btn-sm doubt-hide" onClick={() => setShowAnswers(false)}>
+            <Icon name="chevronUp" size={14} /> Hide answers
+          </button>
+        </div>
       )}
-    </>
+    </section>
   );
 }

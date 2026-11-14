@@ -74,3 +74,14 @@ One row per design change, with its reason. Add a dated section per batch of wor
 | Learning page parts use container queries (deck controls, phase tiles, live board text) | razeef | Accept | They react to the space they get, so a narrow column looks like a small screen |
 | Index drawer from 900px down (was 760px); band stacks only below 860px; card control bar sticky at every size | razeef | Accept | Tablets and short laptops showed a cramped card with its buttons off screen |
 
+## 2026-11-14 Learning page without repeats, Night colors
+
+| Decision | By | Status | Reason |
+| --- | --- | --- | --- |
+| Top-left card becomes a session card: road map ring, accuracy (green / amber / pink, always with the number), cards known, minutes this visit, retest pile | razeef | Accept | Owner: phases and progress were shown twice (band and Index). Research on learning dashboards: few numbers (completion, accuracy, time), color by level, an obvious next action |
+| Phase tiles and the stop line removed from the band; the Index groups show done/total instead; the stop name sits above the card | razeef | Accept | The Index already lists phases and stops |
+| Live board ticker shows only the next stops and shortcuts | razeef | Accept | The numbers moved to the session card |
+| Index is a sidebar on the left edge, full height | razeef | Accept | Owner: the Index pushed the content too far right |
+| Doubt bot is a card between the session card and the live board, answers drop down under it; the floating button is gone | razeef | Accept | Owner's choice of place |
+| Night: the soft highlight is a neutral lift with a thin lime outline (`--focus-edge`); review color is coral instead of ember; flashcard backs keep their tint; wordmark uses a light gradient | razeef | Accept | Owner: colors broke in dark mode (lime tints looked olive, orange tints looked brown, wordmark invisible) |
+

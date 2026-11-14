@@ -1,5 +1,5 @@
-// The Index: stops grouped by phase, the current one expanded with its subtopics.
-// On phones it becomes a drawer (see learn.css).
+// The Index: stops grouped by phase (with how many are done), the current one expanded with
+// its progress and subtopics. It sits on the left edge; below 900px it becomes a drawer (learn.css).
 import Icon from "./Icon.jsx";
 import { stops, isModuleDone, moduleScore } from "../state/selectors.js";
 
@@ -38,11 +38,18 @@ export default function IndexNav({ session, onPick, open, onClose, retestCount, 
 
         {GROUPS.map((group) => {
           const members = all.filter((s) => s.phase === group.phase);
+          const doneCount = members.filter((s) => isModuleDone(session, s.id)).length;
           return (
             <div key={group.phase} className={`index-group group-${group.phase}`}>
               <span className="index-group-label">
                 {group.label}
-                {members.length === 0 && <span className="muted"> · Skipped</span>}
+                {members.length === 0 ? (
+                  <span className="muted"> · Skipped</span>
+                ) : (
+                  <span className={`index-group-count ${doneCount === members.length ? "is-done" : ""}`}>
+                    {doneCount}/{members.length}
+                  </span>
+                )}
               </span>
               {members.map((stop) => {
                 const slot = session.modules[stop.id];

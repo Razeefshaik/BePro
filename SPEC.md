@@ -290,12 +290,14 @@ Color meaning, same roles in both themes: **focus now = lavender (Meadow) / high
 * On a phone, the road scrolls horizontally.
 
 **Learning page.**
-* Top band: three **phase tiles** (Basics and prereqs, Topic deep dive, Test and quiz; skipped phases show "Skipped"). The phase you are in is the bright tile, and each tile has one mark per stop (done, current, to do). Under them, the current stop in one line (stop number, title, one-line summary, minutes). The band stays compact (about 130px) so the card and its buttons fit on one screen. Next to it, a **live board** styled like a station departures display: a LIVE light, the stop and a clock; a main line that rotates by itself every 7 seconds through motivation lines (`src/data/quotes.json`) and study tips (`src/data/tips.json`), replaced by an adaptive "Attention" hint after 2 "Review again" in a row; and a scrolling ticker with session stats and the next stop. The current stop's progress bar lives in the Index, not the top band.
+* Layout: the **Index** is a sidebar attached to the left edge (full height under the top bar; a drawer below 900px). Next to it, the content column: the top band, the stop name with the Cards / Quiz tabs, and the card or quiz.
+* Top band, three cards: a **session card** (a ring with the share of the road map done, plus accuracy colored by level, cards known, minutes studying this visit, and the retest pile with Retest now), the **doubt bot** card (input and suggestion chips; answers drop down under it), and the live board. Nothing in the band repeats the Index. On narrow screens the doubt bot moves under the card.
+* **Live board**, styled like a station departures display: a LIVE light, the stop, the message label and a clock; a main line that rotates by itself every 7 seconds through motivation lines (`src/data/quotes.json`) and study tips (`src/data/tips.json`), replaced by an adaptive "Attention" hint after 2 "Review again" in a row; a thin scrolling ticker with the next stops and the shortcuts.
 * Body: the Index (modules grouped by phase, current module expanded with its subtopics) and the content window.
 * Content window tabs: **Cards** (default) and **Quiz**.
   * Flashcard: a meter above the deck (one segment per card, colored by rating, click to jump), the next cards peeking out from behind, a big card number, Q and A badges. Front: question plus visual; click the card or press Space to flip. Back: a lighter face that repeats the question small above the answer. **Read further** expands the explanation inside the card (lazy loaded and cached). One control bar: previous, "Review again", Flip, "Got it", next.
   * Quiz: options, then feedback with the explanation, then Next. "Report a wrong question" removes the question and adds it to the warnings.
-* **Doubt bot**: a button in the bottom right of the content window opens a small panel. It answers about the current card or question only.
+* **Doubt bot**: a card in the top band (not a floating button). It answers about the current card or question only.
 * **Motivation lines:** `src/data/quotes.json`, 30 original lines (motivation, light humor, learning tips) with **no attributions to real people**, shown on the live board.
 * **Sources:**
   * Notes mode: the quoted lines from the notes.
