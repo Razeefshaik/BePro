@@ -64,8 +64,8 @@ Approved dependencies: `react`, `react-dom`, `vite`, `@vitejs/plugin-react`, `ex
     state/persistence.js  localStorage load and save
     data/quotes.json      30 original motivation and humor lines
     screens/StartScreen.jsx  RoadmapScreen.jsx  LearnScreen.jsx  ResultsScreen.jsx
-    components/           Flashcard, visuals/*, QuizQuestion, DoubtBot, Stepper, IndexNav, StatusBanner...
-    styles/tokens.css  styles/app.css
+    components/           Flashcard, visuals/*, QuizQuestion, DoubtBot, IndexNav, SessionCard, LiveBoard, RoadPeek, StatusBanner...
+    styles/               tokens.css (both themes), base.css, then one file per screen or component
 ```
 
 ---
