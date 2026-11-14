@@ -89,6 +89,24 @@
   .flash-face {
     min-height: 340px;
   }
+  /* The buttons are a compact bar centred under the card, so the card stays the biggest thing. */
+  .deck-bar {
+    width: min(100%, 660px);
+    margin: 0 auto;
+    gap: 8px;
+  }
+  .deck-bar .btn-lg {
+    height: 44px;
+    padding: 0 16px;
+    font-size: 15px;
+  }
+  .deck-bar .round-btn {
+    width: 44px;
+    height: 44px;
+  }
+  .deck-bar .btn svg {
+    flex: none;
+  }
   .chart-bars {
     height: 140px;
   }

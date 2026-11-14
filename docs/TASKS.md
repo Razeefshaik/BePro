@@ -118,3 +118,7 @@
 **C20: one-screen learning page**
 - **Goal:** on desktop (901px wide and 600px tall or more) the band, stop title, meter, card and buttons fit in the window with no page scroll. The card is the main element: the band is slimmer (one-line session numbers, one-row doubt chips), the meter is thinner, the card grows into the space left, visuals on the question side shrink to fit, and long answers scroll inside the card (`.flash-body`) with a soft see-through scrollbar.
 - **Status:** done on `razeef/c01-build`
+
+**C21: compact card buttons**
+- **Goal:** on desktop the card buttons are a compact bar (up to 660px wide, 44px tall) centred under the wider card, so the card reads as the main element. Phones keep the full-width sticky bar.
+- **Status:** done on `razeef/c01-build`
