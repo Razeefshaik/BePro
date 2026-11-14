@@ -142,3 +142,7 @@
 **C26: start screen hierarchy**
 - **Goal:** clear levels on the start screen: the headline and the topic box (glow, 22px text) are the main thing; level and goal are quieter settings (one light row of three options each, no shadow, no radio circles, narrower than the box, chosen option = white tile with a focus ring); the example chips are the lightest (smaller, see-through). Phones hide the option icons.
 - **Status:** done on `razeef/c01-build`
+
+**C27: big backdrop wordmark**
+- **Goal:** on desktop the BEPRO wordmark is a big soft backdrop again (size `--wm` from the window width and height, up to 380px, may bleed past the column edges, clipped), with the headline sitting on the bottom of its letters. The headline is smaller (24 to 32px) and the level and goal rows are more compact (600px wide, smaller text and icons). The wordmark has a little right padding so the gradient covers the last letter.
+- **Status:** done on `razeef/c01-build`
