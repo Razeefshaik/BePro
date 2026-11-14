@@ -51,3 +51,16 @@ One row per design change, with its reason. Add a dated section per batch of wor
 | The current stop's progress bar moves from the top band into the Index entry | razeef | Accept | Owner: the Index already lists the stops, so progress belongs there |
 | Notice board replaced by a live board in the style of a railway or airport display (LED font VT323, auto-rotating line, ticker, clock), dark in both themes | razeef | Accept | Owner: should feel like a live announcement screen, not notes you refresh |
 | Top band shows the stop's one-line summary and time estimate under the title | razeef | Accept | Fills the space the progress bar left with useful context |
+
+## 2026-11-14 Navigation and flashcards
+
+| Decision | By | Status | Reason |
+| --- | --- | --- | --- |
+| The top bar loses its + (new learning) button; new learnings start from the home sidebar only | razeef | Accept | Owner: nobody starts a new learning from the middle of a lesson |
+| On Learn and Results, Road map opens a road map card over the page (jump to a stop, or Edit road map for the full page) | razeef | Accept | Owner: navigation was confusing; the map should open like Sources |
+| Results gets a Back to learning button (Back to road map if no stop was started) | razeef | Accept | Owner: there was no way back from results |
+| The top-left band becomes three phase tiles with one mark per stop, plus the current stop in one line | razeef | Accept | Owner: the stop title took too much space; the phase should be the highlight |
+| Flashcards get a deck meter, peeking next cards, a big number, Q and A badges, a different back face, click to flip and one control bar | razeef | Accept | Owner: the cards looked boring |
+| Card background shapes vary per card from a set of eight instead of one star everywhere | razeef | Accept | Owner: the same star on every card was boring |
+| Caveat font removed | razeef | Accept | Only the old notice board used it |
+

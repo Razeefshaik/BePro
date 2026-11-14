@@ -2,6 +2,7 @@ import { useState } from "react";
 import Icon from "../components/Icon.jsx";
 import AppBar from "../components/AppBar.jsx";
 import ScoreGauge from "../components/ScoreGauge.jsx";
+import RoadPeek from "../components/RoadPeek.jsx";
 import { StatusBanner } from "../components/common.jsx";
 import { stops, moduleScore, overallScore, retestPile, weakSpots, isModuleDone } from "../state/selectors.js";
 
@@ -15,6 +16,7 @@ function verdict(percent, total) {
 export default function ResultsScreen({ session, actions, theme, toggleTheme }) {
   const sessionId = session.id;
   const [saved, setSaved] = useState(null);
+  const [roadOpen, setRoadOpen] = useState(false);
   const all = stops(session);
   const score = overallScore(session);
   const pile = retestPile(session);
@@ -42,15 +44,22 @@ export default function ResultsScreen({ session, actions, theme, toggleTheme }) 
     actions.dispatch({ type: "START_MODULE", sessionId, moduleId: id });
   }
 
+  // Back goes to the stop the learner was on, or to the road map if they haven't started one.
+  const current = session.currentModuleId;
+  const canLearn = current === "retest" || all.some((s) => s.id === current);
+  const back = canLearn
+    ? { label: "Back to learning", onClick: () => actions.dispatch({ type: "GO", screen: "learn" }) }
+    : { label: "Back to road map", onClick: () => actions.dispatch({ type: "GO", screen: "roadmap" }) };
+
   function save() {
     setSaved(actions.saveNow() ? "ok" : "fail");
   }
 
   return (
     <div className="calm-bg page results-page">
-      <AppBar session={session} actions={actions} theme={theme} toggleTheme={toggleTheme}>
-        <button className="btn btn-ghost hide-sm" onClick={() => actions.dispatch({ type: "GO", screen: "roadmap" })}>
-          <Icon name="road" size={16} /> Road map
+      <AppBar session={session} actions={actions} theme={theme} toggleTheme={toggleTheme} back={back}>
+        <button className="btn btn-ghost" onClick={() => setRoadOpen(true)} aria-label="Road map">
+          <Icon name="road" size={16} /> <span className="hide-sm">Road map</span>
         </button>
       </AppBar>
 
@@ -159,6 +168,16 @@ export default function ResultsScreen({ session, actions, theme, toggleTheme }) 
           </section>
         </div>
       </main>
+
+      {roadOpen && (
+        <RoadPeek
+          session={session}
+          showCurrent={false}
+          onPick={(id) => actions.dispatch({ type: "START_MODULE", sessionId, moduleId: id })}
+          onOpenMap={() => actions.dispatch({ type: "GO", screen: "roadmap" })}
+          onClose={() => setRoadOpen(false)}
+        />
+      )}
     </div>
   );
 }

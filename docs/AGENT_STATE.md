@@ -6,10 +6,10 @@ Updated: 2026-11-14. Rewrite this file rather than appending to it. It doesn't r
 Highlight / BePro: an AI study assistant for the Flam frontend internship assignment. Design in `SPEC.md`, decisions in `docs/DECISIONS.md`, cards in `docs/TASKS.md`.
 
 ## Now
-- **Branch:** `razeef/c01-build` holds C01 to C11 (one commit or two per card). `main` has only C00. Not pushed; no remote yet.
-- **Built:** every screen in SPEC 10, both themes, phone layout, all four endpoints, validation pipeline, stale guard, persistence, chaos mode. `npm test` passes 24 tests; `npm run build` passes.
+- **Branch:** `razeef/c01-build` holds C01 to C15 (one commit or two per card). `main` has only C00. Not pushed; no remote yet.
+- **Built:** every screen in SPEC 10, both themes, phone layout, all four endpoints, validation pipeline, stale guard, persistence, chaos mode. UI rework from owner feedback: C12 start screen sidebar, C13 road map colors and scrolling, C14 live board and progress in the Index, C15 navigation (road map card, Back on results, no + in the top bar), phase tiles and livelier flashcards with varied card shapes. `npm test` passes 24 tests; `npm run build` passes.
 - **Verified by hand:** clicked through every screen in Meadow and Night and at 390px width (headless Chrome screenshots); all endpoints against `mock` and a real `codex` model; 20 requests under `LLM_CHAOS=1` (all answered with a proper envelope, retries visible in the server log).
-- **Blockers:** none.
+- **Blockers:** none. Waiting for the owner's next UI feedback.
 
 ## Next
 1. Owner: merge `razeef/c01-build` into `main`, create the GitHub repo, push.

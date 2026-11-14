@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import Icon from "./Icon.jsx";
 import { CardDeco } from "./common.jsx";
 
-export default function QuizQuestion({ question, answer, onAnswer, onNext, nextLabel = "Next", onReport, tint = "meadow", keyboard = true }) {
+export default function QuizQuestion({ question, answer, onAnswer, onNext, nextLabel = "Next", onReport, tint = "meadow", deco = "sparkles", keyboard = true }) {
   const answered = Boolean(answer);
   const isMcq = question.type === "mcq";
   const choices = isMcq ? question.options : [true, false];
@@ -71,7 +71,7 @@ export default function QuizQuestion({ question, answer, onAnswer, onNext, nextL
         </>
       ) : (
         <div className={`tf-card tint-${tint}`}>
-          <CardDeco />
+          <CardDeco variant={deco} />
           <div className="tf-head">
             <span className="tf-icon">
               <Icon name="bulb" size={20} />

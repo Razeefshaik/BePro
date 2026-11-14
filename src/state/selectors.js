@@ -111,10 +111,12 @@ export function phases(session) {
   ];
   return defs.map((def) => {
     const members = all.filter((s) => s.phase === def.key);
-    if (members.length === 0) return { ...def, state: "skipped" };
-    if (members.every((s) => isModuleDone(session, s.id))) return { ...def, state: "done" };
-    if (current && current.phase === def.key) return { ...def, state: "current" };
-    return { ...def, state: "todo" };
+    const marks = members.map((s) => (isModuleDone(session, s.id) ? "done" : s.id === current?.id ? "current" : "todo"));
+    const counts = { total: members.length, done: marks.filter((m) => m === "done").length, marks };
+    if (members.length === 0) return { ...def, ...counts, state: "skipped" };
+    if (counts.done === counts.total) return { ...def, ...counts, state: "done" };
+    if (current && current.phase === def.key) return { ...def, ...counts, state: "current" };
+    return { ...def, ...counts, state: "todo" };
   });
 }
 

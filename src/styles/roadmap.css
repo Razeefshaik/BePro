@@ -619,3 +619,143 @@
   flex: none;
   align-self: center;
 }
+
+/* ---------- back button in the top bar ---------- */
+.appbar-back {
+  height: 40px;
+  padding: 0 14px;
+  flex: none;
+}
+@media (max-width: 760px) {
+  .appbar-back {
+    width: 40px;
+    padding: 0;
+    justify-content: center;
+  }
+  .appbar-back-text {
+    display: none;
+  }
+}
+
+/* ---------- road map as a card (opened from Learn and Results) ---------- */
+.road-peek {
+  max-width: 600px;
+}
+.peek-titles {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.peek-titles .muted {
+  font-size: 14px;
+}
+.road-peek > .bar {
+  flex: none;
+}
+.peek-list {
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+/* The road: a line through the stop dots. */
+.peek-list::before {
+  content: "";
+  position: absolute;
+  left: 27px;
+  top: 30px;
+  bottom: 30px;
+  width: 3px;
+  border-radius: 3px;
+  background: var(--line);
+}
+.peek-phase {
+  display: block;
+  padding: 10px 12px 4px 56px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.peek-item {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 18px;
+  background: transparent;
+  text-align: left;
+  color: var(--text);
+}
+.peek-item:hover {
+  background: var(--surface-2);
+}
+.peek-stop.is-current .peek-item {
+  background: var(--focus-soft);
+}
+.peek-dot {
+  width: 32px;
+  height: 32px;
+  flex: none;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  font-weight: 700;
+  border: 3px solid var(--card-deco);
+  background: var(--card-bg);
+  color: var(--card-ink);
+}
+.peek-stop.is-done .peek-dot {
+  background: var(--good-fill);
+  border-color: var(--good-fill);
+  color: #14151f;
+}
+.peek-stop.is-current .peek-dot {
+  background: var(--focus);
+  border-color: var(--surface);
+  color: var(--on-focus);
+  box-shadow: 0 0 0 3px var(--focus);
+}
+.peek-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.peek-text strong {
+  font-size: 15px;
+  font-weight: 600;
+}
+.peek-text .muted {
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.peek-meta {
+  flex: none;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.peek-stop.is-current .peek-meta {
+  color: var(--focus-ink);
+}
+.peek-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-top: 4px;
+  border-top: 1px solid var(--line);
+}

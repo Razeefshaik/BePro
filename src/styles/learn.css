@@ -11,41 +11,93 @@
   margin: 0 auto;
   padding: 20px 24px 0;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 16px;
 }
 
 .track {
-  padding: 20px 22px;
+  padding: 14px;
   display: flex;
   flex-direction: column;
-  gap: 18px;
-  justify-content: space-between;
+  gap: 12px;
 }
 .track-now {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 0 6px;
+}
+.track-chip {
+  flex: none;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--focus-soft);
+  color: var(--focus-ink);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 .track-title {
-  font-size: 30px;
-  line-height: 1.1;
+  flex: 1;
+  min-width: 0;
+  font-size: 20px;
+  line-height: 1.2;
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
+.track-time {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.track-summary {
+  padding: 0 6px;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Phase tiles: the phase you are in is the bright one. */
 .stepper {
+  flex: 1;
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
-  align-items: center;
-  gap: 8px;
+  align-items: stretch;
+  gap: 4px;
 }
 .step {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  flex: 1;
   min-width: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-content: space-between;
+  align-items: center;
+  column-gap: 10px;
+  row-gap: 12px;
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: var(--surface-2);
+}
+.step-arrow {
+  flex: none;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
 }
 .step-dot {
   width: 28px;
@@ -58,31 +110,44 @@
   font-weight: 700;
   border: 2px solid var(--line);
   color: var(--muted);
+  background: var(--surface);
 }
 .step-text {
   display: flex;
   flex-direction: column;
-  line-height: 1.2;
+  line-height: 1.25;
   min-width: 0;
 }
 .step-label {
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 .step-state {
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
 }
-.step-line {
+.step-pips {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 5px;
+}
+.pip {
   flex: 1;
-  min-width: 16px;
-  height: 2px;
-  border-radius: 2px;
+  height: 8px;
+  border-radius: 999px;
   background: var(--line);
 }
-.step-line.line-done {
+.pip-done {
   background: var(--good-fill);
+}
+.pip-current {
+  background: var(--focus);
+}
+.step-done {
+  background: var(--good-soft);
 }
 .step-done .step-dot {
   background: var(--good-fill);
@@ -92,18 +157,35 @@
 .step-done .step-state {
   color: var(--good);
 }
-.step-current .step-dot {
-  background: var(--focus);
-  border-color: var(--focus);
+.step-current {
+  background: linear-gradient(135deg, var(--focus), color-mix(in srgb, var(--focus) 55%, #6cc9cf));
   color: var(--on-focus);
-  box-shadow: 0 0 0 4px var(--focus-soft);
+  box-shadow: 0 12px 26px color-mix(in srgb, var(--focus) 30%, transparent);
+}
+.step-current .step-dot {
+  background: var(--on-focus);
+  border-color: transparent;
+  color: var(--focus-ink);
+}
+.t-night .step-current .step-dot {
+  color: var(--focus);
 }
 .step-current .step-state {
-  color: var(--focus-ink);
+  color: inherit;
+  opacity: 0.85;
   font-weight: 600;
 }
+.step-current .pip {
+  background: color-mix(in srgb, var(--on-focus) 30%, transparent);
+}
+.step-current .pip-done {
+  background: var(--good-fill);
+}
+.step-current .pip-current {
+  background: var(--on-focus);
+}
 .step-skipped {
-  opacity: 0.6;
+  opacity: 0.55;
 }
 .step-skipped .step-dot {
   border-style: dashed;
@@ -291,13 +373,95 @@
 .deck {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
   max-width: 900px;
   width: 100%;
   margin: 0 auto;
 }
+
+/* Meter: one segment per card, colored by how you rated it. Click one to jump. */
+.deck-meter {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 4px;
+}
+.meter-segs {
+  flex: 1;
+  display: flex;
+  gap: 6px;
+}
+.meter-seg {
+  position: relative;
+  flex: 1;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: var(--line);
+  transition: transform 0.15s ease, background 0.2s ease;
+}
+.meter-seg::before {
+  content: "";
+  position: absolute;
+  inset: -8px 0; /* bigger click area than the thin bar */
+}
+.meter-seg:hover {
+  transform: scaleY(1.4);
+}
+.meter-seg.is-got {
+  background: var(--good-fill);
+}
+.meter-seg.is-review {
+  background: var(--review-fill);
+}
+.meter-seg.is-current {
+  background: var(--focus);
+  box-shadow: 0 0 0 3px var(--focus-soft);
+}
+.meter-count {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The deck: the next cards peek out from behind the current one. */
+.flash-stage {
+  position: relative;
+  padding-bottom: 22px;
+}
+.flash-ghost {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 22px;
+  border-radius: 32px;
+  background: var(--card-bg);
+  box-shadow: var(--shadow-sm);
+  transform-origin: 50% 100%;
+}
+.ghost-1 {
+  z-index: 1;
+  transform: translateY(11px) scale(0.95);
+}
+.ghost-2 {
+  z-index: 0;
+  transform: translateY(22px) scale(0.9);
+  opacity: 0.75;
+}
 .flashcard {
+  position: relative;
+  z-index: 2;
   perspective: 1600px;
+  animation: deal-in 0.45s cubic-bezier(0.3, 0.7, 0.2, 1);
+}
+@keyframes deal-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
 }
 .flash-inner {
   display: grid;
@@ -474,11 +638,22 @@
   gap: 6px;
 }
 
-.deck-controls {
-  display: flex;
-  justify-content: center;
+/* One control bar under the deck: prev, Review again, Flip, Got it, next. */
+.deck-bar {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto minmax(0, 1fr) auto;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
+}
+.deck-bar .rate-btn {
+  width: 100%;
+  padding: 0 16px;
+}
+.deck-bar .is-chosen {
+  box-shadow: inset 0 0 0 1.5px currentColor;
+}
+.lbl-short {
+  display: none;
 }
 .round-btn {
   width: 52px;
@@ -494,16 +669,68 @@
 .round-btn:hover:not(:disabled) {
   border-color: var(--focus);
 }
-.rate-row {
+
+/* Card parts: big number, Q / A badges, the question repeated small on the back. */
+.flash-face .flash-num {
+  position: absolute;
+  top: 52px;
+  right: 26px;
+  font-size: 108px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  color: var(--card-deco);
+  opacity: 0.6;
+  pointer-events: none;
+  user-select: none;
+}
+.flash-kind {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+.kind-badge {
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  place-items: center;
+  background: var(--card-ink);
+  color: var(--card-bg);
+  font-size: 15px;
+  letter-spacing: 0;
+  transform: rotate(-6deg);
 }
-.rate-row .btn {
-  width: 100%;
+.kind-badge.kind-answer {
+  background: var(--good-fill);
+  color: #14151f;
+  transform: rotate(6deg);
 }
-.rate-row .is-chosen {
-  box-shadow: inset 0 0 0 1.5px currentColor;
+.flash-echo {
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0.7;
+  margin-top: -6px;
+}
+.flash-front {
+  cursor: pointer;
+}
+.flash-front .flash-question {
+  max-width: 85%;
+}
+/* The back looks different from the front: lighter, with a colored top edge. */
+.flash-back {
+  background: color-mix(in srgb, var(--card-bg) 50%, var(--surface));
+  box-shadow: var(--shadow), inset 0 7px 0 var(--card-deco);
+}
+.flash-back .card-deco {
+  opacity: 0.25;
 }
 
 /* ---------- visuals ---------- */
@@ -1202,13 +1429,25 @@
     gap: 12px;
   }
   .track {
-    padding: 14px 16px;
-    gap: 12px;
+    padding: 10px;
+    gap: 10px;
   }
   .track-title {
-    font-size: 22px;
+    font-size: 17px;
   }
-  .step-text {
+  .track-summary {
+    display: none;
+  }
+  .step {
+    flex: none;
+    padding: 8px;
+    border-radius: 14px;
+  }
+  .step-current {
+    flex: 1;
+  }
+  .step-text,
+  .step-pips {
     display: none;
   }
   .step-current .step-text {
@@ -1251,27 +1490,47 @@
   .readmore-extras {
     grid-template-columns: minmax(0, 1fr);
   }
-  /* Card actions stick to the bottom of the screen. */
-  .deck-controls,
-  .rate-row {
+  /* The control bar sticks to the bottom of the screen, with short labels. */
+  .deck-bar {
     position: sticky;
     z-index: 15;
-  }
-  .rate-row {
     bottom: 12px;
+    gap: 6px;
     padding: 8px;
     border-radius: 22px;
     background: color-mix(in srgb, var(--bg) 85%, transparent);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
   }
-  .rate-row .btn {
+  .deck-bar .btn {
     height: 48px;
     font-size: 15px;
+    padding: 0 10px;
+    gap: 6px;
   }
-  .rate-row kbd,
-  .flip-btn kbd {
+  .deck-bar .round-btn {
+    width: 40px;
+    height: 40px;
+  }
+  .deck-bar kbd,
+  .deck-bar .rate-btn svg,
+  .lbl-long {
     display: none;
+  }
+  .lbl-short {
+    display: inline;
+  }
+  .flip-btn {
+    width: 48px;
+    padding: 0 !important;
+  }
+  .flash-face .flash-num {
+    top: 50px;
+    right: 16px;
+    font-size: 72px;
+  }
+  .flash-ghost {
+    border-radius: 26px;
   }
   .quiz {
     padding: 16px;
@@ -1303,10 +1562,6 @@
 
 /* Compact desktop band: the card and its controls should fit on one screen. */
 @media (min-width: 761px) {
-  .track {
-    justify-content: flex-start;
-    gap: 22px;
-  }
   .flash-face {
     min-height: 340px;
   }
@@ -1537,17 +1792,3 @@
   }
 }
 
-.track-summary {
-  font-size: 15px;
-  line-height: 1.45;
-  color: var(--muted);
-  max-width: 60ch;
-}
-.track-time {
-  white-space: nowrap;
-}
-@media (max-width: 760px) {
-  .track-summary {
-    display: none;
-  }
-}

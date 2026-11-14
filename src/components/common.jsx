@@ -132,11 +132,51 @@ export class ErrorBoundary extends Component {
 export const TINTS = ["lavender", "aqua", "meadow", "butter", "blush", "peach"];
 export const tintFor = (index) => TINTS[((index % TINTS.length) + TINTS.length) % TINTS.length];
 
-// Background decoration for tinted cards: a big soft star like the reference cards.
-export function CardDeco() {
+// Background decorations for tinted cards. Each card gets a different shape so a
+// deck doesn't look like the same card over and over. All drawn in a 200 x 200 box;
+// "deco-line" parts are outlines, the rest are filled (see base.css).
+const SPARKLE = "M100 20C106 84 116 94 180 100C116 106 106 116 100 180C94 116 84 106 20 100C84 94 94 84 100 20Z";
+const DECOS = {
+  star: <path d="M100 8l22 58 62 4-48 40 16 60-52-34-52 34 16-60-48-40 62-4z" />,
+  flower: (
+    <>
+      {[0, 60, 120, 180, 240, 300].map((deg) => (
+        <circle key={deg} cx={100 + 46 * Math.cos((deg * Math.PI) / 180)} cy={100 + 46 * Math.sin((deg * Math.PI) / 180)} r="36" />
+      ))}
+      <circle className="deco-hole" cx="100" cy="100" r="24" />
+    </>
+  ),
+  rings: (
+    <>
+      <circle className="deco-line" cx="100" cy="100" r="84" />
+      <circle className="deco-line" cx="100" cy="100" r="56" />
+      <circle cx="100" cy="100" r="24" />
+    </>
+  ),
+  sparkles: (
+    <>
+      <path d={SPARKLE} />
+      <path d={SPARKLE} transform="translate(118 -6) scale(0.4)" />
+      <path d={SPARKLE} transform="translate(-2 112) scale(0.3)" />
+    </>
+  ),
+  waves: <path className="deco-line" d="M0 50q25-30 50 0t50 0 50 0 50 0M0 100q25-30 50 0t50 0 50 0 50 0M0 150q25-30 50 0t50 0 50 0 50 0" />,
+  blob: <path d="M152 38c28 22 40 66 22 100s-62 54-98 42S14 132 22 92 58 22 92 18s34-2 60 20z" />,
+  dots: (
+    <>
+      {[0, 1, 2, 3].flatMap((row) => [0, 1, 2, 3].map((col) => <circle key={`${row}${col}`} cx={25 + col * 50} cy={25 + row * 50} r="12" />))}
+    </>
+  ),
+  arches: <path className="deco-line" d="M16 196a84 84 0 0 1 168 0M44 196a56 56 0 0 1 112 0M72 196a28 28 0 0 1 56 0" />,
+};
+export const DECO_NAMES = Object.keys(DECOS);
+export const decoFor = (index) => DECO_NAMES[((index % DECO_NAMES.length) + DECO_NAMES.length) % DECO_NAMES.length];
+
+export function CardDeco({ variant = "star" }) {
+  const name = DECOS[variant] ? variant : "star";
   return (
-    <svg className="card-deco" viewBox="0 0 200 200" aria-hidden="true">
-      <path d="M100 8l22 58 62 4-48 40 16 60-52-34-52 34 16-60-48-40 62-4z" />
+    <svg className={`card-deco deco-${name}`} viewBox="0 0 200 200" aria-hidden="true">
+      {DECOS[name]}
     </svg>
   );
 }

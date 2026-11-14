@@ -8,7 +8,8 @@ import Flashcard from "../components/Flashcard.jsx";
 import QuizQuestion from "../components/QuizQuestion.jsx";
 import DoubtBot from "../components/DoubtBot.jsx";
 import SourcesPanel from "../components/SourcesPanel.jsx";
-import { LoadingNotice, Skeleton, StatusBanner, tintFor } from "../components/common.jsx";
+import RoadPeek from "../components/RoadPeek.jsx";
+import { LoadingNotice, Skeleton, StatusBanner, tintFor, decoFor } from "../components/common.jsx";
 import { stops, phases, retestContent, retestPile, nextStopId, isModuleDone, FINAL_ID } from "../state/selectors.js";
 
 export default function LearnScreen({ session, actions, theme, toggleTheme }) {
@@ -27,6 +28,7 @@ export default function LearnScreen({ session, actions, theme, toggleTheme }) {
   const [openReadMore, setOpenReadMore] = useState({});
   const [indexOpen, setIndexOpen] = useState(false);
   const [sourcesOpen, setSourcesOpen] = useState(false);
+  const [roadOpen, setRoadOpen] = useState(false);
 
   const dispatch = (action) => actions.dispatch({ sessionId, ...action });
 
@@ -73,6 +75,7 @@ export default function LearnScreen({ session, actions, theme, toggleTheme }) {
 
   function goTo(id) {
     setIndexOpen(false);
+    setRoadOpen(false);
     dispatch({ type: "START_MODULE", moduleId: id });
   }
 
@@ -120,16 +123,15 @@ export default function LearnScreen({ session, actions, theme, toggleTheme }) {
   if (!stop) return null;
 
   const stopLabel = isRetest ? "Retest" : stop.id === FINAL_ID ? "Final test" : `Stop ${stopIndex + 1}`;
-  const phaseLabel = { basics: "Basics and prereqs", deepdive: "Topic deep dive", test: "Test and quiz" }[stop.phase];
 
   return (
     <div className="calm-bg page learn-page">
       <AppBar session={session} actions={actions} theme={theme} toggleTheme={toggleTheme}>
+        <button className="btn btn-ghost hide-sm" onClick={() => setRoadOpen(true)}>
+          <Icon name="road" size={16} /> Road map
+        </button>
         <button className="btn btn-ghost hide-sm" onClick={() => setSourcesOpen(true)}>
           <Icon name="list" size={16} /> Sources
-        </button>
-        <button className="btn btn-ghost hide-sm" onClick={() => actions.dispatch({ type: "GO", screen: "roadmap" })}>
-          <Icon name="road" size={16} /> Road map
         </button>
         <button className="btn btn-ghost hide-sm" onClick={() => actions.dispatch({ type: "GO", screen: "results" })}>
           <Icon name="bars" size={16} /> Results
@@ -139,18 +141,17 @@ export default function LearnScreen({ session, actions, theme, toggleTheme }) {
       <section className="learn-top">
         <div className="track panel">
           <Stepper phases={phases(session)} />
+          {/* The current stop in one line: the Index and the card already show the rest. */}
           <div className="track-now">
-            <span className="eyebrow">
-              {stopLabel} · {phaseLabel}
-            </span>
+            <span className="track-chip">{stopLabel}</span>
             <h1 className="track-title">{stop.title}</h1>
-            {(stop.summary || stop.minutes) && !isRetest && (
-              <p className="track-summary">
-                {stop.summary}
-                {stop.minutes ? <span className="track-time"> · about {stop.minutes} min</span> : null}
-              </p>
-            )}
+            {stop.minutes && !isRetest ? (
+              <span className="track-time">
+                <Icon name="clock" size={14} /> {stop.minutes} min
+              </span>
+            ) : null}
           </div>
+          {stop.summary && !isRetest && <p className="track-summary">{stop.summary}</p>}
         </div>
         <LiveBoard
           stopLabel={stopLabel}
@@ -191,7 +192,7 @@ export default function LearnScreen({ session, actions, theme, toggleTheme }) {
               <button className="icon-btn" onClick={() => setSourcesOpen(true)} aria-label="Sources">
                 <Icon name="list" />
               </button>
-              <button className="icon-btn" onClick={() => actions.dispatch({ type: "GO", screen: "roadmap" })} aria-label="Road map">
+              <button className="icon-btn" onClick={() => setRoadOpen(true)} aria-label="Road map">
                 <Icon name="road" />
               </button>
             </div>
@@ -252,6 +253,10 @@ export default function LearnScreen({ session, actions, theme, toggleTheme }) {
                   index={cardIndex}
                   total={cards.length}
                   tint={tintFor(cardIndex + Math.max(0, stopIndex))}
+                  deco={decoFor(cardIndex + Math.max(0, stopIndex))}
+                  upcoming={[1, 2].filter((k) => cardIndex + k < cards.length).map((k) => tintFor(cardIndex + k + Math.max(0, stopIndex)))}
+                  marks={cards.map((c) => session.progress.ratings[c.id])}
+                  onJump={(i) => dispatch({ type: "SET_CARD_INDEX", index: i })}
                   label={isRetest ? "Retest" : stop.title}
                   flipped={flipped}
                   onFlip={() => setFlipped((f) => !f)}
@@ -300,6 +305,7 @@ export default function LearnScreen({ session, actions, theme, toggleTheme }) {
                     question={question}
                     answer={answers[question.id]}
                     tint={tintFor(questionIndex + 2)}
+                    deco={decoFor(questionIndex + 3)}
                     onAnswer={(chosen, correct) => dispatch({ type: "ANSWER", questionId: question.id, chosen, correct })}
                     onNext={() => dispatch({ type: "SET_QUESTION_INDEX", index: questionIndex + 1 })}
                     nextLabel={questionIndex === quiz.length - 1 ? "Finish" : "Next"}
@@ -333,6 +339,9 @@ export default function LearnScreen({ session, actions, theme, toggleTheme }) {
 
       {doubtContext && <DoubtBot context={doubtContext} contextKey={doubtKey} contextLabel={view === "cards" ? "this card" : "this question"} />}
       {sourcesOpen && <SourcesPanel session={session} onClose={() => setSourcesOpen(false)} />}
+      {roadOpen && (
+        <RoadPeek session={session} onPick={goTo} onOpenMap={() => actions.dispatch({ type: "GO", screen: "roadmap" })} onClose={() => setRoadOpen(false)} />
+      )}
     </div>
   );
 }

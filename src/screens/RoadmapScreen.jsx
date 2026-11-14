@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Icon from "../components/Icon.jsx";
 import AppBar from "../components/AppBar.jsx";
 import SkipCheck from "../components/SkipCheck.jsx";
-import { LoadingNotice, Skeleton, StatusBanner, CardDeco, tintFor } from "../components/common.jsx";
+import { LoadingNotice, Skeleton, StatusBanner, CardDeco, tintFor, decoFor } from "../components/common.jsx";
 import { stops, isModuleDone, hasBasics, FINAL_ID } from "../state/selectors.js";
 import { LEVEL_LABELS, GOAL_LABELS } from "../../shared/profile.js";
 
@@ -351,7 +351,7 @@ function Station({ stop, index, isFirst, isLastModule, session, selected, onSele
       </button>
 
       <article className={`stop-card tint-${tint}`}>
-        <CardDeco />
+        <CardDeco variant={decoFor(index)} />
         <div className="stop-top">
           <span className="pill pill-white">{isFinal ? "Final" : `Stop ${index + 1}`}</span>
           <span className="stop-meta">

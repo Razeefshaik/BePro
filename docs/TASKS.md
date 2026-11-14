@@ -74,3 +74,28 @@
 - **Goal:** README with setup, usage, AI usage note, known limitations and time spent.
 - **Files:** `README.md`, `docs/submission/*`.
 - **Status:** README written; owner fills AI usage detail and time spent, records video, pushes
+
+**C12: start screen rework**
+- **Owner:** razeef with Claude.
+- **Goal:** learnings sidebar, stacked level and goal lists, wordmark on its own row, smaller build button.
+- **Files:** `src/screens/StartScreen.jsx`, `src/styles/start.css`.
+- **Status:** done on `razeef/c01-build`
+
+**C13: road map colors and scrolling**
+- **Owner:** razeef with Claude.
+- **Goal:** no native scrollbar (arrows and faded edges), road colors match the stop cards, long subtopic chips wrap.
+- **Files:** `src/screens/RoadmapScreen.jsx`, `src/styles/roadmap.css`.
+- **Status:** done on `razeef/c01-build`
+
+**C14: learning page band**
+- **Owner:** razeef with Claude.
+- **Goal:** stop progress moves into the Index; the notice board becomes a live departures-style board.
+- **Files:** `src/components/LiveBoard.jsx`, `src/components/IndexNav.jsx`, `src/screens/LearnScreen.jsx`, `src/styles/learn.css`.
+- **Status:** done on `razeef/c01-build`
+
+**C15: navigation and flashcards**
+- **Owner:** razeef with Claude.
+- **Goal:** road map card instead of leaving the page, Back on results, no + in the top bar, phase tiles in the band, livelier flashcards, varied card shapes.
+- **Files:** `src/components/{AppBar,RoadPeek,Stepper,Flashcard,common}.jsx`, `src/screens/{LearnScreen,ResultsScreen}.jsx`, `src/styles/*.css`.
+- **Status:** done on `razeef/c01-build`
+

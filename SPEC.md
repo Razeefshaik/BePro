@@ -267,10 +267,10 @@ Rules:
 **Theme: "Meadow Glass"** (replaced the original Ink/Paper tokens, see DECISIONS 2026-11-12). Design canvas: https://claude.ai/artifact/NPGo2q3f3m9YUsPAip1Mfi
 * Tokens live in `src/styles/tokens.css`. The root element gets class `t-meadow` (default, light) or `t-night` (dark). The toggle is saved in localStorage.
 * Only the start screen gets the full gradient background (`public/bg/intro-*.svg`) and the big wordmark. Working screens (road map, learn, results) use a calm, flat background with two faint corner washes, so content stays readable.
-* Flashcards, road map stops and true/false cards each get a pastel tint from the palette (lavender, aqua, meadow, butter, blush, peach), cycling per item.
+* Flashcards, road map stops and true/false cards each get a pastel tint from the palette (lavender, aqua, meadow, butter, blush, peach), cycling per item, and a background shape from a set of eight (star, flower, rings, sparkles, waves, blob, dots, arches), so neighbouring cards never look the same.
 * Results use the same layout in both themes.
 
-Fonts (Google Fonts): Outfit (everything), Caveat (motivation note only).
+Fonts (Google Fonts): Outfit (everything), VT323 (the live board's LED text only).
 
 Color meaning, same roles in both themes: **focus now = lavender (Meadow) / highlighter lime (Night), got it = green / mint, review this = blush pink / ember.** Never rely on color alone; always pair it with text or an icon.
 
@@ -278,6 +278,8 @@ Color meaning, same roles in both themes: **focus now = lavender (Meadow) / high
 * Left sidebar: saved learnings with a progress bar and a "what's next" line, plus a "New learning" button.
 * Main area: an "I am" box (Beginner, Intermediate, Pro), an "I want to" box (Master, Mid level, Crash course), then the input "Type what you want to learn.." with a + button that opens a notes paste area.
 * Primary button: "Build my road map". Example chips below.
+
+**Navigation.** The top bar on the working screens has the logo (home: all learnings), the session title, screen buttons and the theme toggle. New learnings start only from the home sidebar. On Learn and Results, **Road map** opens the road map as a card on top of the page (every stop with its status; pick one to jump there; "Edit road map" opens the full road map page). Results has a **Back to learning** button.
 
 **Road map screen.**
 * Title "Road Map" and a "Let's start" button.
@@ -288,10 +290,10 @@ Color meaning, same roles in both themes: **focus now = lavender (Meadow) / high
 * On a phone, the road scrolls horizontally.
 
 **Learning page.**
-* Top band: the stepper (Basics and prereqs, Topic deep dive, Test and quiz; skipped phases show "Skipped"), the Sources and Roadmap buttons, and a **live board** styled like a station departures display: a LIVE light, the stop and a clock; a main line that rotates by itself every 7 seconds through motivation lines (`src/data/quotes.json`) and study tips (`src/data/tips.json`), replaced by an adaptive "Attention" hint after 2 "Review again" in a row; and a scrolling ticker with session stats and the next stop. The current stop's progress bar lives in the Index, not the top band.
+* Top band: three **phase tiles** (Basics and prereqs, Topic deep dive, Test and quiz; skipped phases show "Skipped"). The phase you are in is the bright tile, and each tile has one mark per stop (done, current, to do). Under them, the current stop in one line (stop number, title, minutes, one-line summary). Next to it, a **live board** styled like a station departures display: a LIVE light, the stop and a clock; a main line that rotates by itself every 7 seconds through motivation lines (`src/data/quotes.json`) and study tips (`src/data/tips.json`), replaced by an adaptive "Attention" hint after 2 "Review again" in a row; and a scrolling ticker with session stats and the next stop. The current stop's progress bar lives in the Index, not the top band.
 * Body: the Index (modules grouped by phase, current module expanded with its subtopics) and the content window.
 * Content window tabs: **Cards** (default) and **Quiz**.
-  * Flashcard: front plus visual. Flip shows the answer. **Read further** expands the explanation inside the card (lazy loaded and cached). Rating buttons: "Review again" and "Got it".
+  * Flashcard: a meter above the deck (one segment per card, colored by rating, click to jump), the next cards peeking out from behind, a big card number, Q and A badges. Front: question plus visual; click the card or press Space to flip. Back: a lighter face that repeats the question small above the answer. **Read further** expands the explanation inside the card (lazy loaded and cached). One control bar: previous, "Review again", Flip, "Got it", next.
   * Quiz: options, then feedback with the explanation, then Next. "Report a wrong question" removes the question and adds it to the warnings.
 * **Doubt bot**: a button in the bottom right of the content window opens a small panel. It answers about the current card or question only.
 * **Motivation lines:** `src/data/quotes.json`, 30 original lines (motivation, light humor, learning tips) with **no attributions to real people**, shown on the live board.
