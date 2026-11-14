@@ -7,13 +7,19 @@
 /* ---------- layout ----------
    Index on the left edge of the screen; next to it the content column: the band
    (session card, doubt bot, live board) and the card or quiz. */
+/* The whole page, top bar included, sits on a cream "scratch pad" with a faint dot grid
+   and two soft color washes, so the glass top bar has something to show through. */
 .learn-page {
   --appbar-h: 69px;
+  background:
+    radial-gradient(700px 260px at 0% 0%, var(--wash-1), transparent 70%),
+    radial-gradient(700px 260px at 100% 0%, var(--wash-2), transparent 70%),
+    radial-gradient(circle, var(--pad-dot) 0.9px, transparent 1.3px) 0 0 / 28px 28px,
+    var(--pad);
+  background-attachment: fixed;
 }
-/* Everything under the top bar sits on a cream "scratch pad" with a faint dot grid. */
 .learn-body {
   min-height: calc(100 * var(--vh) - var(--appbar-h));
-  background: radial-gradient(circle, var(--pad-dot) 0.9px, transparent 1.3px) 0 0 / 28px 28px, var(--pad);
   display: grid;
   grid-template-columns: clamp(232px, calc(17 * var(--vw)), 272px) minmax(0, 1fr);
   align-items: start;

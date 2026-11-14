@@ -126,3 +126,7 @@
 **C22: band tray and scratch-pad background**
 - **Goal:** the three band cards sit on one tray (`--band`, lavender to mint; deep indigo to teal in Night) so they read as one section. The rest of the learning page is a cream "scratch pad" with a faint dot grid (`--pad`, `--pad-dot`); the Index column is a slightly deeper cream (`--pad-side`).
 - **Status:** done on `razeef/c01-build`
+
+**C23: glass top bar**
+- **Goal:** the app bar is frosted glass (see-through `--glass`, blur and saturate, light top edge, soft shadow) with glass pill buttons. On the learning page the dotted cream and two soft washes now cover the whole page, so the glass has something to show through.
+- **Status:** done on `razeef/c01-build`
