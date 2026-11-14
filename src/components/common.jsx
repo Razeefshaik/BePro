@@ -86,11 +86,6 @@ export function LoadingNotice({ label, onRetry, onCancel }) {
 }
 
 // Plain words for every error code the client can see.
-export function errorText(error) {
-  if (!error) return "Something went wrong.";
-  return error.message || "Something went wrong.";
-}
-
 export function Skeleton({ width = "100%", height = 14, radius = 10, className = "" }) {
   return <span className={`skeleton ${className}`} style={{ width, height, borderRadius: radius }} aria-hidden="true" />;
 }

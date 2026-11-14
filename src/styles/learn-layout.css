@@ -1,0 +1,444 @@
+/* Learning page layout: the Index sidebar, the content column, the top band and the session card. */
+
+.show-sm {
+  display: none !important;
+}
+
+/* ---------- layout ----------
+   Index on the left edge of the screen; next to it the content column: the band
+   (session card, doubt bot, live board) and the card or quiz. */
+.learn-page {
+  --appbar-h: 69px;
+}
+.learn-body {
+  display: grid;
+  grid-template-columns: clamp(232px, calc(17 * var(--vw)), 272px) minmax(0, 1fr);
+  align-items: start;
+}
+.learn-content {
+  container: content / inline-size;
+  min-width: 0;
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 14px var(--gutter) 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* The Index: a sidebar attached to the left edge, full height under the top bar.
+   Each stop is a small white card: colored number tile, title, "status • minutes". */
+.index {
+  position: sticky;
+  top: var(--appbar-h);
+  height: calc(100 * var(--vh) - var(--appbar-h));
+  overflow: auto;
+  padding: 16px 12px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: color-mix(in srgb, var(--surface-2) 55%, transparent);
+  border-right: 1px solid var(--line);
+}
+.index-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 4px;
+}
+.index-heading {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.index-close {
+  display: none;
+}
+.index-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 14px;
+}
+.index-group-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 4px;
+  font-size: 13px;
+  font-weight: 700;
+}
+.index-group-count {
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+}
+.index-group-count.is-done {
+  background: var(--good-soft);
+  border-color: transparent;
+  color: var(--good);
+}
+.index-entry {
+  border-radius: 18px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.index-entry:not(.is-current):hover {
+  border-color: var(--focus-edge);
+  box-shadow: var(--shadow-sm);
+}
+.index-entry.is-current {
+  border-color: transparent;
+  box-shadow: 0 0 0 2px var(--focus), var(--shadow-sm);
+  padding-bottom: 10px;
+}
+.index-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border: 0;
+  border-radius: 18px;
+  background: transparent;
+  text-align: left;
+  color: var(--text);
+}
+.index-tile {
+  width: 38px;
+  height: 38px;
+  flex: none;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: var(--card-bg);
+  color: var(--card-ink);
+  border: 1px solid color-mix(in srgb, var(--card-deco) 55%, transparent);
+  font-size: 14px;
+  font-weight: 700;
+}
+.index-entry.is-done .index-tile {
+  background: var(--good-fill);
+  border-color: transparent;
+  color: #14151f;
+}
+.index-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.index-title {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+.index-sub {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.index-entry.is-current .index-sub {
+  color: var(--focus-ink);
+  font-weight: 600;
+}
+.index-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--focus);
+}
+.spinner-sm {
+  width: 14px;
+  height: 14px;
+  border-width: 2px;
+}
+.index-subs {
+  list-style: none;
+  margin: 0;
+  padding: 0 14px 0 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* ---------- top band ---------- */
+.learn-top {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 14px;
+  align-items: stretch;
+}
+.session-hero {
+  grid-area: session;
+}
+.doubt-card {
+  grid-area: doubt;
+}
+.live {
+  grid-area: live;
+}
+/* Narrower content: session and board side by side, the doubt bot full width under them. */
+@container content (max-width: 980px) {
+  .learn-top {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas: "session live" "doubt doubt";
+  }
+}
+@container content (max-width: 620px) {
+  .learn-top {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "session" "live" "doubt";
+  }
+}
+@container content (min-width: 981px) {
+  .learn-top {
+    grid-template-areas: "session doubt live";
+  }
+}
+
+/* Session "hero" card: gradient card, header row, glass panel with a big number,
+   a ring and three numbers with small bars. */
+.session-hero {
+  min-width: 0;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.hero-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.hero-avatar {
+  width: 40px;
+  height: 40px;
+  flex: none;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.55);
+}
+.hero-titles {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+.hero-titles strong {
+  font-size: 15px;
+}
+.hero-titles span {
+  font-size: 12.5px;
+  opacity: 0.85;
+}
+.hero-retest {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  flex: none;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+}
+.hero-retest.has-pile:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+.hero-retest:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.hero-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 19px;
+  height: 19px;
+  padding: 0 5px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: #ff5f73;
+  border: 2px solid #fff;
+  font-size: 11px;
+  font-weight: 700;
+}
+.hero-glass {
+  padding: 12px 14px 14px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.hero-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.hero-big {
+  min-width: 0;
+}
+.hero-big strong {
+  display: block;
+  font-size: 34px;
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+.hero-big span {
+  font-size: 12.5px;
+  opacity: 0.85;
+}
+.hero-ring {
+  position: relative;
+  flex: none;
+  width: 58px;
+  height: 58px;
+}
+.hero-ring svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+.hero-ring-track,
+.hero-ring-value {
+  fill: none;
+  stroke-width: 6;
+}
+.hero-ring-track {
+  stroke: rgba(255, 255, 255, 0.25);
+}
+.hero-ring-value {
+  stroke: #fff;
+  stroke-linecap: round;
+  transition: stroke-dasharray 0.5s ease;
+}
+.hero-ring-icon {
+  position: absolute;
+  inset: 11px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.18);
+}
+.hero-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.hero-metric {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.hero-metric strong {
+  font-size: 17px;
+  font-weight: 600;
+}
+.hero-metric-label {
+  font-size: 11.5px;
+  opacity: 0.85;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.hero-bar {
+  margin-top: 6px;
+  width: 85%;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.28);
+  overflow: hidden;
+}
+.hero-bar > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #fff;
+  transition: width 0.4s ease;
+}
+/* Accuracy bar color by level (the level is also written in the label). */
+.hero-metric.tone-good .hero-bar > span {
+  background: #b9f5a1;
+}
+.hero-metric.tone-ok .hero-bar > span {
+  background: #ffe08a;
+}
+.hero-metric.tone-low .hero-bar > span {
+  background: #ffb4c2;
+}
+
+.learn-main {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+.learn-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.tabs {
+  display: inline-flex;
+  padding: 4px;
+  gap: 4px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+.tabs button {
+  height: 38px;
+  padding: 0 18px;
+  border-radius: 999px;
+  border: 0;
+  background: transparent;
+  font-weight: 600;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.tabs button.is-on {
+  background: var(--action);
+  color: var(--on-action);
+}
+.tab-count {
+  font-size: 12px;
+  opacity: 0.7;
+}
+.learn-head-actions {
+  margin-left: auto;
+  gap: 8px;
+}
+
+.card-skeleton {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}

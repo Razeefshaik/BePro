@@ -4,6 +4,20 @@ An AI study assistant that is **not a chatbot**. Type a topic (or paste your not
 
 The model only fills in content. **Our code decides the structure** (how many stops, cards and questions, how long answers are) and **checks every reply** before it reaches the screen.
 
+| Start | Road map |
+| --- | --- |
+| ![Start screen](docs/screenshots/01-start.png) | ![Road map](docs/screenshots/02-roadmap.png) |
+
+| Flashcards | Quiz |
+| --- | --- |
+| ![Learning page with a flashcard](docs/screenshots/03-learn.png) | ![Quiz with feedback](docs/screenshots/04-quiz.png) |
+
+| Results | Night theme | Phone |
+| --- | --- | --- |
+| ![Results](docs/screenshots/05-results.png) | ![Night theme](docs/screenshots/06-night.png) | ![Phone layout](docs/screenshots/07-phone.png) |
+
+The content in these screenshots came from a real model, not the mock.
+
 ## Setup
 
 Needs Node 18 or newer.
@@ -30,10 +44,17 @@ To watch the failure handling, set `LLM_CHAOS=0.5` in `.env`. Half of the model 
 
 1. **Start:** type a topic, choose *I am* (Beginner, Intermediate, Pro) and *I want to* (Master, Mid level, Crash course). "+ Add your notes" switches to notes mode: cards then quote your notes.
 2. **Road map:** stops grouped into phases. Click a stop's number to move, rename or delete it; **+** on the road inserts a stop; subtopic chips can be removed or added. **Adjust plan** sends an instruction ("add a stop on QUIC") and the model edits the existing plan instead of starting over. Intermediate learners get a 3 question basics check.
-3. **Learn:** flip cards (Space), rate them (1 = Review again, 2 = Got it), **Read further** opens a longer explanation inside the card. Then the quiz (1 to 4 answers, Enter for next). The notice board shows a motivation line, a study tip and live stats. The round button at the bottom right is a small **doubt bot** that only answers about the card on screen.
-4. **Results:** score gauge, score per stop, the retest pile, "Retest the N I missed", and "New questions on weak spots".
+3. **Learn:** click a card or press Space to flip it, rate it (1 = Review again, 2 = Got it), **Read further** opens a longer explanation inside the card. The meter above the deck shows every card of the stop; click a segment to jump. Then the quiz (1 to 4 answers, Enter for next).
+   * The **Index** on the left lists every stop with its status; click one to jump there.
+   * The **session card** shows how much of the road map is done, your quiz accuracy, cards known, minutes studying, and a Retest button with the size of your retest pile.
+   * **Ask a doubt** answers only about the card or question on screen (and never gives away an unanswered question).
+   * The **live board** rotates motivation lines and study tips, and warns you after two "Review again" in a row.
+   * **Road map** in the top bar opens the map as a card over the page; **Sources** lists the quotes from your notes, or Wikipedia searches for a topic.
+4. **Results:** score gauge, score per stop, the retest pile, "Retest the N I missed", and "New questions on weak spots". **Back to learning** returns to your stop.
 
-Sessions save to localStorage and come back on reload. The moon button switches between the Meadow (light) and Night (dark) themes. It works on phones: the index becomes a drawer and the card actions stick to the bottom.
+Sessions save to localStorage and come back on reload. The moon button switches between the Meadow (light) and Night (dark) themes.
+
+**Screen sizes:** on a phone or tablet the Index becomes a drawer and the card's buttons stick to the bottom. On big monitors (1800px and wider) the whole interface scales up a step.
 
 ## How bad model output is handled
 
@@ -68,8 +89,19 @@ server/       Express API: routes, provider (fetch / codex / mock), prompts, pip
 src/api       fetch wrapper (timeout, abort, re-validation)
 src/state     reducer with the stale guard, derived selectors, localStorage, the useApp hook
 src/screens   Start, Roadmap, Learn, Results
-src/components flashcard, five visual renderers, quiz question, notice board, doubt bot...
+src/components flashcard, five visual renderers, quiz question, index, session card, live board, doubt bot...
+src/styles    tokens.css (both themes), base.css, then one file per screen or component
 ```
+
+Where to look first:
+
+| Question | File |
+| --- | --- |
+| How is a model reply checked? | `server/llm/pipeline.js`, then `server/llm/checks.js` |
+| What does valid data look like? | `shared/schemas.js` |
+| How are stale replies ignored? | `REQUEST_*` cases in `src/state/sessionReducer.js`, and `run()` in `src/state/useApp.js` |
+| How does the browser call the server? | `src/api/client.js` |
+| Who decides how many cards and questions? | `shared/profile.js` |
 
 Design decisions and their reasons are in `docs/DECISIONS.md`. The full spec is `SPEC.md`.
 
@@ -79,7 +111,8 @@ I used AI heavily and want to be clear about how:
 
 * **Claude (Claude Code)** wrote most of the code from my spec (`SPEC.md`), which I wrote and iterated on with it. It also produced the design mockups from reference images I collected, and drove a headless browser to screenshot every screen in both themes and at phone width.
 * **Codex CLI** was the model behind the app during development (`LLM_PROVIDER=codex`).
-* I reviewed the code and steered the design: the theme, colored cards, the notice board, and a calm learning page instead of heavy gradients. ‹OWNER: add what you changed or rewrote yourself.›
+* I reviewed the code and steered the design over many rounds of feedback (each round is a row in `docs/DECISIONS.md`): the theme, colored cards, the live board, the Index on the left, the session card, the navigation, and the Night colors.
+* A real-model test found a bug the mock couldn't: in notes mode the model left the source quote off quiz questions, so they were flagged "Not found in your notes". The fix was in the prompt (`notesRules` in `server/llm/prompts.js`). ‹OWNER: add what you changed or rewrote yourself.›
 
 ## Known limitations
 

@@ -85,3 +85,12 @@ One row per design change, with its reason. Add a dated section per batch of wor
 | Doubt bot is a card between the session card and the live board, answers drop down under it; the floating button is gone | razeef | Accept | Owner's choice of place |
 | Night: the soft highlight is a neutral lift with a thin lime outline (`--focus-edge`); review color is coral instead of ember; flashcard backs keep their tint; wordmark uses a light gradient | razeef | Accept | Owner: colors broke in dark mode (lime tints looked olive, orange tints looked brown, wordmark invisible) |
 | Session card redrawn as a hero card (gradient, glass panel, big number with ring, three numbers with bars, round Retest button with a count badge); Index stops drawn as small cards with a colored number tile and a "status • minutes" line | razeef | Accept | Owner shared a reference (pet-care app header card and schedule list) and asked the band and Index to follow it |
+
+## 2026-11-14 Final pass
+
+| Decision | By | Status | Reason |
+| --- | --- | --- | --- |
+| One `hero-surface` style for each screen's headline card (session card, road map header, results score); saved learnings drawn as list cards like the Index | razeef | Accept | Owner: unify and polish, keep the approved layouts |
+| Notes mode prompt spells out that every quiz question needs `sourceQuote` | razeef | Accept | A real Codex run left it off quiz questions, so they were flagged as not in the notes |
+| `learn.css` split into `learn-layout`, `flashcard`, `visuals`, `quiz`, `doubt`, `liveboard`, `learn-responsive` (same order, so the cascade is unchanged); small learn panels moved to `LearnPanels.jsx` | razeef | Accept | Easier to find and explain code in the interview |
+| README gets real-model screenshots and a "where to look first" table; video script written | razeef | Accept | Communication is 15% of the grade |

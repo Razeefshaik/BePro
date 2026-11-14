@@ -99,3 +99,14 @@
 - **Files:** `src/components/{AppBar,RoadPeek,Stepper,Flashcard,common}.jsx`, `src/screens/{LearnScreen,ResultsScreen}.jsx`, `src/styles/*.css`.
 - **Status:** done on `razeef/c01-build`
 
+**C16: screen sizes**
+- **Goal:** same look from phone to big monitor (zoom step, container queries, sticky card bar).
+- **Status:** done on `razeef/c01-build`
+
+**C17: learning page without repeats**
+- **Goal:** session hero card, Index on the left edge as list cards, doubt bot as a band card, Night colors fixed.
+- **Status:** done on `razeef/c01-build`
+
+**C18: final pass**
+- **Goal:** unify the look across screens, real-model test, code clean-up, README screenshots and video script.
+- **Status:** done on `razeef/c01-build`; owner still fills two README placeholders and records the video

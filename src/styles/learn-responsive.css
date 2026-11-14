@@ -1,0 +1,297 @@
+/* Learning page: sources list, the Index progress bar, and how the page adapts to screen sizes.
+   Loaded last, because these rules adjust the ones in the files above. */
+
+/* ---------- sources ---------- */
+.sources-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.sources-list li {
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: var(--surface-2);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 14px;
+}
+.sources-list a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  text-decoration: none;
+}
+.sources-list blockquote {
+  margin: 0;
+}
+.sources-list .is-ungrounded {
+  background: var(--warn-soft);
+}
+
+.drawer-backdrop {
+  display: none;
+}
+
+/* ---------- tablets ---------- */
+
+/* ---------- phones: index becomes a drawer, the band compacts, actions stick to the bottom ---------- */
+@media (max-width: 760px) {
+  .hide-sm {
+    display: none !important;
+  }
+  .show-sm {
+    display: inline-flex !important;
+  }
+  .learn-content {
+    padding: 12px 16px 120px;
+  }
+  .learn-stop {
+    font-size: 17px;
+  }
+  .flash-face {
+    min-height: 360px;
+    padding: 18px;
+    border-radius: 26px;
+  }
+  .readmore-extras {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .flash-face .flash-num {
+    top: 50px;
+    right: 16px;
+    font-size: 72px;
+  }
+  .flash-ghost {
+    border-radius: 26px;
+  }
+  .quiz {
+    padding: 16px;
+  }
+  .question-text {
+    font-size: 20px;
+  }
+  .tf-buttons {
+    justify-content: stretch;
+  }
+  .tf-btn {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+/* Compact desktop band: the card and its controls should fit on one screen. */
+@media (min-width: 761px) {
+  .flash-face {
+    min-height: 340px;
+  }
+  .chart-bars {
+    height: 140px;
+  }
+}
+
+@media (max-width: 760px) {
+  .learn-head {
+    flex-wrap: wrap;
+  }
+  .learn-head .tabs {
+    order: 3;
+    width: 100%;
+  }
+  .learn-head .tabs button {
+    flex: 1;
+    justify-content: center;
+  }
+}
+
+/* ---------- progress of the current stop, inside the index ---------- */
+.index-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 2px 12px 8px 38px;
+}
+.index-progress .bar {
+  height: 6px;
+  background: color-mix(in srgb, var(--text) 12%, transparent);
+}
+.index-progress-text {
+  font-size: 12px;
+}
+
+/* ---------- fitting every screen size ----------
+   Parts of this page adapt to the space they actually get (container queries),
+   not only to the window width, so they look the same in a narrow column or a wide one. */
+.deck,
+.live {
+  container-type: inline-size;
+}
+
+/* The card's control bar always sticks to the bottom, so it is reachable on short screens. */
+.deck-bar {
+  position: sticky;
+  bottom: 12px;
+  z-index: 15;
+  padding: 8px;
+  border-radius: 22px;
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+@container (max-width: 640px) {
+  .deck-bar {
+    gap: 6px;
+  }
+  .deck-bar .btn {
+    height: 48px;
+    font-size: 15px;
+    padding: 0 10px;
+    gap: 6px;
+  }
+  .deck-bar .round-btn {
+    width: 40px;
+    height: 40px;
+  }
+  .deck-bar kbd,
+  .deck-bar .rate-btn svg,
+  .lbl-long {
+    display: none;
+  }
+  .lbl-short {
+    display: inline;
+  }
+  .flip-btn {
+    width: 48px;
+    padding: 0 !important;
+  }
+}
+
+/* Live board text follows the board's own width. */
+.live-text {
+  font-size: clamp(21px, 4.2cqw, 30px);
+}
+
+/* Tablets and small laptops: the Index becomes a drawer, the card gets the width. */
+.index-btn {
+  display: none !important;
+}
+@media (max-width: 900px) {
+  .index-btn {
+    display: inline-flex !important;
+  }
+  .learn-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .index {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 40;
+    width: min(320px, calc(86 * var(--vw)));
+    height: auto;
+    max-height: none;
+  }
+  .index {
+    border-radius: 0 24px 24px 0;
+    background: var(--bg);
+    box-shadow: var(--shadow);
+    transform: translateX(-105%);
+    transition: transform 0.25s ease;
+  }
+  .index.is-open {
+    transform: translateX(0);
+  }
+  .index-close {
+    display: grid;
+  }
+  .drawer-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 39;
+    background: rgba(10, 10, 20, 0.4);
+  }
+}
+
+/* Short screens (small laptops): smaller card and visuals so the card fits. */
+@media (min-width: 761px) and (max-height: 820px) {
+  .flash-face {
+    min-height: 280px;
+    padding: 20px 24px;
+  }
+  .chart-bars,
+  .anim-bars,
+  .chart-line {
+    height: 110px;
+  }
+  .visual-image {
+    max-height: 180px;
+  }
+  .flash-face .flash-num {
+    font-size: 84px;
+  }
+}
+
+/* Tabs line up with the card below them. */
+.learn-head {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* The current stop's name, above the card. */
+.learn-stop {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.learn-stop-chip {
+  flex: none;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--focus-soft);
+  color: var(--focus-ink);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.learn-stop-title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Narrow content (phones): the doubt bot moves under the card, so the card comes first.
+   The band's cards become direct items of the content column, and order places them. */
+@container content (max-width: 620px) {
+  .learn-top {
+    display: contents;
+  }
+  .learn-main {
+    order: 1;
+  }
+  .doubt-card {
+    order: 2;
+  }
+  .doubt-pop {
+    top: auto;
+    bottom: calc(100% + 8px);
+  }
+}
+@media (max-width: 760px) {
+  .learn-stop-chip {
+    display: none;
+  }
+}

@@ -1,0 +1,358 @@
+/* ---------- flashcard ---------- */
+.deck {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Meter: one segment per card, colored by how you rated it. Click one to jump. */
+.deck-meter {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 4px;
+}
+.meter-segs {
+  flex: 1;
+  display: flex;
+  gap: 6px;
+}
+.meter-seg {
+  position: relative;
+  flex: 1;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: var(--line);
+  transition: transform 0.15s ease, background 0.2s ease;
+}
+.meter-seg::before {
+  content: "";
+  position: absolute;
+  inset: -8px 0; /* bigger click area than the thin bar */
+}
+.meter-seg:hover {
+  transform: scaleY(1.4);
+}
+.meter-seg.is-got {
+  background: var(--good-fill);
+}
+.meter-seg.is-review {
+  background: var(--review-fill);
+}
+.meter-seg.is-current {
+  background: var(--focus);
+  box-shadow: 0 0 0 3px var(--focus-soft);
+}
+.meter-count {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The deck: the next cards peek out from behind the current one. */
+.flash-stage {
+  position: relative;
+  padding-bottom: 22px;
+}
+.flash-ghost {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 22px;
+  border-radius: 32px;
+  background: var(--card-bg);
+  box-shadow: var(--shadow-sm);
+  transform-origin: 50% 100%;
+}
+.ghost-1 {
+  z-index: 1;
+  transform: translateY(11px) scale(0.95);
+}
+.ghost-2 {
+  z-index: 0;
+  transform: translateY(22px) scale(0.9);
+  opacity: 0.75;
+}
+.flashcard {
+  position: relative;
+  z-index: 2;
+  perspective: 1600px;
+  animation: deal-in 0.45s cubic-bezier(0.3, 0.7, 0.2, 1);
+}
+@keyframes deal-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+}
+.flash-inner {
+  display: grid;
+  transition: transform 0.55s cubic-bezier(0.3, 0.7, 0.2, 1);
+  transform-style: preserve-3d;
+}
+.flashcard.is-flipped .flash-inner {
+  transform: rotateY(180deg);
+}
+.flash-face {
+  grid-area: 1 / 1;
+  position: relative;
+  overflow: hidden;
+  min-height: 420px;
+  padding: 24px 28px;
+  border-radius: 32px;
+  background: var(--card-bg);
+  color: var(--card-ink);
+  box-shadow: var(--shadow);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.flash-face > *:not(.card-deco) {
+  position: relative;
+}
+.flash-back {
+  transform: rotateY(180deg);
+}
+.flash-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.flash-top .pill-white {
+  background: rgba(255, 255, 255, 0.85);
+  color: #14151f;
+}
+.t-night .flash-top .pill-white {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--text);
+}
+.rated {
+  margin-left: auto;
+  background: rgba(255, 255, 255, 0.8);
+}
+.rated-got {
+  color: #2c6e1b;
+}
+.rated-review {
+  color: #a3224f;
+}
+.t-night .rated {
+  background: rgba(0, 0, 0, 0.3);
+}
+.t-night .rated-got {
+  color: var(--good);
+}
+.t-night .rated-review {
+  color: var(--review);
+}
+.flash-question {
+  font-size: clamp(21px, 3.6cqw, 30px);
+  line-height: 1.22;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+.flash-answer {
+  font-size: clamp(18px, 3cqw, 25px);
+  line-height: 1.38;
+  font-weight: 500;
+}
+.flash-quote {
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: var(--card-panel);
+  font-size: 14px;
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+.flash-visual {
+  border-radius: 22px;
+  background: var(--card-panel);
+  padding: 16px 18px;
+  color: var(--text);
+}
+.t-meadow .flash-visual {
+  color: #14151f;
+}
+.flash-hint {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  opacity: 0.7;
+}
+
+.readmore {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.readmore-toggle {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 42px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.8);
+  color: #14151f;
+  font-weight: 600;
+  font-size: 14px;
+}
+.t-night .readmore-toggle {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: var(--text);
+}
+.readmore-toggle.is-suggested {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus) 45%, transparent);
+}
+.suggested {
+  height: 22px;
+  font-size: 11px;
+  background: var(--focus);
+  color: var(--on-focus);
+}
+.readmore-body {
+  border-radius: 20px;
+  background: var(--card-panel);
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 15px;
+  line-height: 1.6;
+}
+.readmore-extras {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.extra {
+  border-radius: 14px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 14px;
+  background: rgba(255, 255, 255, 0.6);
+}
+.t-night .extra {
+  background: rgba(255, 255, 255, 0.06);
+}
+.extra strong {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* One control bar under the deck: prev, Review again, Flip, Got it, next. */
+.deck-bar {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+}
+.deck-bar .rate-btn {
+  width: 100%;
+  padding: 0 16px;
+}
+.deck-bar .is-chosen {
+  box-shadow: inset 0 0 0 1.5px currentColor;
+}
+.lbl-short {
+  display: none;
+}
+.round-btn {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow-sm);
+}
+.round-btn:hover:not(:disabled) {
+  border-color: var(--focus);
+}
+
+/* Card parts: big number, Q / A badges, the question repeated small on the back. */
+.flash-face .flash-num {
+  position: absolute;
+  top: 52px;
+  right: 26px;
+  font-size: 108px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  color: var(--card-deco);
+  opacity: 0.6;
+  pointer-events: none;
+  user-select: none;
+}
+.flash-kind {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+.kind-badge {
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: var(--card-ink);
+  color: var(--card-bg);
+  font-size: 15px;
+  letter-spacing: 0;
+  transform: rotate(-6deg);
+}
+.kind-badge.kind-answer {
+  background: var(--good-fill);
+  color: #14151f;
+  transform: rotate(6deg);
+}
+.flash-echo {
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0.7;
+  margin-top: -6px;
+}
+.flash-front {
+  cursor: pointer;
+}
+.flash-front .flash-question {
+  max-width: 85%;
+}
+/* The back looks different from the front: lighter, with a colored top edge. */
+.flash-back {
+  background: color-mix(in srgb, var(--card-bg) 50%, var(--surface));
+  box-shadow: var(--shadow), inset 0 7px 0 var(--card-deco);
+}
+.flash-back .card-deco {
+  opacity: 0.25;
+}

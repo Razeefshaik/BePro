@@ -1,0 +1,268 @@
+/* ---------- quiz ---------- */
+.quiz {
+  padding: 24px 26px;
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.quiz-progress {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 14px;
+}
+.quiz-progress .bar {
+  flex: 1;
+}
+.question {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.question > .pill {
+  align-self: flex-start;
+}
+.question-text {
+  font-size: 24px;
+  line-height: 1.28;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.option {
+  width: 100%;
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 16px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  text-align: left;
+  font-size: 16px;
+  font-weight: 500;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.option:hover:not(:disabled) {
+  border-color: var(--focus);
+}
+.option:disabled {
+  opacity: 1;
+}
+.option-key {
+  width: 30px;
+  height: 30px;
+  flex: none;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: var(--surface-2);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+}
+.option-text {
+  flex: 1;
+}
+.option-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.opt-right {
+  background: var(--good-soft);
+  border: 1.5px solid var(--good-edge);
+}
+.opt-wrong {
+  background: var(--review-soft);
+  border: 1.5px solid var(--review-edge);
+}
+.opt-dim {
+  opacity: 0.55 !important;
+}
+.tag-right {
+  color: var(--good);
+}
+.tag-wrong {
+  color: var(--review);
+}
+
+/* True/false: "Do you know this?" card, like the reference trivia cards. */
+.tf-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 26px;
+  padding: 22px;
+  background: var(--card-bg);
+  color: var(--card-ink);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.tf-card > *:not(.card-deco) {
+  position: relative;
+}
+.tf-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.tf-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.85);
+  color: #14151f;
+}
+.t-night .tf-icon {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text);
+}
+.tf-title {
+  font-size: 20px;
+  font-weight: 700;
+}
+.tf-statement {
+  font-size: 19px;
+  line-height: 1.45;
+  font-weight: 500;
+}
+.tf-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+.tf-btn {
+  min-width: 120px;
+  height: 48px;
+  padding: 0 18px;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 600;
+  border: 1.5px solid transparent;
+}
+.tf-no {
+  background: rgba(255, 255, 255, 0.85);
+  color: #14151f;
+}
+.tf-yes {
+  background: #121320;
+  color: #fff;
+}
+.t-night .tf-no {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text);
+}
+.t-night .tf-yes {
+  background: var(--action);
+  color: var(--on-action);
+}
+.tf-btn.opt-right {
+  background: var(--good-fill);
+  color: #14151f;
+  border-color: var(--good-edge);
+}
+.tf-btn.opt-wrong {
+  background: var(--review-fill);
+  color: #14151f;
+  border-color: var(--review-edge);
+}
+.tf-btn kbd {
+  background: rgba(127, 127, 127, 0.18);
+  border-color: transparent;
+}
+
+.feedback {
+  border-radius: 18px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.feedback strong {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.feedback-right {
+  background: var(--good-soft);
+}
+.feedback-right strong {
+  color: var(--good);
+}
+.feedback-wrong {
+  background: var(--review-soft);
+}
+.feedback-wrong strong {
+  color: var(--review);
+}
+.question-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+}
+.btn-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ---------- done panels ---------- */
+.done-panel {
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 36px 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+.done-panel .row {
+  justify-content: center;
+  margin-top: 8px;
+}
+.done-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--good-fill);
+  color: #14151f;
+}
+.done-score {
+  font-size: 56px;
+  font-weight: 200;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+.good-text {
+  color: var(--good);
+  font-weight: 600;
+}
+.review-text {
+  color: var(--review);
+  font-weight: 600;
+}

@@ -1,7 +1,7 @@
 // The Index: stops grouped by phase (with how many are done). Each stop is a small card:
 // a colored tile with its number (the same color as its road map card), the title, and a
 // "status • minutes" line. The current stop is expanded with its progress and subtopics.
-// It sits on the left edge; below 900px it becomes a drawer (learn.css).
+// It sits on the left edge; below 900px it becomes a drawer (learn-responsive.css).
 import Icon from "./Icon.jsx";
 import { tintFor } from "./common.jsx";
 import { stops, isModuleDone, moduleScore, FINAL_ID } from "../state/selectors.js";

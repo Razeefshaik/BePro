@@ -11,7 +11,13 @@ import "./styles/tokens.css";
 import "./styles/base.css";
 import "./styles/start.css";
 import "./styles/roadmap.css";
-import "./styles/learn.css";
+import "./styles/learn-layout.css";
+import "./styles/flashcard.css";
+import "./styles/visuals.css";
+import "./styles/quiz.css";
+import "./styles/doubt.css";
+import "./styles/liveboard.css";
+import "./styles/learn-responsive.css";
 import "./styles/results.css";
 
 export default function App() {

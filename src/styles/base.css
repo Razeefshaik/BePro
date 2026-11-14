@@ -294,18 +294,9 @@ kbd {
   font-size: 13px;
   font-weight: 600;
 }
-.pill-glass {
-  background: var(--glass);
-  border: 1px solid var(--glass-edge);
-  color: var(--focus-ink);
-}
 .pill-white {
   background: var(--surface);
   color: var(--text);
-}
-.pill-focus {
-  background: var(--focus-soft);
-  color: var(--focus-ink);
 }
 .pill-warn {
   background: var(--warn-soft);
@@ -556,8 +547,7 @@ kbd {
    In Night the outline carries the lime, because a lime-tinted background turns olive. */
 .peek-stop.is-current .peek-item,
 .learn-stop-chip,
-.stack-row.is-on,
-.pill-focus {
+.stack-row.is-on {
   box-shadow: inset 0 0 0 1px var(--focus-edge);
 }
 /* Night: the back of a flashcard keeps its own tint instead of fading to near black. */
