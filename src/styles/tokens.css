@@ -20,6 +20,8 @@
   --focus-ink: #4b40c4;
   --focus-soft: #ecebfd;
   --focus-edge: rgba(111, 101, 224, 0.22); /* thin outline on "you are here" highlights */
+  --hero: linear-gradient(140deg, #7a6ef0 0%, #5a4fd6 52%, #4136b0 100%);
+  --hero-shadow: 0 18px 40px rgba(76, 64, 190, 0.32);
   --on-focus: #ffffff;
 
   --good: #2c6e1b;
@@ -72,6 +74,8 @@
   --focus-ink: #e4ff5a;
   --focus-soft: rgba(255, 255, 255, 0.07); /* lime here looked olive */
   --focus-edge: rgba(228, 255, 90, 0.38);
+  --hero: linear-gradient(140deg, #3d3399 0%, #2b2873 50%, #165059 100%);
+  --hero-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
   --on-focus: #17170f;
 
   --good: #7ee8c4;

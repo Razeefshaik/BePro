@@ -1,7 +1,10 @@
-// The Index: stops grouped by phase (with how many are done), the current one expanded with
-// its progress and subtopics. It sits on the left edge; below 900px it becomes a drawer (learn.css).
+// The Index: stops grouped by phase (with how many are done). Each stop is a small card:
+// a colored tile with its number (the same color as its road map card), the title, and a
+// "status • minutes" line. The current stop is expanded with its progress and subtopics.
+// It sits on the left edge; below 900px it becomes a drawer (learn.css).
 import Icon from "./Icon.jsx";
-import { stops, isModuleDone, moduleScore } from "../state/selectors.js";
+import { tintFor } from "./common.jsx";
+import { stops, isModuleDone, moduleScore, FINAL_ID } from "../state/selectors.js";
 
 const GROUPS = [
   { phase: "basics", label: "Basics and prereqs" },
@@ -17,9 +20,9 @@ export default function IndexNav({ session, onPick, open, onClose, retestCount, 
   return (
     <>
       {open && <div className="drawer-backdrop" onClick={onClose} aria-hidden="true" />}
-      <nav className={`index panel ${open ? "is-open" : ""}`} aria-label="Index">
+      <nav className={`index ${open ? "is-open" : ""}`} aria-label="Index">
         <div className="index-head">
-          <span className="eyebrow">Index</span>
+          <span className="index-heading">Index</span>
           <button className="icon-btn icon-btn-sm index-close" onClick={onClose} aria-label="Close index">
             <Icon name="close" size={16} />
           </button>
@@ -28,9 +31,13 @@ export default function IndexNav({ session, onPick, open, onClose, retestCount, 
         {current === "retest" && (
           <div className="index-entry is-current">
             <div className="index-item">
-              <span className="index-status status-current" />
-              <span className="index-title">Retest pile</span>
-              <span className="index-meta">{retestCount}</span>
+              <span className="index-tile tint-blush">
+                <Icon name="redo" size={15} />
+              </span>
+              <span className="index-text">
+                <span className="index-title">Retest pile</span>
+                <span className="index-sub">{retestCount} to redo</span>
+              </span>
             </div>
             {currentProgress}
           </div>
@@ -41,47 +48,58 @@ export default function IndexNav({ session, onPick, open, onClose, retestCount, 
           const doneCount = members.filter((s) => isModuleDone(session, s.id)).length;
           return (
             <div key={group.phase} className={`index-group group-${group.phase}`}>
-              <span className="index-group-label">
-                {group.label}
+              <div className="index-group-label">
+                <span>{group.label}</span>
                 {members.length === 0 ? (
-                  <span className="muted"> · Skipped</span>
+                  <span className="index-group-count">Skipped</span>
                 ) : (
                   <span className={`index-group-count ${doneCount === members.length ? "is-done" : ""}`}>
                     {doneCount}/{members.length}
                   </span>
                 )}
-              </span>
+              </div>
               {members.map((stop) => {
+                const position = all.indexOf(stop);
                 const slot = session.modules[stop.id];
                 const done = isModuleDone(session, stop.id);
                 const isCurrent = stop.id === current;
                 const score = moduleScore(session, stop.id);
-                let status = "todo";
-                let meta = "";
-                if (done) {
-                  status = "done";
-                  meta = score.total ? `${score.correct}/${score.total}` : "Done";
-                } else if (slot?.status === "loading") {
-                  status = "loading";
-                  meta = "Loading";
-                } else if (slot?.status === "error") {
-                  status = "error";
-                  meta = "Failed";
-                } else if (slot?.status === "ready") {
-                  meta = "Ready";
-                }
-                if (isCurrent) status = status === "done" ? "done" : "current";
+                let status = "Up next";
+                if (done) status = score.total ? `${score.correct}/${score.total} right` : "Done";
+                else if (isCurrent) status = "You are here";
+                else if (slot?.status === "loading") status = "Loading";
+                else if (slot?.status === "error") status = "Failed";
+                else if (slot?.status === "ready") status = "Ready";
+                const tint = stop.id === FINAL_ID ? "aqua" : tintFor(position);
 
                 return (
-                  <div key={stop.id} className={`index-entry ${isCurrent ? "is-current" : ""}`}>
+                  <div key={stop.id} className={`index-entry ${isCurrent ? "is-current" : ""} ${done ? "is-done" : ""}`}>
                     <button className="index-item" onClick={() => onPick(stop.id)} aria-current={isCurrent ? "true" : undefined}>
-                      <span className={`index-status status-${status}`}>
-                        {status === "done" && <Icon name="check" size={11} stroke={3.5} />}
-                        {status === "error" && <Icon name="alert" size={14} />}
-                        {status === "loading" && <span className="spinner spinner-sm" />}
+                      <span className={`index-tile tint-${tint}`}>
+                        {done ? (
+                          <Icon name="check" size={15} stroke={3} />
+                        ) : slot?.status === "loading" ? (
+                          <span className="spinner spinner-sm" />
+                        ) : slot?.status === "error" ? (
+                          <Icon name="alert" size={15} />
+                        ) : stop.id === FINAL_ID ? (
+                          <Icon name="flag" size={15} />
+                        ) : (
+                          position + 1
+                        )}
                       </span>
-                      <span className="index-title">{stop.title}</span>
-                      <span className="index-meta">{meta}</span>
+                      <span className="index-text">
+                        <span className="index-title">{stop.title}</span>
+                        <span className="index-sub">
+                          {status}
+                          {stop.minutes ? (
+                            <>
+                              <span className="index-dot" aria-hidden="true" />
+                              {stop.minutes} min
+                            </>
+                          ) : null}
+                        </span>
+                      </span>
                     </button>
                     {isCurrent && currentProgress}
                     {isCurrent && stop.subtopics.length > 0 && (

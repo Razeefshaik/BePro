@@ -84,4 +84,4 @@ One row per design change, with its reason. Add a dated section per batch of wor
 | Index is a sidebar on the left edge, full height | razeef | Accept | Owner: the Index pushed the content too far right |
 | Doubt bot is a card between the session card and the live board, answers drop down under it; the floating button is gone | razeef | Accept | Owner's choice of place |
 | Night: the soft highlight is a neutral lift with a thin lime outline (`--focus-edge`); review color is coral instead of ember; flashcard backs keep their tint; wordmark uses a light gradient | razeef | Accept | Owner: colors broke in dark mode (lime tints looked olive, orange tints looked brown, wordmark invisible) |
-
+| Session card redrawn as a hero card (gradient, glass panel, big number with ring, three numbers with bars, round Retest button with a count badge); Index stops drawn as small cards with a colored number tile and a "status • minutes" line | razeef | Accept | Owner shared a reference (pet-care app header card and schedule list) and asked the band and Index to follow it |

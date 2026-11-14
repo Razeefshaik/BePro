@@ -554,10 +554,8 @@ kbd {
 
 /* "You are here" highlights: the soft background plus a thin focus-colored outline.
    In Night the outline carries the lime, because a lime-tinted background turns olive. */
-.index-entry.is-current,
 .peek-stop.is-current .peek-item,
 .learn-stop-chip,
-.stat-pile.has-pile,
 .stack-row.is-on,
 .pill-focus {
   box-shadow: inset 0 0 0 1px var(--focus-edge);

@@ -1,13 +1,15 @@
-// "This session" card, top left of the learning page.
-// The Index already shows the stops and where you are, so this card shows what the Index can't:
-//   - a ring with how much of the whole road map is done
-//   - quiz accuracy (green / amber / pink by level, always with the number)
-//   - cards you know, out of the cards you rated
-//   - how long you've been studying in this visit
-//   - the retest pile, with a button to start it
+// The session card, top left of the learning page, drawn as a "hero" card:
+// a gradient card with a header row and a glass panel inside it.
+//   header: what you're learning, level and goal, and a round Retest button (with the pile count)
+//   panel:  a big number (share of the road map done) with a ring, then three numbers with small bars:
+//           accuracy, cards known, minutes studying (against a 15 minute goal)
+// The Index already shows the stops and where you are, so nothing here repeats it.
 import { useEffect, useState } from "react";
 import Icon from "./Icon.jsx";
 import { stops, isModuleDone, overallScore, retestPile } from "../state/selectors.js";
+import { LEVEL_LABELS, GOAL_LABELS } from "../../shared/profile.js";
+
+const GOAL_MINUTES = 15;
 
 // Minutes since the learning page opened. Updates every 15 seconds, enough for a minute counter.
 function useStudyMinutes() {
@@ -20,11 +22,25 @@ function useStudyMinutes() {
   return Math.floor((now - started) / 60000);
 }
 
-function accuracyTone(percent, answered) {
-  if (answered === 0) return "none";
-  if (percent >= 85) return "good";
-  if (percent >= 60) return "ok";
-  return "low";
+// Accuracy level in a word, so the meaning never depends on the bar color alone.
+function accuracyLevel(percent, answered) {
+  if (answered === 0) return { word: "No answers yet", tone: "none" };
+  if (percent >= 85) return { word: "strong", tone: "good" };
+  if (percent >= 60) return { word: "okay", tone: "ok" };
+  return { word: "low", tone: "low" };
+}
+
+function Metric({ label, value, sub, ratio, tone = "none" }) {
+  return (
+    <div className={`hero-metric tone-${tone}`}>
+      <strong>{value}</strong>
+      <span className="hero-metric-label">{label}</span>
+      <span className="hero-bar" aria-hidden="true">
+        <span style={{ width: `${Math.round(Math.min(1, ratio) * 100)}%` }} />
+      </span>
+      <span className="sr-only">{sub}</span>
+    </div>
+  );
 }
 
 export default function SessionCard({ session, onRetest }) {
@@ -36,61 +52,70 @@ export default function SessionCard({ session, onRetest }) {
   const rated = score.cardsGot + score.cardsReview;
   const pile = retestPile(session);
   const pileCount = pile.cards.length + pile.questions.length;
-  const tone = accuracyTone(score.percent, score.total);
+  const level = accuracyLevel(score.percent, score.total);
 
   // The ring: a circle whose visible length is the share of stops done.
-  const radius = 34;
+  const radius = 26;
   const length = 2 * Math.PI * radius;
 
   return (
-    <section className="session panel" aria-label="This session">
-      <div className="session-ring" role="img" aria-label={`${done} of ${all.length} stops done`}>
-        <svg viewBox="0 0 80 80" aria-hidden="true">
-          <circle className="ring-track" cx="40" cy="40" r={radius} />
-          {done > 0 && <circle className="ring-value" cx="40" cy="40" r={radius} strokeDasharray={`${(done / all.length) * length} ${length}`} />}
-        </svg>
-        <span className="ring-text">
-          <strong>{percent}%</strong>
-          <span>
-            {done}/{all.length} stops
-          </span>
+    <section className="session-hero" aria-label="This session">
+      <header className="hero-head">
+        <span className="hero-avatar" aria-hidden="true">
+          <Icon name="cap" size={20} />
         </span>
-      </div>
+        <div className="hero-titles">
+          <strong>Your session</strong>
+          <span>
+            {LEVEL_LABELS[session.input.level]} · {GOAL_LABELS[session.input.goal]}
+          </span>
+        </div>
+        <button
+          className={`hero-retest ${pileCount ? "has-pile" : ""}`}
+          onClick={onRetest ?? undefined}
+          disabled={!pileCount || !onRetest}
+          aria-label={pileCount ? `Retest the ${pileCount} in your pile` : "Retest pile is empty"}
+          title={pileCount ? "Retest now" : "Retest pile is empty"}
+        >
+          <Icon name="redo" size={18} />
+          {pileCount > 0 && <span className="hero-badge">{pileCount}</span>}
+        </button>
+      </header>
 
-      <div className="session-stats">
-        <div className={`stat stat-${tone}`}>
-          <span className="stat-label">
-            <Icon name="target" size={13} /> Accuracy
-          </span>
-          <strong>{score.total ? `${score.percent}%` : "–"}</strong>
-          <span className="stat-sub">{score.total ? `${score.correct} of ${score.total} right` : "No answers yet"}</span>
+      <div className="hero-glass">
+        <div className="hero-top">
+          <div className="hero-big">
+            <strong>{percent}%</strong>
+            <span>
+              Road map done · {done} of {all.length} stops
+            </span>
+          </div>
+          <div className="hero-ring" aria-hidden="true">
+            <svg viewBox="0 0 64 64">
+              <circle className="hero-ring-track" cx="32" cy="32" r={radius} />
+              {done > 0 && <circle className="hero-ring-value" cx="32" cy="32" r={radius} strokeDasharray={`${(done / all.length) * length} ${length}`} />}
+            </svg>
+            <span className="hero-ring-icon">
+              <Icon name="road" size={18} />
+            </span>
+          </div>
         </div>
-        <div className="stat">
-          <span className="stat-label">
-            <Icon name="check" size={13} stroke={2.6} /> Cards known
-          </span>
-          <strong>{rated ? `${score.cardsGot}/${rated}` : "–"}</strong>
-          <span className="stat-sub">{rated ? `${score.cardsReview} to review` : "Rate a card"}</span>
-        </div>
-        <div className="stat">
-          <span className="stat-label">
-            <Icon name="clock" size={13} /> Studying
-          </span>
-          <strong>{minutes < 1 ? "<1" : minutes} min</strong>
-          <span className="stat-sub">this visit</span>
-        </div>
-        <div className={`stat stat-pile ${pileCount ? "has-pile" : ""}`}>
-          <span className="stat-label">
-            <Icon name="redo" size={13} /> Retest pile
-          </span>
-          <strong>{pileCount}</strong>
-          {pileCount > 0 && onRetest ? (
-            <button className="stat-action" onClick={onRetest}>
-              Retest now <Icon name="arrowRight" size={13} />
-            </button>
-          ) : (
-            <span className="stat-sub">{pileCount ? "In retest" : "All clear"}</span>
-          )}
+
+        <div className="hero-metrics">
+          <Metric
+            label={score.total ? `Accuracy · ${level.word}` : "Accuracy"}
+            value={score.total ? `${score.percent}%` : "–"}
+            sub={score.total ? `${score.correct} of ${score.total} right` : "No answers yet"}
+            ratio={score.total ? score.correct / score.total : 0}
+            tone={level.tone}
+          />
+          <Metric
+            label="Cards known"
+            value={rated ? `${score.cardsGot}/${rated}` : "–"}
+            sub={rated ? `${score.cardsReview} to review` : "No cards rated yet"}
+            ratio={rated ? score.cardsGot / rated : 0}
+          />
+          <Metric label={`Studying · goal ${GOAL_MINUTES}`} value={`${minutes < 1 ? "<1" : minutes} min`} sub="this visit" ratio={minutes / GOAL_MINUTES} />
         </div>
       </div>
     </section>
