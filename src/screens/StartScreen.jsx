@@ -72,41 +72,45 @@ export default function StartScreen({ state, actions, theme, toggleTheme }) {
           </section>
 
           <form className="start-form" onSubmit={submit} noValidate>
-            <div className={`prompt glass ${touched && error ? "has-error" : ""}`}>
-              <label htmlFor="topic" className="sr-only">
-                Topic
-              </label>
-              <input
-                id="topic"
-                className="prompt-input"
-                placeholder="Type what you want to learn.."
-                value={topic}
-                maxLength={200}
-                autoComplete="off"
-                onChange={(e) => setTopic(e.target.value)}
-                onBlur={() => topic && setTouched(true)}
-                aria-invalid={touched && Boolean(error)}
-                aria-describedby="topic-error"
-              />
-              {showNotes && (
-                <div className="notes-box">
-                  <label htmlFor="notes" className="notes-label">
-                    Your notes <span className="muted">(cards will quote them)</span>
-                  </label>
-                  <textarea id="notes" value={notes} onChange={(e) => setNotes(e.target.value)} rows={6} placeholder="Paste lecture notes, an article, a chapter..." />
-                  <span className={`count ${tooLong ? "over" : ""}`}>
-                    {notes.length.toLocaleString()} / {NOTES_MAX.toLocaleString()}
-                  </span>
+            {/* The wrapper holds a soft glow that moves around the box (see .prompt-glow). */}
+            <div className="prompt-wrap">
+              <span className="prompt-glow" aria-hidden="true" />
+              <div className={`prompt glass ${touched && error ? "has-error" : ""}`}>
+                <label htmlFor="topic" className="sr-only">
+                  Topic
+                </label>
+                <input
+                  id="topic"
+                  className="prompt-input"
+                  placeholder="Type what you want to learn.."
+                  value={topic}
+                  maxLength={200}
+                  autoComplete="off"
+                  onChange={(e) => setTopic(e.target.value)}
+                  onBlur={() => topic && setTouched(true)}
+                  aria-invalid={touched && Boolean(error)}
+                  aria-describedby="topic-error"
+                />
+                {showNotes && (
+                  <div className="notes-box">
+                    <label htmlFor="notes" className="notes-label">
+                      Your notes <span className="muted">(cards will quote them)</span>
+                    </label>
+                    <textarea id="notes" value={notes} onChange={(e) => setNotes(e.target.value)} rows={6} placeholder="Paste lecture notes, an article, a chapter..." />
+                    <span className={`count ${tooLong ? "over" : ""}`}>
+                      {notes.length.toLocaleString()} / {NOTES_MAX.toLocaleString()}
+                    </span>
+                  </div>
+                )}
+                <div className="prompt-row">
+                  <button type="button" className="btn btn-dashed" onClick={() => setShowNotes((v) => !v)} aria-expanded={showNotes}>
+                    <Icon name={showNotes ? "close" : "plus"} size={15} />
+                    {showNotes ? "Remove notes" : "Add your notes"}
+                  </button>
+                  <button type="submit" className="btn btn-primary build-btn">
+                    Build my road map <Icon name="arrowRight" size={16} />
+                  </button>
                 </div>
-              )}
-              <div className="prompt-row">
-                <button type="button" className="btn btn-dashed" onClick={() => setShowNotes((v) => !v)} aria-expanded={showNotes}>
-                  <Icon name={showNotes ? "close" : "plus"} size={15} />
-                  {showNotes ? "Remove notes" : "Add your notes"}
-                </button>
-                <button type="submit" className="btn btn-primary build-btn">
-                  Build my road map <Icon name="arrowRight" size={16} />
-                </button>
               </div>
             </div>
             <p id="topic-error" className="field-error" role={touched && error ? "alert" : undefined}>

@@ -130,3 +130,7 @@
 **C23: glass top bar**
 - **Goal:** the app bar is frosted glass (see-through `--glass`, blur and saturate, light top edge, soft shadow) with glass pill buttons. On the learning page the dotted cream and two soft washes now cover the whole page, so the glass has something to show through.
 - **Status:** done on `razeef/c01-build`
+
+**C24: start box polish**
+- **Goal:** a roomier topic box with smaller buttons, and a soft light that runs around the box (a conic gradient spun with an `@property` angle: a thin line on the border plus a blurred copy behind it). It stops for reduced motion.
+- **Status:** done on `razeef/c01-build`
