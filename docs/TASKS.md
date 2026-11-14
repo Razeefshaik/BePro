@@ -138,3 +138,7 @@
 **C25: start screen fits one screen**
 - **Goal:** on desktop the start screen fits the window, centred top to bottom: the wordmark follows the window height, and the gaps between sections and the choice rows are tighter. With notes open, the content column scrolls inside itself.
 - **Status:** done on `razeef/c01-build`
+
+**C26: start screen hierarchy**
+- **Goal:** clear levels on the start screen: the headline and the topic box (glow, 22px text) are the main thing; level and goal are quieter settings (one light row of three options each, no shadow, no radio circles, narrower than the box, chosen option = white tile with a focus ring); the example chips are the lightest (smaller, see-through). Phones hide the option icons.
+- **Status:** done on `razeef/c01-build`

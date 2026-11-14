@@ -223,7 +223,7 @@ function Sidebar({ state, actions, open, onClose, theme, toggleTheme }) {
   );
 }
 
-// One joined list per question: rows share a single card, the chosen row is highlighted.
+// One row of options per question (styled like a segmented control); the chosen one is highlighted.
 function ChoiceStack({ label, name, options, labels, value, onChange }) {
   return (
     <fieldset className="choice-group">
