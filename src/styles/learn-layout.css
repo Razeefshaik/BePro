@@ -178,7 +178,7 @@
 .learn-top {
   display: grid;
   grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.9fr) minmax(0, 1.1fr);
-  gap: 14px;
+  gap: 12px;
   align-items: stretch;
 }
 .session-hero {
@@ -213,10 +213,11 @@
    a ring and three numbers with small bars. */
 .session-hero {
   min-width: 0;
-  padding: 14px;
+  padding: 10px 12px;
+  border-radius: 22px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
 }
 .hero-head {
   display: flex;
@@ -224,8 +225,8 @@
   gap: 10px;
 }
 .hero-avatar {
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   flex: none;
   border-radius: 50%;
   display: grid;
@@ -241,16 +242,16 @@
   line-height: 1.25;
 }
 .hero-titles strong {
-  font-size: 15px;
+  font-size: 14px;
 }
 .hero-titles span {
-  font-size: 12.5px;
+  font-size: 12px;
   opacity: 0.85;
 }
 .hero-retest {
   position: relative;
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   flex: none;
   border-radius: 50%;
   display: grid;
@@ -282,7 +283,7 @@
   font-weight: 700;
 }
 .hero-glass {
-  padding: 12px 14px 14px;
+  padding: 8px 12px 10px;
   border-radius: 20px;
   background: rgba(255, 255, 255, 0.14);
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -290,7 +291,7 @@
   -webkit-backdrop-filter: blur(8px);
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
 }
 .hero-top {
   display: flex;
@@ -303,20 +304,20 @@
 }
 .hero-big strong {
   display: block;
-  font-size: 34px;
+  font-size: 26px;
   font-weight: 600;
   line-height: 1.05;
   letter-spacing: -0.02em;
 }
 .hero-big span {
-  font-size: 12.5px;
+  font-size: 12px;
   opacity: 0.85;
 }
 .hero-ring {
   position: relative;
   flex: none;
-  width: 58px;
-  height: 58px;
+  width: 44px;
+  height: 44px;
 }
 .hero-ring svg {
   width: 100%;
@@ -338,7 +339,7 @@
 }
 .hero-ring-icon {
   position: absolute;
-  inset: 11px;
+  inset: 8px;
   border-radius: 50%;
   display: grid;
   place-items: center;
@@ -356,20 +357,20 @@
   gap: 1px;
 }
 .hero-metric strong {
-  font-size: 17px;
+  font-size: 15px;
   font-weight: 600;
 }
 .hero-metric-label {
-  font-size: 11.5px;
+  font-size: 11px;
   opacity: 0.85;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .hero-bar {
-  margin-top: 6px;
+  margin-top: 4px;
   width: 85%;
-  height: 6px;
+  height: 4px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.28);
   overflow: hidden;

@@ -2,11 +2,11 @@
 .doubt-card {
   position: relative;
   min-width: 0;
-  padding: 14px;
+  padding: 10px 12px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 10px;
+  gap: 8px;
 }
 .doubt-head {
   display: flex;
@@ -15,9 +15,9 @@
 }
 .doubt-avatar {
   flex: none;
-  width: 40px;
-  height: 40px;
-  border-radius: 14px;
+  width: 32px;
+  height: 32px;
+  border-radius: 11px;
   display: grid;
   place-items: center;
   color: #fff;
@@ -32,7 +32,7 @@
   line-height: 1.3;
 }
 .doubt-titles strong {
-  font-size: 14.5px;
+  font-size: 14px;
 }
 .doubt-toggle {
   flex: none;
@@ -55,21 +55,21 @@
 .doubt-form input {
   flex: 1;
   min-width: 0;
-  height: 40px;
+  height: 34px;
   border-radius: 999px;
   border: 1px solid var(--line);
   background: var(--surface-2);
   color: var(--text);
   padding: 0 14px;
-  font-size: 14px;
+  font-size: 13px;
 }
 .doubt-form input:disabled {
   opacity: 0.6;
 }
 .doubt-send {
   flex: none;
-  width: 40px;
-  height: 40px;
+  width: 34px;
+  height: 34px;
   border: 0;
   border-radius: 50%;
   background: var(--action);
@@ -88,9 +88,9 @@
 }
 .doubt-suggest .chip {
   flex: none;
-  height: 28px;
+  height: 26px;
   padding: 0 10px;
-  font-size: 12px;
+  font-size: 11.5px;
   color: var(--text);
 }
 /* Answers drop down under the card, over the page, like search results. */

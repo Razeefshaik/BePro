@@ -172,7 +172,7 @@
 
 /* Live board text follows the board's own width. */
 .live-text {
-  font-size: clamp(21px, 4.2cqw, 30px);
+  font-size: clamp(18px, 3.6cqw, 25px);
 }
 
 /* Tablets and small laptops: the Index becomes a drawer, the card gets the width. */

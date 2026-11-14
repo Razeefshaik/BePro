@@ -110,3 +110,7 @@
 **C18: final pass**
 - **Goal:** unify the look across screens, real-model test, code clean-up, README screenshots and video script.
 - **Status:** done on `razeef/c01-build`; owner still fills two README placeholders and records the video
+
+**C19: smaller top band**
+- **Goal:** shrink the session card, doubt card and live board (padding, avatars, big number, ring, board text). The band is about 190px tall at 1440 wide, down from about 295px.
+- **Status:** done on `razeef/c01-build`
