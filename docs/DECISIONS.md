@@ -32,3 +32,12 @@ One row per design change, with its reason. Add a dated section per batch of wor
 | Unanswered quiz questions go to the doubt bot without the answer key | razeef | Accept | The bot must not spoil the question |
 | Vite proxy reads the API port from `PORT` (dotenv) | razeef | Accept | Server and proxy always agree on the port |
 | Reducer tests (`src/state/*.test.js`) run with `npm test` next to the pipeline tests | razeef | Accept | Proves the stale guard in code, not only in prose |
+
+## 2026-11-14 Start screen rework
+
+| Decision | By | Status | Reason |
+| --- | --- | --- | --- |
+| Saved learnings move to a full-height left sidebar (drawer under 900px), with New learning and the theme toggle | razeef | Accept | Owner: should feel like a chat app's history list |
+| BEPRO wordmark gets its own row above the headline (gradient in Meadow) instead of sitting behind it | razeef | Accept | Owner: text over the wordmark looked congested and wasted it |
+| Level and goal are two joined stacked lists with a radio per row, not separate tiles | razeef | Accept | Owner: separated tiles looked confusing |
+| Smaller Build my road map button (42px) | razeef | Accept | Owner: it looked too big |
