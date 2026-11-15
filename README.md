@@ -1,6 +1,6 @@
 <div align="center">
 
-<a href="#try-it-in-a-minute"><img src="docs/screenshots/03-learn.png" alt="BePro learning page: the session card, Ask a doubt and the live board above a flashcard with a chart, and the Index of stops on the left" width="100%"></a>
+<a href="#try-it-in-a-minute"><img src="docs/screenshots/03-learn.png" alt="BePro learning page: the session card, Ask a doubt and the live board above a flashcard, and the Index of stops on the left" width="100%"></a>
 
 ### Type a topic. Get a road map of flashcards to flip, not a chat to scroll.
 
@@ -51,7 +51,7 @@ And when the model gets it wrong, you see a plain message and **Try again**, nev
 
 ## Tour the product
 
-These captures come from a real model run (Codex) on 14 November 2026. The one-screen desktop layout and the start screen hierarchy from 15 November are newer than these images.
+These captures come from a real model run (local Codex) on 15 November 2026, on the current layout.
 
 | Plan and learn | Check and review |
 | --- | --- |
