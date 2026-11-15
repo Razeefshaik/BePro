@@ -94,3 +94,18 @@ One row per design change, with its reason. Add a dated section per batch of wor
 | Notes mode prompt spells out that every quiz question needs `sourceQuote` | razeef | Accept | A real Codex run left it off quiz questions, so they were flagged as not in the notes |
 | `learn.css` split into `learn-layout`, `flashcard`, `visuals`, `quiz`, `doubt`, `liveboard`, `learn-responsive` (same order, so the cascade is unchanged); small learn panels moved to `LearnPanels.jsx` | razeef | Accept | Easier to find and explain code in the interview |
 | README gets real-model screenshots and a "where to look first" table; video script written | razeef | Accept | Communication is 15% of the grade |
+
+## 2026-11-15 One screen, hierarchy and the fresh clone (C19 to C28)
+
+| Decision | By | Status | Reason |
+| --- | --- | --- | --- |
+| On desktop the learning page fits one window: the band, stop title, meter, card and buttons, no page scroll; long answers scroll inside the card | razeef | Accept | Owner: "fit all this in a page so that it is best UX" |
+| The card is the biggest thing on the page: slimmer band, thinner meter (4px), card grows into the leftover height | razeef | Accept | Owner: "in the hierarchy cards is major" |
+| Card buttons are a compact bar (up to 660px, 44px tall) centred under the wider card | razeef | Accept | Owner: a pyramid, big card on top, compact controls under it |
+| The three band cards sit on one tray; the rest of the learning page is a cream "scratch pad" with a faint dot grid | razeef | Accept | Owner: better separation between the band and the work area |
+| Scrollbars inside the card are thin and see-through, no arrows | razeef | Accept | Owner asked for a quiet, transparent scrollbar |
+| The top bar is frosted glass with glass pill buttons | razeef | Accept | Owner's call |
+| Start screen fits one window; the topic box is roomier with smaller buttons and a moving glow around it | razeef | Accept | Owner: make the main input the obvious first step |
+| Start screen hierarchy: big BEPRO wordmark as a backdrop, headline on the bottom of its letters, level and goal as quiet one-row choices, example chips lightest | razeef | Accept | Owner: "here all looks equal" |
+| With no model configured the server uses the mock and the start screen says "Demo mode" | razeef | Accept | Audit against the brief: a fresh clone must work with `npm install && npm start` |
+| README follows the structure of the owner's Premise and CounterSign READMEs, and states the owner's part and the AI's part plainly | razeef | Accept | Owner's own README style |

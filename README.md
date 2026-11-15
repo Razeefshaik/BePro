@@ -1,135 +1,258 @@
-# BePro
+<div align="center">
 
-An AI study assistant that is **not a chatbot**. Type a topic (or paste your notes), pick your level and goal, and BePro builds an editable **road map** of stops. Each stop is learned flashcard first: a card with a question and a visual, flip for the answer, rate it, then take a short quiz. Wrong answers and cards you mark "Review again" go to a **retest pile**.
+<a href="#try-it-in-a-minute"><img src="docs/screenshots/03-learn.png" alt="BePro learning page: the session card, Ask a doubt and the live board above a flashcard with a chart, and the Index of stops on the left" width="100%"></a>
 
-The model only fills in content. **Our code decides the structure** (how many stops, cards and questions, how long answers are) and **checks every reply** before it reaches the screen.
+### Type a topic. Get a road map of flashcards to flip, not a chat to scroll.
 
-| Start | Road map |
+![React 18](https://img.shields.io/badge/React-18-61dafb)
+![Express](https://img.shields.io/badge/server-Express-0a0a0a)
+![Every reply checked by zod](https://img.shields.io/badge/every_reply-checked_by_zod-6f65e0)
+![Any OpenAI compatible model](https://img.shields.io/badge/LLM-any_OpenAI_compatible-6f65e0)
+![24 tests](https://img.shields.io/badge/tests-24_passing-2ea043)
+![Not a chatbot](https://img.shields.io/badge/not_a-chatbot-2ea043)
+
+<p>
+<a href="#demo-video"><img src="https://img.shields.io/badge/Demo-Screen_recording-ff0000?style=for-the-badge&logo=youtube&logoColor=white" alt="Demo video"></a>
+<a href="#try-it-in-a-minute"><img src="https://img.shields.io/badge/Run_it-npm_start-cb3837?style=for-the-badge&logo=npm&logoColor=white" alt="Run it with npm start"></a>
+<a href="SPEC.md"><img src="https://img.shields.io/badge/Design-The_spec-0a0a0a?style=for-the-badge&logo=readthedocs&logoColor=white" alt="The design spec"></a>
+</p>
+
+<p>
+<a href="#the-story-in-60-seconds">The story in 60 seconds</a> ·
+<a href="#every-feature">Every feature</a> ·
+<a href="#how-bad-model-output-is-handled">Bad AI output</a> ·
+<a href="#the-evidence-against-each-grading-area">Grading areas</a> ·
+<a href="#try-it-in-a-minute">Run it</a> ·
+<a href="#how-i-built-it">How I built it</a>
+</p>
+
+</div>
+
+## What is BePro?
+
+**BePro is an AI study assistant that turns a topic, or your own notes, into a road map you study flashcard first.**
+
+You type what you want to learn and pick two things: who you are (*Beginner*, *Intermediate*, *Pro*) and what you want (*Master*, *Mid level*, *Crash course*). BePro builds a road map of stops. At each stop you flip cards, rate them, then take a short quiz. Everything you missed goes to a **retest pile**, and the results page shows your weak spots.
+
+The model never writes the screen. **Our code decides the structure** (how many stops, cards and questions, how long an answer may be), the model fills in the content as JSON, and **every reply is checked** before it reaches you.
+
+> **The model proposes the content. The code decides what reaches the screen.**
+
+## The story in 60 seconds
+
+1. **Ask.** "How vaccines work", Beginner, Mid level. The level sets the depth, the goal sets the breadth: Mid level means 5 stops of 5 cards and 3 questions, plus a final test ([`shared/profile.js`](shared/profile.js)).
+2. **See the plan.** A road map of stops in phases. Rename, move, delete or add a stop, or type "add a stop on herd immunity" in **Adjust plan**: the model edits the plan you have instead of starting over.
+3. **Flip.** Each card has a question and, often, a chart, flow, diagram, animation or picture. Space flips it; **1** sends it to the retest pile, **2** marks it known. **Read further** opens a longer explanation inside the card.
+4. **Get stuck?** **Ask a doubt** answers only about the card on screen, and never gives away an unanswered quiz question.
+5. **Take the quiz.** Wrong answers join the retest pile. Options are shuffled, because models like to put the right answer first.
+6. **See your results.** A score per stop, weak spots marked, and **Retest the N I missed**. Close the tab and come back: the session reloads.
+
+And when the model gets it wrong, you see a plain message and **Try again**, never a blank page. [How that works](#how-bad-model-output-is-handled).
+
+## Tour the product
+
+These captures come from a real model run (Codex) on 14 November 2026. The one-screen desktop layout and the start screen hierarchy from 15 November are newer than these images.
+
+| Plan and learn | Check and review |
 | --- | --- |
-| ![Start screen](docs/screenshots/01-start.png) | ![Road map](docs/screenshots/02-roadmap.png) |
+| **Start.** Type a topic or paste notes, pick your level and goal.<br>[<img src="docs/screenshots/01-start.png" alt="Start screen with the topic box and level and goal choices" height="260">](docs/screenshots/01-start.png) | **Quiz.** Instant feedback, the right answer marked, and the miss sent to the retest pile.<br>[<img src="docs/screenshots/04-quiz.png" alt="Quiz question with feedback" height="260">](docs/screenshots/04-quiz.png) |
+| **Road map.** Stops in phases; edit any stop or adjust the whole plan in words.<br>[<img src="docs/screenshots/02-roadmap.png" alt="Road map with stops grouped into phases" height="260">](docs/screenshots/02-roadmap.png) | **Results.** Score gauge, score per stop, weak spots and the retest pile.<br>[<img src="docs/screenshots/05-results.png" alt="Results page" height="260">](docs/screenshots/05-results.png) |
+| **Learn.** The card is the main thing; the session card, doubt bot and live board sit above it.<br>[<img src="docs/screenshots/03-learn.png" alt="Learning page with a flashcard" height="260">](docs/screenshots/03-learn.png) | **Night and phone.** The same app in the dark theme and at phone width.<br>[<img src="docs/screenshots/06-night.png" alt="Night theme" height="260">](docs/screenshots/06-night.png) [<img src="docs/screenshots/07-phone.png" alt="Phone layout" height="260">](docs/screenshots/07-phone.png) |
 
-| Flashcards | Quiz |
-| --- | --- |
-| ![Learning page with a flashcard](docs/screenshots/03-learn.png) | ![Quiz with feedback](docs/screenshots/04-quiz.png) |
+## Every feature
 
-| Results | Night theme | Phone |
+| Area | What the learner gets | Implementation |
 | --- | --- | --- |
-| ![Results](docs/screenshots/05-results.png) | ![Night theme](docs/screenshots/06-night.png) | ![Phone layout](docs/screenshots/07-phone.png) |
+| Input | A topic, or notes (cards then quote your notes, and a quote that isn't in them is flagged) | [StartScreen](src/screens/StartScreen.jsx), [quote check](server/llm/checks.js) |
+| Learning profile | Level sets depth, goal sets breadth; the model is told exact counts and lengths | [profile.js](shared/profile.js), [prompts.js](server/llm/prompts.js) |
+| Road map | Stops in phases; move, rename, delete, insert; remove or add subtopics | [RoadmapScreen](src/screens/RoadmapScreen.jsx) |
+| Refinement loop | **Adjust plan** sends an instruction and the model edits the existing plan | [plan route](server/routes/plan.js) |
+| Flashcards | Flip, rate, jump with the meter, Read further inside the card | [Flashcard](src/components/Flashcard.jsx) |
+| Different kinds of blocks | Each card may carry a flow, chart, diagram, step animation or image, each drawn by its own component | [visuals/](src/components/visuals/), [schemas](shared/schemas.js) |
+| Quiz | Multiple choice and true or false, shuffled options, feedback, report a wrong question | [QuizQuestion](src/components/QuizQuestion.jsx) |
+| Retest | Wrong answers and "Review again" cards become a retest stop | [sessionReducer](src/state/sessionReducer.js), [selectors](src/state/selectors.js) |
+| Results | Score gauge, score per stop, weak spots, new questions on weak spots | [ResultsScreen](src/screens/ResultsScreen.jsx) |
+| Ask a doubt | Answers about the card on screen only, never spoils an open question | [DoubtBot](src/components/DoubtBot.jsx), [doubt route](server/routes/doubt.js) |
+| Session card and live board | Progress, accuracy, cards known, study time; tips and a nudge after two misses in a row | [SessionCard](src/components/SessionCard.jsx), [LiveBoard](src/components/LiveBoard.jsx) |
+| Save and reload | Every session in localStorage, listed on the start screen | [persistence.js](src/state/persistence.js) |
+| Polish | Meadow and Night themes, animations, keyboard (Space, 1, 2, arrows, 1 to 4, Enter), reduced motion | [tokens.css](src/styles/tokens.css) |
+| Every screen size | One-screen layout on laptops and desktops; drawer Index and sticky buttons on phones | [learn-responsive.css](src/styles/learn-responsive.css) |
 
-The content in these screenshots came from a real model, not the mock.
+## The evidence against each grading area
 
-## Setup
+The brief's weights, and where to look for each.
 
-Needs Node 18 or newer.
+| Area | Weight | What is demonstrated | Evidence |
+| --- | --- | --- | --- |
+| **React and frontend architecture** | 25% | Hooks and function components only; one reducer for all session state, derived values in selectors, screens split from components, a fetch wrapper that never throws | [useApp](src/state/useApp.js), [sessionReducer](src/state/sessionReducer.js), [client.js](src/api/client.js) |
+| **AI integration and data handling** | 25% | Structured JSON in, interactive UI out; shared zod schemas on server and client; the key never leaves the server | [schemas](shared/schemas.js), [pipeline](server/llm/pipeline.js), [provider](server/llm/provider.js) |
+| **Handling bad AI output** | 20% | Malformed, wrong shape, empty, slow and failed replies; per item salvage; one retry with the problem named; stale replies ignored | [How it's handled](#how-bad-model-output-is-handled), [tests](server/test/pipeline.test.js) |
+| **UI/UX and product sense** | 15% | Flashcard first learning, a clear hierarchy on every screen, loading, error and empty states, phone layout, two themes | [Tour](#tour-the-product), [design decisions](docs/DECISIONS.md) |
+| **Communication and understanding** | 15% | This README, the spec, a reason for every design decision | [SPEC.md](SPEC.md), [DECISIONS.md](docs/DECISIONS.md) |
+
+| The brief asks for | Where |
+| --- | --- |
+| React, hooks, functional components | [`src/`](src) |
+| A free-form text input | The topic box and "Add your notes" |
+| A real LLM API, key not in the browser | Any OpenAI compatible endpoint through [`server/`](server); the browser only calls `/api/*` |
+| Structured data rendered as interactive, stateful UI | Plan, cards and quiz JSON become the road map, flip cards and quiz |
+| Bad output: malformed, wrong shape, empty, slow, failed | [Pipeline](#how-bad-model-output-is-handled); try `LLM_CHAOS=0.5` |
+| A stale response never overwrites a newer one | `requestId` per slot, older requests aborted ([test](src/state/sessionReducer.test.js)) |
+| Loading, error and empty states | Skeletons, "Taking longer than usual" after 20 s, Try again, Skip, empty retest pile |
+| Works on mobile | Phone layout with a drawer Index and sticky card buttons |
+
+## Try it in a minute
+
+Needs Node 18 or newer. No API key needed to look around.
 
 ```bash
+git clone https://github.com/Razeefshaik/BePro.git
+cd BePro
 npm install
 npm start                 # app on http://localhost:5173, API on :8787
 ```
 
-With no `.env`, the server runs on built-in sample content (the mock provider) so you can click through everything right away; the start screen then says "Demo mode". For a real model:
+With no `.env`, the server runs on built-in sample content and the start screen says **Demo mode**. For a real model:
 
 ```bash
-cp .env.example .env      # then fill in a model, see below, and restart
+cp .env.example .env      # fill in a model (below), then npm start again
 ```
-
-Pick a model backend in `.env`:
 
 | `LLM_PROVIDER` | What it needs | Notes |
 | --- | --- | --- |
-| `openai` (default) | `LLM_BASE_URL`, `LLM_MODEL`, usually `LLM_API_KEY` | Any OpenAI compatible endpoint: Groq (free tier), OpenRouter, Ollama, OpenAI. Groq example is prefilled. |
-| `mock` | nothing | Canned replies, no network. Used automatically when no model is set up. |
-| `codex` | a logged in local Codex CLI | What I used during development. |
+| `openai` | `LLM_BASE_URL`, `LLM_MODEL`, usually `LLM_API_KEY` | Any OpenAI compatible endpoint: Groq (free tier, prefilled in `.env.example`), OpenRouter, Ollama, OpenAI |
+| `mock` | nothing | Sample content, no network. Used automatically when no model is set up |
+| `codex` | a logged in local Codex CLI | What I used during development |
 
-`npm test` runs 24 tests: bad model output fixtures and the reducer rules.
+| Do this | And see |
+| --- | --- |
+| Type "How vaccines work", press **Build my road map** | A skeleton, then the road map in phases |
+| **Adjust plan** → "add a stop on herd immunity" | The same plan with one new stop |
+| **Let's start**, press **Space**, then **1** | The card flips, and goes to the retest pile |
+| Open **Quiz**, pick a wrong answer | "Not quite. Added to your retest pile." |
+| Top bar → **Results** → **Retest the N I missed** | A retest stop with only what you missed |
+| Set `LLM_CHAOS=0.5` in `.env` and restart | Half the replies broken on purpose: retries, then Try again, never a crash |
 
-To watch the failure handling, set `LLM_CHAOS=0.5` in `.env`. Half of the model replies then get broken on purpose (wrapped in prose, truncated, empty, wrong answer index, or 22 seconds slow).
+`npm test` runs 24 tests: bad model output fixtures and the reducer rules, including the stale guard.
 
-## Usage
+## Demo video
 
-1. **Start:** type a topic, choose *I am* (Beginner, Intermediate, Pro) and *I want to* (Master, Mid level, Crash course). "+ Add your notes" switches to notes mode: cards then quote your notes.
-2. **Road map:** stops grouped into phases. Click a stop's number to move, rename or delete it; **+** on the road inserts a stop; subtopic chips can be removed or added. **Adjust plan** sends an instruction ("add a stop on QUIC") and the model edits the existing plan instead of starting over. Intermediate learners get a 3 question basics check.
-3. **Learn:** click a card or press Space to flip it, rate it (1 = Review again, 2 = Got it), **Read further** opens a longer explanation inside the card. The meter above the deck shows every card of the stop; click a segment to jump. Then the quiz (1 to 4 answers, Enter for next).
-   * The **Index** on the left lists every stop with its status; click one to jump there.
-   * The **session card** shows how much of the road map is done, your quiz accuracy, cards known, minutes studying, and a Retest button with the size of your retest pile.
-   * **Ask a doubt** answers only about the card or question on screen (and never gives away an unanswered question).
-   * The **live board** rotates motivation lines and study tips, and warns you after two "Review again" in a row.
-   * **Road map** in the top bar opens the map as a card over the page; **Sources** lists the quotes from your notes, or Wikipedia searches for a topic.
-4. **Results:** score gauge, score per stop, the retest pile, "Retest the N I missed", and "New questions on weak spots". **Back to learning** returns to your stop.
+‹OWNER: video link›
 
-Sessions save to localStorage and come back on reload. The moon button switches between the Meadow (light) and Night (dark) themes.
+---
 
-**Keyboard:** Space flips the card, 1 = Review again, 2 = Got it, arrow keys move between cards, 1 to 4 pick a quiz answer, Enter goes to the next question.
+# Under the hood
 
-**Screen sizes:** on a laptop or desktop the start screen and the learning page each fit in one window without page scrolling (a long answer scrolls inside its card). On a phone or tablet the Index becomes a drawer and the card's buttons stick to the bottom. On big monitors (1800px and wider) the whole interface scales up a step.
+## Architecture
+
+```mermaid
+flowchart LR
+  U["Topic or notes<br/>level · goal"] --> C["React client"]
+  C -->|"/api/plan · module ·<br/>readmore · doubt"| S["Express server"]
+  S --> P["prompts.js<br/>profile sets counts"]
+  P --> M[("Model<br/>openai · codex · mock")]
+  M -->|raw text| PL{"pipeline<br/>extract · parse · shape ·<br/>items · semantics"}
+  PL -- "fails" --> R["one retry,<br/>problem named"] --> M
+  PL -- "passes" --> E["envelope<br/>ok · data · warnings"]
+  E --> C2["client checks again<br/>with the same zod schemas"]
+  C2 --> RD["reducer<br/>stale guard"] --> UI["Road map · cards · quiz"]
+```
+
+The API key lives only on the server. The browser calls `/api/*`, and Vite proxies it to Express.
 
 ## How bad model output is handled
 
-Every reply goes through `server/llm/pipeline.js` and `server/llm/checks.js`:
+Every reply goes through [`server/llm/pipeline.js`](server/llm/pipeline.js) and [`server/llm/checks.js`](server/llm/checks.js):
 
 1. **Empty** reply: `EMPTY_OUTPUT`.
 2. **Extract:** strip markdown fences, slice from the first `{` to the last `}`.
 3. **Parse** with `JSON.parse`.
 4. **Shape:** zod checks the outer object (for example, `cards` and `quiz` arrays).
-5. **Item by item:** each card and question is checked on its own. A bad one is **dropped with a warning**, the rest survive.
-6. **Semantic checks:** `answerIndex` inside the options, no duplicate options, no repeated cards, chart arrays of equal length, diagram edges pointing to real nodes, and in notes mode the quote must really be in your notes (else the card shows "Not found in your notes").
+5. **Item by item:** each card and question is checked on its own. A bad one is **dropped with a warning**; the rest survive.
+6. **Semantic checks:** `answerIndex` inside the options, no duplicate options, no repeated cards, chart arrays of equal length, diagram edges pointing to real nodes, and in notes mode the quote must really be in your notes (else the card says "Not found in your notes").
 7. **Bad visual:** the visual is dropped and the card stays.
 8. **Too little left:** fewer than 60% valid cards (or fewer than 2 questions) counts as a failure.
 
-Any failure in steps 1 to 8 gets **one retry** with the problem appended to the prompt. If that also fails, the UI shows a plain error with **Try again** (and **Skip** for a single stop). Each model call times out after 25 seconds. Errors that a retry can't fix (no model set up, a rejected API key) say what to change instead of offering Try again.
+Any failure gets **one retry** with the problem appended to the prompt. If that also fails, the UI shows a plain error with **Try again** (and **Skip** for a single stop). Each model call times out after 25 seconds. Errors a retry can't fix (no model set up, a rejected API key) say what to change instead of offering Try again.
 
-On the client (`src/api/client.js`, `src/state/`):
+On the client ([`src/api/client.js`](src/api/client.js), [`src/state/`](src/state)):
 
 * The response is **checked again** with the same zod schemas. Never trust the network.
-* **Stale guard:** every request gets a `requestId` stored in its slot. A reply whose id isn't the slot's current one is ignored, and the previous request for the same slot is aborted. The doubt bot does the same for its own questions. There's a test for this in `src/state/sessionReducer.test.js`.
+* **Stale guard:** every request gets a `requestId` stored in its slot. A reply whose id isn't the slot's current one is ignored, and the previous request for the same slot is aborted. The doubt bot does the same for its own questions.
 * After 20 seconds the UI says "Taking longer than usual" with Try again and Cancel.
-* Quiz options are **shuffled** (and `answerIndex` remapped), because models like to put the right answer first.
+* Quiz options are **shuffled** and `answerIndex` remapped.
 * An error boundary means a render bug shows a reload screen, never a blank page.
 
-The API key only lives on the server. The browser calls `/api/*`, and Vite proxies it to Express.
-
-## Project layout
-
+```mermaid
+sequenceDiagram
+  participant L as Learner
+  participant R as Reducer
+  participant S as Server
+  L->>R: open stop 2 (request a1)
+  R->>S: /api/module a1
+  L->>R: Try again (request a2)
+  R->>S: abort a1, send /api/module a2
+  S-->>R: reply for a1 (late)
+  Note over R: a1 is not the slot's current id: ignored
+  S-->>R: reply for a2
+  Note over R: a2 matches: shown
 ```
-shared/       zod schemas and the learning profile, used by server AND client
-server/       Express API: routes, provider (fetch / codex / mock), prompts, pipeline, checks, tests
-src/api       fetch wrapper (timeout, abort, re-validation)
-src/state     reducer with the stale guard, derived selectors, localStorage, the useApp hook
-src/screens   Start, Roadmap, Learn, Results
-src/components flashcard, five visual renderers, quiz question, index, session card, live board, doubt bot...
-src/styles    tokens.css (both themes), base.css, then one file per screen or component
-```
 
-Where to look first:
+## Who decides what
+
+| The model | Our code |
+| --- | --- |
+| Writes stop titles, card questions and answers, quiz options, explanations, doubt answers | Decides how many stops, cards and questions, and how long answers are ([profile.js](shared/profile.js)) |
+| Suggests a visual for a card | Checks it and draws it with our own components; a bad visual is dropped |
+| Marks which option is right | Checks the index, shuffles the options, scores the answer |
+| Quotes your notes | Checks the quote is really in your notes |
+
+## Repository map
+
+| Path | What lives there |
+| --- | --- |
+| [`shared/`](shared) | zod schemas and the learning profile, used by server and client |
+| [`server/`](server) | Express API: routes, provider (fetch, codex, mock), prompts, pipeline, checks, tests |
+| [`src/api`](src/api) | fetch wrapper: timeout, abort, re-validation |
+| [`src/state`](src/state) | reducer with the stale guard, selectors, localStorage, the `useApp` hook |
+| [`src/screens`](src/screens) | Start, Roadmap, Learn, Results |
+| [`src/components`](src/components) | flashcard, five visual renderers, quiz question, index, session card, live board, doubt bot |
+| [`src/styles`](src/styles) | `tokens.css` (both themes), `base.css`, then one file per screen or component |
 
 | Question | File |
 | --- | --- |
-| How is a model reply checked? | `server/llm/pipeline.js`, then `server/llm/checks.js` |
-| What does valid data look like? | `shared/schemas.js` |
-| How are stale replies ignored? | `REQUEST_*` cases in `src/state/sessionReducer.js`, and `run()` in `src/state/useApp.js` |
-| How does the browser call the server? | `src/api/client.js` |
-| Who decides how many cards and questions? | `shared/profile.js` |
+| How is a model reply checked? | [`server/llm/pipeline.js`](server/llm/pipeline.js), then [`server/llm/checks.js`](server/llm/checks.js) |
+| What does valid data look like? | [`shared/schemas.js`](shared/schemas.js) |
+| How are stale replies ignored? | `REQUEST_*` cases in [`sessionReducer.js`](src/state/sessionReducer.js), and `run()` in [`useApp.js`](src/state/useApp.js) |
+| How does the browser call the server? | [`src/api/client.js`](src/api/client.js) |
+| Who decides how many cards and questions? | [`shared/profile.js`](shared/profile.js) |
 
-Design decisions and their reasons are in `docs/DECISIONS.md`. The full spec is `SPEC.md`.
+**Stack:** React 18 · Vite · Express · zod · plain CSS. Nothing else at runtime.
 
-## AI usage
+## Limits and what's next
 
-I used AI heavily and want to be clear about how:
+* **No streaming.** Each stop arrives in one piece; the next stop is prefetched while you study, which hides most of the wait.
+* **Simple visuals.** They are our own components; the diagram layout can look crowded with 8 nodes. Images come from a Wikimedia Commons search, so a vague term can return an unrelated picture.
+* **Editing a stop** (rename, subtopics) clears its cached cards and their progress, because the old cards may no longer fit.
+* **This browser only.** Sessions live in localStorage: no accounts, no sync.
+* **Small local models** (for example through Ollama) fail the checks more often; the app stays usable but retries more.
+* **Next:** stream cards as they arrive, and a hosted demo so nobody has to run it locally.
 
-* **Claude (Claude Code)** wrote most of the code from my spec (`SPEC.md`), which I wrote and iterated on with it. It also produced the design mockups from reference images I collected, and drove a headless browser to screenshot every screen in both themes and at phone width.
-* **Codex CLI** was the model behind the app during development (`LLM_PROVIDER=codex`).
-* I reviewed the code and steered the design over many rounds of feedback (each round is a row in `docs/DECISIONS.md`): the theme, colored cards, the live board, the Index on the left, the session card, the navigation, and the Night colors.
-* A real-model test found a bug the mock couldn't: in notes mode the model left the source quote off quiz questions, so they were flagged "Not found in your notes". The fix was in the prompt (`notesRules` in `server/llm/prompts.js`). ‹OWNER: add what you changed or rewrote yourself.›
+## How I built it
 
-## Known limitations
+**Built by** Shaik Mahammad Razeef for the Flam frontend internship assignment. The repository history begins on 12 November 2026.
 
-* Visuals are drawn by our own components, so they are simple. The diagram layout is a basic layered layout and can look crowded with 8 nodes.
-* Image visuals come from the Wikimedia Commons search API. A vague search term can return an unrelated picture.
-* No streaming: each stop's content arrives in one piece. The next stop is prefetched while you study, which hides most of the wait.
-* Editing a stop (rename, subtopics) clears its cached cards and their progress, because the old cards may no longer fit.
-* Sessions live in this browser's localStorage only. No accounts, no sync.
-* Small local models (for example via Ollama) fail the checks more often. The app stays usable but shows more retries.
+**My part: the idea, the design and every decision.** I came up with the product (a road map you study flashcard first, instead of a chat), wrote the spec ([SPEC.md](SPEC.md)), and designed the learning model (level sets depth, goal sets breadth), the failure handling plan and the whole look: the Meadow and Night themes, every screen's layout, the hierarchy and the interactions. I collected the reference designs, tested each version in my own browser, said what was wrong and decided what changed. Each of those choices is a row in [docs/DECISIONS.md](docs/DECISIONS.md) with its reason: 63 of them.
 
-## Time spent
+**AI use, honestly.** I used **Claude (Claude Code)** as my coding assistant: it wrote the code to my spec and my design directions, under the rules in [CLAUDE.md](CLAUDE.md) and [AGENTS.md](AGENTS.md) (plain JavaScript, only approved dependencies, code simple enough to explain line by line), and helped with debugging, tests and screenshots at each screen size. The **Codex CLI** was the model behind the app during development (`LLM_PROVIDER=codex`). A real model run found a bug the mock couldn't: in notes mode the model left the source quote off quiz questions, so they were flagged "Not found in your notes". The fix was in the prompt (`notesRules` in [prompts.js](server/llm/prompts.js)).
 
-‹OWNER: fill in›. The schedule was 4 days. I spent the time on the spec, design, build and testing.
+**How we worked:** small cards in [docs/TASKS.md](docs/TASKS.md), one commit each, with the plan in [docs/PLAN.md](docs/PLAN.md) and the server and client contract in [docs/CONTRACTS.md](docs/CONTRACTS.md).
+
+**Time spent:** ‹OWNER: hours›, over 4 days (12 to 16 November 2026). The brief suggests about 8 hours; I chose to build the full spec instead and logged that choice in [DECISIONS.md](docs/DECISIONS.md).
+
+## Read more
+
+* [SPEC.md](SPEC.md): the design source of truth.
+* [docs/DECISIONS.md](docs/DECISIONS.md): every design choice and its reason.
+* [docs/PLAN.md](docs/PLAN.md) and [docs/TASKS.md](docs/TASKS.md): the plan and the build cards.
+* [docs/CONTRACTS.md](docs/CONTRACTS.md): the API between client and server.
