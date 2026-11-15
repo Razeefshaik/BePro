@@ -135,6 +135,16 @@ cp .env.example .env      # fill in a model (below), then npm start again
 
 `npm test` runs 24 tests: bad model output fixtures and the reducer rules, including the stale guard.
 
+### Host it
+
+The same Express server can serve the built app, so one free web service runs everything. [`render.yaml`](render.yaml) sets it up on Render:
+
+1. Render → **New** → **Blueprint**, pick this repo.
+2. Paste a Groq key into `LLM_API_KEY` when asked. It stays on the server.
+3. Render runs `npm install --include=dev && npm run build`, then `node server/index.js`.
+
+Any host that runs Node works the same way: build, then start the server with the `LLM_*` variables set. Free hosts sleep when idle, so the first visit can take about 30 seconds to wake up.
+
 ## Demo video
 
 ‹OWNER: video link›
@@ -236,7 +246,8 @@ sequenceDiagram
 * **Editing a stop** (rename, subtopics) clears its cached cards and their progress, because the old cards may no longer fit.
 * **This browser only.** Sessions live in localStorage: no accounts, no sync.
 * **Small local models** (for example through Ollama) fail the checks more often; the app stays usable but retries more.
-* **Next:** stream cards as they arrive, and a hosted demo so nobody has to run it locally.
+* **Free model limits.** The hosted demo uses Groq's free tier: about 1,000 requests a day. If many people use it at once, a request can come back as "The AI service is busy" with Try again.
+* **Next:** stream cards as they arrive.
 
 ## How I built it
 

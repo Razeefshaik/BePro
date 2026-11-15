@@ -1,4 +1,7 @@
 import "dotenv/config";
+import { existsSync } from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import express from "express";
 import { handle } from "./http.js";
 import { PROVIDER, TIMEOUT_MS } from "./llm/provider.js";
@@ -29,6 +32,14 @@ app.post("/api/doubt", handle(doubtRoute));
 app.use("/api", (req, res) => {
   res.status(404).json({ ok: false, error: { code: "BAD_INPUT", message: "Unknown endpoint.", retryable: false } });
 });
+
+// Hosting: after `npm run build`, this same server also serves the built app from dist/,
+// so one service runs everything. In development dist/ doesn't exist and Vite serves the app.
+const distDir = fileURLToPath(new URL("../dist", import.meta.url));
+if (existsSync(distDir)) {
+  app.use(express.static(distDir));
+  app.get("*", (req, res) => res.sendFile(path.join(distDir, "index.html")));
+}
 app.use((error, req, res, next) => {
   res.status(400).json({ ok: false, error: { code: "BAD_INPUT", message: "The request body was not valid JSON.", retryable: false } });
 });
