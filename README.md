@@ -44,14 +44,19 @@ The model never writes the screen. **Our code decides the structure** (how many 
 2. **See the plan.** A road map of stops in phases. Rename, move, delete or add a stop, or type "add a stop on herd immunity" in **Adjust plan**: the model edits the plan you have instead of starting over.
 3. **Flip.** Each card has a question and, often, a chart, flow, diagram, animation or picture. Space flips it; **1** sends it to the retest pile, **2** marks it known. **Read further** opens a longer explanation inside the card.
 4. **Get stuck?** **Ask a doubt** answers only about the card on screen, and never gives away an unanswered quiz question.
-5. **Take the quiz.** Wrong answers join the retest pile. Options are shuffled, because models like to put the right answer first.
-6. **See your results.** A score per stop, weak spots marked, and **Retest the N I missed**. Close the tab and come back: the session reloads.
+5. **Stay on track.** The **live board**, styled like a railway departures display, rotates study tips by itself, scrolls your next stops and the shortcuts, and after two **Review again** in a row it swaps in a hint.
+6. **Take the quiz.** Wrong answers join the retest pile. Options are shuffled, because models like to put the right answer first.
+7. **See your results.** A score per stop, weak spots marked, and **Retest the N I missed**. Close the tab and come back: the session reloads.
 
 And when the model gets it wrong, you see a plain message and **Try again**, never a blank page. [How that works](#how-bad-model-output-is-handled).
 
 ## Tour the product
 
 These captures come from a real model run (local Codex) on 15 November 2026, on the current layout.
+
+<p align="center"><img src="docs/screenshots/08-live-board.png" alt="The live board: a LIVE light, the stop and a clock on top, a study line in an LED font, and the next stops scrolling along the bottom" width="460"></p>
+
+<p align="center"><b>The live board.</b> A study screen that feels alive, like a departures board: the line changes every few seconds, the next stops scroll past, and it reacts when you struggle.</p>
 
 | Plan and learn | Check and review |
 | --- | --- |
@@ -73,7 +78,8 @@ These captures come from a real model run (local Codex) on 15 November 2026, on 
 | Retest | Wrong answers and "Review again" cards become a retest stop | [sessionReducer](src/state/sessionReducer.js), [selectors](src/state/selectors.js) |
 | Results | Score gauge, score per stop, weak spots, new questions on weak spots | [ResultsScreen](src/screens/ResultsScreen.jsx) |
 | Ask a doubt | Answers about the card on screen only, never spoils an open question | [DoubtBot](src/components/DoubtBot.jsx), [doubt route](server/routes/doubt.js) |
-| Session card and live board | Progress, accuracy, cards known, study time; tips and a nudge after two misses in a row | [SessionCard](src/components/SessionCard.jsx), [LiveBoard](src/components/LiveBoard.jsx) |
+| Session card | Progress, accuracy, cards known, study time, and the retest pile count | [SessionCard](src/components/SessionCard.jsx) |
+| Live board | A departures-board display: LIVE light, current stop and a clock; a tip or motivation line that changes every 7 seconds; the next stops and shortcuts scrolling below; a hint after two **Review again** in a row | [LiveBoard](src/components/LiveBoard.jsx) |
 | Save and reload | Every session in localStorage, listed on the start screen | [persistence.js](src/state/persistence.js) |
 | Polish | Meadow and Night themes, animations, keyboard (Space, 1, 2, arrows, 1 to 4, Enter), reduced motion | [tokens.css](src/styles/tokens.css) |
 | Every screen size | One-screen layout on laptops and desktops; drawer Index and sticky buttons on phones | [learn-responsive.css](src/styles/learn-responsive.css) |
@@ -147,7 +153,9 @@ Any host that runs Node works the same way: build, then start the server with th
 
 ## Demo video
 
-‹OWNER: video link›
+**▶ Watch: ‹OWNER: video link›** (2 min, narrated)
+
+Recorded on a real model, with no staged screens: start → road map → adjust plan → flashcards → doubt bot → live board → quiz. Then the hard part: broken model replies going through the pipeline, the real "Couldn't build this stop" banner with **Try again**, and how a late reply is ignored. It ends on results, the night theme and the phone layout.
 
 ---
 
@@ -253,9 +261,9 @@ sequenceDiagram
 
 **Built by** Shaik Mahammad Razeef for the Flam frontend internship assignment. The repository history begins on 12 November 2026.
 
-**My part: the idea, the design and every decision.** I came up with the product (a road map you study flashcard first, instead of a chat), wrote the spec ([SPEC.md](SPEC.md)), and designed the learning model (level sets depth, goal sets breadth), the failure handling plan and the whole look: the Meadow and Night themes, every screen's layout, the hierarchy and the interactions. I collected the reference designs, tested each version in my own browser, said what was wrong and decided what changed. Each of those choices is a row in [docs/DECISIONS.md](docs/DECISIONS.md) with its reason: 63 of them.
+**My part: the idea, the design and every decision.** I came up with the product (a road map you study flashcard first, instead of a chat), wrote the spec ([SPEC.md](SPEC.md)), and designed the learning model (level sets depth, goal sets breadth), the failure handling plan and the whole look: the Meadow and Night themes, every screen's layout, the hierarchy and the interactions. I collected the reference designs, tested each version in my own browser, said what was wrong and decided what changed. Each of those choices is a row in [docs/DECISIONS.md](docs/DECISIONS.md) with its reason: 67 of them.
 
-**AI use, honestly.** I used **Claude (Claude Code)** as my coding assistant: it wrote the code to my spec and my design directions, under the rules in [CLAUDE.md](CLAUDE.md) and [AGENTS.md](AGENTS.md) (plain JavaScript, only approved dependencies, code simple enough to explain line by line), and helped with debugging, tests and screenshots at each screen size. The **Codex CLI** was the model behind the app during development (`LLM_PROVIDER=codex`). A real model run found a bug the mock couldn't: in notes mode the model left the source quote off quiz questions, so they were flagged "Not found in your notes". The fix was in the prompt (`notesRules` in [prompts.js](server/llm/prompts.js)).
+**AI use, honestly.** I used **Claude (Claude Code)** as my coding assistant: it wrote the code to my spec and my design directions, under the rules in [CLAUDE.md](CLAUDE.md) and [AGENTS.md](AGENTS.md) (plain JavaScript, only approved dependencies, code simple enough to explain line by line), and helped with debugging, tests and screenshots at each screen size. For the demo video I set the direction (a reels-style edit, an Indian-English voice, the live board in the spotlight); Claude Code wrote the script, recorded the real app and built the motion graphics, and the narration is an **ElevenLabs** voice. The **Codex CLI** was the model behind the app during development (`LLM_PROVIDER=codex`). A real model run found a bug the mock couldn't: in notes mode the model left the source quote off quiz questions, so they were flagged "Not found in your notes". The fix was in the prompt (`notesRules` in [prompts.js](server/llm/prompts.js)).
 
 **How we worked:** small cards in [docs/TASKS.md](docs/TASKS.md), one commit each, with the plan in [docs/PLAN.md](docs/PLAN.md) and the server and client contract in [docs/CONTRACTS.md](docs/CONTRACTS.md).
 
