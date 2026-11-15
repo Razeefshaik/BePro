@@ -12,7 +12,7 @@
 ![Not a chatbot](https://img.shields.io/badge/not_a-chatbot-2ea043)
 
 <p>
-<a href="#demo-video"><img src="https://img.shields.io/badge/Demo-Screen_recording-ff0000?style=for-the-badge&logo=youtube&logoColor=white" alt="Demo video"></a>
+<a href="https://youtu.be/6PnWsOYxUWE"><img src="https://img.shields.io/badge/Demo-Watch_on_YouTube-ff0000?style=for-the-badge&logo=youtube&logoColor=white" alt="Watch the demo video on YouTube"></a>
 <a href="#try-it-in-a-minute"><img src="https://img.shields.io/badge/Run_it-npm_start-cb3837?style=for-the-badge&logo=npm&logoColor=white" alt="Run it with npm start"></a>
 <a href="SPEC.md"><img src="https://img.shields.io/badge/Design-The_spec-0a0a0a?style=for-the-badge&logo=readthedocs&logoColor=white" alt="The design spec"></a>
 </p>
@@ -153,7 +153,9 @@ Any host that runs Node works the same way: build, then start the server with th
 
 ## Demo video
 
-**▶ Watch: ‹OWNER: video link›** (2 min, narrated)
+[![Watch the BePro demo on YouTube](https://img.youtube.com/vi/6PnWsOYxUWE/maxresdefault.jpg)](https://youtu.be/6PnWsOYxUWE)
+
+**▶ [Watch on YouTube](https://youtu.be/6PnWsOYxUWE)** (2 min, narrated)
 
 Recorded on a real model, with no staged screens: start → road map → adjust plan → flashcards → doubt bot → live board → quiz. Then the hard part: broken model replies going through the pipeline, the real "Couldn't build this stop" banner with **Try again**, and how a late reply is ignored. It ends on results, the night theme and the phone layout.
 
