@@ -12,6 +12,7 @@
 ![Not a chatbot](https://img.shields.io/badge/not_a-chatbot-2ea043)
 
 <p>
+<a href="https://bepro-la95.onrender.com/"><img src="https://img.shields.io/badge/Live-Try_BePro-2ea043?style=for-the-badge&logo=render&logoColor=white" alt="Try BePro live"></a>
 <a href="https://youtu.be/6PnWsOYxUWE"><img src="https://img.shields.io/badge/Demo-Watch_on_YouTube-ff0000?style=for-the-badge&logo=youtube&logoColor=white" alt="Watch the demo video on YouTube"></a>
 <a href="#try-it-in-a-minute"><img src="https://img.shields.io/badge/Run_it-npm_start-cb3837?style=for-the-badge&logo=npm&logoColor=white" alt="Run it with npm start"></a>
 <a href="SPEC.md"><img src="https://img.shields.io/badge/Design-The_spec-0a0a0a?style=for-the-badge&logo=readthedocs&logoColor=white" alt="The design spec"></a>
@@ -108,6 +109,10 @@ The brief's weights, and where to look for each.
 | Works on mobile | Phone layout with a drawer Index and sticky card buttons |
 
 ## Try it in a minute
+
+**Live demo: [bepro-la95.onrender.com](https://bepro-la95.onrender.com/)**, running on a real model (Groq `gpt-oss-120b`). It is on Render's free plan, so the first visit after a quiet spell can take about 30 seconds to wake up.
+
+To run it yourself:
 
 Needs Node 18 or newer. No API key needed to look around.
 
