@@ -357,9 +357,6 @@
   .flash-body > * {
     flex-shrink: 0;
   }
-  .flash-front .flash-visual {
-    flex-shrink: 1;
-  }
   /* The buttons sit under the card; no sticky backdrop needed. */
   .deck-bar {
     position: static;
@@ -406,16 +403,18 @@
   }
 
   /* On the question side, charts and pictures shrink to the space left in the card.
-     The answer side keeps them full size and scrolls inside the card instead. */
-  .flash-front .flash-visual {
+     Flows, diagrams and animations can't shrink without being cut, so they keep
+     their full size and the card scrolls instead. The answer side never shrinks. */
+  .flash-front .flash-visual.is-chart,
+  .flash-front .flash-visual.is-image {
     flex: 1 1 auto;
     min-height: 0;
     overflow: hidden;
     display: flex;
     flex-direction: column;
   }
-  .flash-front .flash-visual > .visual,
-  .flash-front .flash-visual .anim {
+  .flash-front .flash-visual.is-chart > .visual,
+  .flash-front .flash-visual.is-image > .visual {
     flex: 1;
     min-height: 0;
   }

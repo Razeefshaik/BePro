@@ -96,7 +96,7 @@ export default function Flashcard({
                 </span>
                 <h2 className="flash-question">{card.front}</h2>
                 {card.visual && (
-                  <div className="flash-visual">
+                  <div className={`flash-visual is-${card.visual.kind}`}>
                     <Visual visual={card.visual} />
                   </div>
                 )}
