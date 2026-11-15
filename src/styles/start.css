@@ -201,6 +201,22 @@
 .hero p {
   font-size: 14.5px;
 }
+/* Shown when the server has no real model (see server/llm/provider.js). */
+.hero .demo-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--warn);
+  background: var(--warn-soft);
+}
+.demo-note code {
+  font-size: 12px;
+}
 
 .start-form {
   width: 100%;

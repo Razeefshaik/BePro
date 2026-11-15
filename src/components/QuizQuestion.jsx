@@ -19,11 +19,11 @@ export default function QuizQuestion({ question, answer, onAnswer, onNext, nextL
   useEffect(() => {
     if (!keyboard) return undefined;
     function onKey(event) {
-      if (event.target.closest("input, textarea, [contenteditable]") || event.ctrlKey || event.metaKey || event.altKey) return;
+      if (event.target.closest?.("input, textarea, [contenteditable]") || event.ctrlKey || event.metaKey || event.altKey) return;
       if (/^[1-4]$/.test(event.key)) {
         event.preventDefault();
         choose(Number(event.key) - 1);
-      } else if (event.key === "Enter" && answered && onNext && !event.target.closest("button, a")) {
+      } else if (event.key === "Enter" && answered && onNext && !event.target.closest?.("button, a")) {
         event.preventDefault();
         onNext();
       }

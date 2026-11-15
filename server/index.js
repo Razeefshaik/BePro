@@ -36,4 +36,7 @@ app.use((error, req, res, next) => {
 const port = Number(process.env.PORT) || 8787;
 app.listen(port, () => {
   console.log(`BePro server on http://localhost:${port} (provider: ${PROVIDER}, timeout ${TIMEOUT_MS} ms)`);
+  if (PROVIDER === "mock") {
+    console.log("Using demo content (no real model). To use one, copy .env.example to .env and fill it in.");
+  }
 });

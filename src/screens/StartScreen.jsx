@@ -19,7 +19,7 @@ const GOAL_OPTIONS = [
 const EXAMPLES = ["TCP congestion control", "How vaccines work", "SQL joins", "The French Revolution", "Big O notation"];
 const NOTES_MAX = 12000;
 
-export default function StartScreen({ state, actions, theme, toggleTheme }) {
+export default function StartScreen({ state, actions, theme, toggleTheme, demo }) {
   const [topic, setTopic] = useState("");
   const [notes, setNotes] = useState("");
   const [showNotes, setShowNotes] = useState(false);
@@ -69,6 +69,11 @@ export default function StartScreen({ state, actions, theme, toggleTheme }) {
               What do you want to <em>learn</em> today?
             </h1>
             <p className="muted">Pick your level and goal. We build the map, you flip the cards.</p>
+            {demo && (
+              <p className="demo-note" role="note">
+                <Icon name="alert" size={14} /> Demo mode: no AI model is set up, so the cards are sample content. Add one in <code>.env</code>.
+              </p>
+            )}
           </section>
 
           <form className="start-form" onSubmit={submit} noValidate>

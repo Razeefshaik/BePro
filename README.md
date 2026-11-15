@@ -24,8 +24,13 @@ Needs Node 18 or newer.
 
 ```bash
 npm install
-cp .env.example .env      # then fill in a model, see below
 npm start                 # app on http://localhost:5173, API on :8787
+```
+
+With no `.env`, the server runs on built-in sample content (the mock provider) so you can click through everything right away; the start screen then says "Demo mode". For a real model:
+
+```bash
+cp .env.example .env      # then fill in a model, see below, and restart
 ```
 
 Pick a model backend in `.env`:
@@ -33,7 +38,7 @@ Pick a model backend in `.env`:
 | `LLM_PROVIDER` | What it needs | Notes |
 | --- | --- | --- |
 | `openai` (default) | `LLM_BASE_URL`, `LLM_MODEL`, usually `LLM_API_KEY` | Any OpenAI compatible endpoint: Groq (free tier), OpenRouter, Ollama, OpenAI. Groq example is prefilled. |
-| `mock` | nothing | Canned replies, no network. Good for clicking through the UI without a key. |
+| `mock` | nothing | Canned replies, no network. Used automatically when no model is set up. |
 | `codex` | a logged in local Codex CLI | What I used during development. |
 
 `npm test` runs 24 tests: bad model output fixtures and the reducer rules.
@@ -54,7 +59,9 @@ To watch the failure handling, set `LLM_CHAOS=0.5` in `.env`. Half of the model 
 
 Sessions save to localStorage and come back on reload. The moon button switches between the Meadow (light) and Night (dark) themes.
 
-**Screen sizes:** on a phone or tablet the Index becomes a drawer and the card's buttons stick to the bottom. On big monitors (1800px and wider) the whole interface scales up a step.
+**Keyboard:** Space flips the card, 1 = Review again, 2 = Got it, arrow keys move between cards, 1 to 4 pick a quiz answer, Enter goes to the next question.
+
+**Screen sizes:** on a laptop or desktop the start screen and the learning page each fit in one window without page scrolling (a long answer scrolls inside its card). On a phone or tablet the Index becomes a drawer and the card's buttons stick to the bottom. On big monitors (1800px and wider) the whole interface scales up a step.
 
 ## How bad model output is handled
 
@@ -69,7 +76,7 @@ Every reply goes through `server/llm/pipeline.js` and `server/llm/checks.js`:
 7. **Bad visual:** the visual is dropped and the card stays.
 8. **Too little left:** fewer than 60% valid cards (or fewer than 2 questions) counts as a failure.
 
-Any failure in steps 1 to 8 gets **one retry** with the problem appended to the prompt. If that also fails, the UI shows a plain error with **Try again** (and **Skip** for a single stop). Each model call times out after 25 seconds.
+Any failure in steps 1 to 8 gets **one retry** with the problem appended to the prompt. If that also fails, the UI shows a plain error with **Try again** (and **Skip** for a single stop). Each model call times out after 25 seconds. Errors that a retry can't fix (no model set up, a rejected API key) say what to change instead of offering Try again.
 
 On the client (`src/api/client.js`, `src/state/`):
 

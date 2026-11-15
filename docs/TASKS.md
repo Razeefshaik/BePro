@@ -146,3 +146,7 @@
 **C27: big backdrop wordmark**
 - **Goal:** on desktop the BEPRO wordmark is a big soft backdrop again (size `--wm` from the window width and height, up to 380px, may bleed past the column edges, clipped), with the headline sitting on the bottom of its letters. The headline is smaller (24 to 32px) and the level and goal rows are more compact (600px wide, smaller text and icons). The wordmark has a little right padding so the gradient covers the last letter.
 - **Status:** done on `razeef/c01-build`
+
+**C28: audit against the brief**
+- **Goal:** a fresh clone runs with no `.env` (falls back to mock, "Demo mode" note on the start screen, log line on the server); a missing or rejected API key is a non-retryable error that says what to fix; key handlers guard `closest`; README updated (setup, keyboard, one-screen layout); checklist ticked.
+- **Status:** done on `razeef/c01-build`

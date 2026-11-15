@@ -29,16 +29,18 @@ export default function App() {
     savePref("theme", theme);
   }, [theme]);
 
-  // Ask the server once how long a request may take (it depends on the model provider).
+  // Ask the server once how long a request may take (it depends on the model provider),
+  // and whether it runs on demo content (no real model set up).
+  const [demo, setDemo] = useState(false);
   useEffect(() => {
-    loadServerConfig();
+    loadServerConfig().then((config) => setDemo(config?.provider === "mock"));
   }, []);
 
   const toggleTheme = () => setTheme((t) => (t === "meadow" ? "night" : "meadow"));
 
   // Without an open session, only the start screen makes sense.
   const screen = activeSession ? state.screen : "start";
-  const props = { state, session: activeSession, actions, theme, toggleTheme };
+  const props = { state, session: activeSession, actions, theme, toggleTheme, demo };
 
   return (
     <ErrorBoundary key={`${screen}:${state.activeId}`}>

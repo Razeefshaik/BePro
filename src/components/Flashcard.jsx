@@ -32,9 +32,9 @@ export default function Flashcard({
 }) {
   useEffect(() => {
     function onKey(event) {
-      if (event.target.closest("input, textarea, [contenteditable], [role=dialog]") || event.ctrlKey || event.metaKey || event.altKey) return;
+      if (event.target.closest?.("input, textarea, [contenteditable], [role=dialog]") || event.ctrlKey || event.metaKey || event.altKey) return;
       if (document.querySelector("[aria-modal='true']")) return; // a panel is open on top
-      if (event.key === " " && !event.target.closest("button, a")) {
+      if (event.key === " " && !event.target.closest?.("button, a")) {
         event.preventDefault();
         onFlip();
       } else if (event.key === "1") onRate("review");

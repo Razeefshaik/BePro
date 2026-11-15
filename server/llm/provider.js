@@ -6,6 +6,9 @@
 //   codex            the local Codex CLI (`codex exec`), for free development on the owner's machine
 //   mock             canned replies, no network: for UI work and for trying the app without a key
 //
+// With no LLM_PROVIDER and no endpoint set (a fresh clone without .env), we use mock, so
+// `npm install && npm start` works right away. The UI then says it is showing demo content.
+//
 // LLM_CHAOS (0 to 1) breaks that share of replies on purpose, to demo the failure handling.
 
 import { spawn, execFile } from "node:child_process";
@@ -15,7 +18,8 @@ import path from "node:path";
 import { ApiError } from "../errors.js";
 import { mockReply } from "./mock.js";
 
-export const PROVIDER = (process.env.LLM_PROVIDER || "openai").toLowerCase();
+const hasEndpoint = Boolean(process.env.LLM_BASE_URL && process.env.LLM_MODEL);
+export const PROVIDER = (process.env.LLM_PROVIDER || (hasEndpoint ? "openai" : "mock")).toLowerCase();
 export const TIMEOUT_MS = Number(process.env.LLM_TIMEOUT_MS) || (PROVIDER === "codex" ? 120000 : 25000);
 const CHAOS = Math.min(1, Math.max(0, Number(process.env.LLM_CHAOS) || 0));
 
@@ -51,7 +55,7 @@ async function completeWithFetch({ system, user, signal }) {
   const baseUrl = (process.env.LLM_BASE_URL || "").replace(/\/+$/, "");
   const model = process.env.LLM_MODEL;
   if (!baseUrl || !model) {
-    throw new ApiError("PROVIDER_ERROR", "No AI model is set up on the server. Copy .env.example to .env and fill it in.");
+    throw new ApiError("PROVIDER_ERROR", "No AI model is set up on the server. Copy .env.example to .env and fill it in.", false);
   }
 
   const body = {
@@ -75,6 +79,10 @@ async function completeWithFetch({ system, user, signal }) {
   });
 
   if (response.status === 429) throw new ApiError("RATE_LIMITED");
+  // A missing or wrong key: trying again won't help, so say what to fix.
+  if (response.status === 401 || response.status === 403) {
+    throw new ApiError("PROVIDER_ERROR", "The AI service rejected the API key. Check LLM_API_KEY in .env.", false);
+  }
   if (!response.ok) {
     const detail = await response.text().catch(() => "");
     console.error(`[provider] HTTP ${response.status}: ${detail.slice(0, 300)}`);
