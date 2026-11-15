@@ -259,15 +259,31 @@ sequenceDiagram
 
 ## How I built it
 
-**Built by** Shaik Mahammad Razeef for the Flam frontend internship assignment. The repository history begins on 12 November 2026.
+I'm **Shaik Mahammad Razeef**, and I built BePro for the Flam frontend internship assignment between 12 and 16 November 2026.
 
-**My part: the idea, the design and every decision.** I came up with the product (a road map you study flashcard first, instead of a chat), wrote the spec ([SPEC.md](SPEC.md)), and designed the learning model (level sets depth, goal sets breadth), the failure handling plan and the whole look: the Meadow and Night themes, every screen's layout, the hierarchy and the interactions. I collected the reference designs, tested each version in my own browser, said what was wrong and decided what changed. Each of those choices is a row in [docs/DECISIONS.md](docs/DECISIONS.md) with its reason: 67 of them.
+I started from a simple frustration: studying with AI usually means a long chat that you scroll up and down and never come back to. I wanted the opposite. Something with a shape: a road map you can see, cards you flip, a quiz that remembers what you missed. Everything in this repo grew from that idea.
 
-**AI use, honestly.** I used **Claude (Claude Code)** as my coding assistant: it wrote the code to my spec and my design directions, under the rules in [CLAUDE.md](CLAUDE.md) and [AGENTS.md](AGENTS.md) (plain JavaScript, only approved dependencies, code simple enough to explain line by line), and helped with debugging, tests and screenshots at each screen size. For the demo video I set the direction (a reels-style edit, an Indian-English voice, the live board in the spotlight); Claude Code wrote the script, recorded the real app and built the motion graphics, and the narration is an **ElevenLabs** voice. The **Codex CLI** was the model behind the app during development (`LLM_PROVIDER=codex`). A real model run found a bug the mock couldn't: in notes mode the model left the source quote off quiz questions, so they were flagged "Not found in your notes". The fix was in the prompt (`notesRules` in [prompts.js](server/llm/prompts.js)).
+### What I did
 
-**How we worked:** small cards in [docs/TASKS.md](docs/TASKS.md), one commit each, with the plan in [docs/PLAN.md](docs/PLAN.md) and the server and client contract in [docs/CONTRACTS.md](docs/CONTRACTS.md).
+* **The idea and the spec.** I wrote [SPEC.md](SPEC.md) before any code: the screens, the data each one needs, the API, the rules for the model's JSON and what happens when it breaks. It stayed the single source of truth the whole way through.
+* **The learning model.** I decided that *level* sets the depth and *goal* sets the breadth, and that our code, not the model, decides how many stops, cards and questions there are ([`shared/profile.js`](shared/profile.js)). Flashcards first, then a short quiz, then a retest pile of everything you missed.
+* **The failure plan.** I planned for bad AI output from day one: malformed JSON, the wrong shape, empty, slow, failed, and stale replies. That became the pipeline, the retry with the problem named, the error banners with Try again, and the stale guard.
+* **The whole design.** Both themes (Meadow and Night), every screen's layout and every interaction are mine. I collected reference designs and worked the look through about twenty rounds of changes. A few of them: making the card the biggest thing on the learning page and fitting it on one screen, the compact "pyramid" of buttons under the card, the cream scratch-pad background with soft dots, the glass top bar, the moving glow around the topic box, and the big BEPRO wordmark behind the start screen.
+* **The live board.** My own idea: a study screen that feels alive, like a railway departures board, with a LIVE light, a clock, a line that changes by itself, your next stops scrolling past, and a hint when you're struggling.
+* **Testing and review.** I ran every version in my own browser, in both themes and at phone width, with real models. I said what was wrong and sent it back until it was right. At the end I audited the app line by line against the brief.
+* **Choosing the model.** I tried Gemini, OrcaRouter and Groq for the hosted demo, and picked Groq's `gpt-oss-120b` after it passed the full flow on the free tier.
+* **Every decision, written down.** 67 of them, each with its reason, in [docs/DECISIONS.md](docs/DECISIONS.md).
+* **The demo video.** I set the direction: a reels-style edit, an Indian-English voice, and the live board in the spotlight.
 
-**Time spent:** ‹OWNER: hours›, over 4 days (12 to 16 November 2026). The brief suggests about 8 hours; I chose to build the full spec instead and logged that choice in [DECISIONS.md](docs/DECISIONS.md).
+### How I used AI
+
+I used **Claude Code** as my coding assistant. I gave it my spec, my design directions and strict rules ([CLAUDE.md](CLAUDE.md), [AGENTS.md](AGENTS.md)): plain JavaScript, only approved dependencies, and code simple enough for me to explain line by line. It wrote the code to those, and helped with debugging, tests and screenshots. For the video it wrote the script, recorded the real app and built the motion graphics; the narration is an **ElevenLabs** voice. During development the app itself ran on the **Codex CLI** (`LLM_PROVIDER=codex`).
+
+One thing I learned: a real model finds bugs a mock never will. In notes mode the model left the source quote off quiz questions, so they showed "Not found in your notes". The fix was in the prompt (`notesRules` in [prompts.js](server/llm/prompts.js)).
+
+**How I worked:** small cards in [docs/TASKS.md](docs/TASKS.md), one commit each, with the plan in [docs/PLAN.md](docs/PLAN.md) and the server and client contract in [docs/CONTRACTS.md](docs/CONTRACTS.md).
+
+**Time spent:** about 28 hours over 4 days (12 to 16 November 2026). The brief suggests about 8 hours; I chose to build the full spec instead, and logged that choice in [DECISIONS.md](docs/DECISIONS.md).
 
 ## Read more
 
